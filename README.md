@@ -121,19 +121,19 @@ Vega.lite
 The data source can be an array
 
 ```ruby
-data(values: [{x: "A", y: 1}, {x: "B", y: 2}])
+data([{x: "A", y: 1}, {x: "B", y: 2}])
 ```
 
 Or a URL
 
 ```ruby
-data(url: "https://www.example.com")
+data("https://www.example.com/data.json")
 ```
 
-You can also specify the data format
+Or a Rover data frame
 
 ```ruby
-data(url: "https://www.example.com/data.csv", format: {type: "csv"})
+data(df)
 ```
 
 ### Transforms
