@@ -64,6 +64,11 @@ class VegaTest < Minitest::Test
     assert_equal expected, Vega.lite.spec(x: 1).spec[:spec]
   end
 
+  def test_to_json
+    result = JSON.parse(Vega.lite.to_json)
+    assert_equal "https://vega.github.io/schema/vega-lite/v4.json", result["$schema"]
+  end
+
   def test_start
     values = [{x: "A", y: 1}, {x: "B", y: 2}]
     expected = [{values: values}]
