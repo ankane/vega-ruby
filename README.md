@@ -118,7 +118,7 @@ Vega.lite
 
 [Docs](https://vega.github.io/vega-lite/docs/data.html)
 
-The data source can be an array
+Data can be an array
 
 ```ruby
 data([{x: "A", y: 1}, {x: "B", y: 2}])
