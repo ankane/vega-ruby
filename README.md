@@ -16,8 +16,8 @@ gem 'vega'
 
 The follow the instructions for how you plan to use it:
 
-- [Rails 6 / Webpacker](#rails)
-- [Rails 5 / Sprockets](#rails)
+- [Rails 6 / Webpacker](#rails-6--webpacker)
+- [Rails 5 / Sprockets](#rails-5--sprockets)
 - [iRuby](#iruby)
 - [Other](#other)
 
