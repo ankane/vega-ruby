@@ -4,6 +4,8 @@ Interactive charts for Ruby, powered by [Vega](https://vega.github.io/vega/) and
 
 Works with Rails, iRuby, and other frameworks
 
+[![Build Status](https://travis-ci.org/ankane/vega.svg?branch=master)](https://travis-ci.org/ankane/vega)
+
 ## Installation
 
 Add this line to your application’s Gemfile:
