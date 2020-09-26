@@ -2,6 +2,8 @@
 
 Interactive charts for Ruby, powered by [Vega](https://vega.github.io/vega/) and [Vega-Lite](https://vega.github.io/vega-lite/)
 
+[See what’s possible](https://vega.github.io/vega-lite/examples/)
+
 Works with Rails, iRuby, and other frameworks
 
 [![Build Status](https://travis-ci.org/ankane/vega.svg?branch=master)](https://travis-ci.org/ankane/vega)
