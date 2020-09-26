@@ -11,6 +11,8 @@ module Vega
     array_methods \
       :signals, :scales, :projections, :axes, :legends, :marks
 
+    attr_reader :spec
+
     def initialize
       @schema = "https://vega.github.io/schema/vega/v5.json"
       super()

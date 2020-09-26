@@ -2,8 +2,6 @@ module Vega
   class BaseChart
     extend MethodHelpers
 
-    attr_reader :spec
-
     def initialize
       @spec = {
         "$schema": @schema,

@@ -59,6 +59,11 @@ class VegaTest < Minitest::Test
     assert_equal expected, b.spec[:encoding]
   end
 
+  def test_spec
+    expected = {x: 1}
+    assert_equal expected, Vega.lite.spec(x: 1).spec[:spec]
+  end
+
   def test_start
     values = [{x: "A", y: 1}, {x: "B", y: 2}]
     expected = [{values: values}]
