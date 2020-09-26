@@ -8,7 +8,7 @@ module Vega
       :config, :usermeta, :projection, :datasets, :encoding, :repeat, :resolve, :selection
 
     array_methods \
-      :transform, :layer
+      :transform, :layer, :hconcat, :vconcat
 
     def initialize
       @schema = "https://vega.github.io/schema/vega-lite/v4.json"
