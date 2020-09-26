@@ -136,6 +136,12 @@ Or a Rover data frame
 data(df)
 ```
 
+Or a data generator
+
+```ruby
+data(sequence: {start: 0, stop: 10, step: 1, as: "x"})
+```
+
 ### Transforms
 
 [Docs](https://vega.github.io/vega-lite/docs/transform.html)
