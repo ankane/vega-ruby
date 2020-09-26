@@ -38,6 +38,7 @@ module Vega
 
     def data_value(value)
       value = value.to_a if defined?(Rover::DataFrame) && value.is_a?(Rover::DataFrame)
+      value = value.to_a[0] if defined?(Daru::DataFrame) && value.is_a?(Daru::DataFrame)
       case value
       when Array
         {values: value}
