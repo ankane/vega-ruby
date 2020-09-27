@@ -190,7 +190,7 @@ encoding(x: {field: "a", type: "ordinal"})
 projection(type: "albersUsa")
 ```
 
-### View Composition [master]
+### View Composition
 
 [Docs](https://vega.github.io/vega-lite/docs/composition.html)
 
@@ -226,7 +226,7 @@ Resolving
 resolve(scale: {color: "independent"})
 ```
 
-### Selections [master]
+### Selections
 
 [Docs](https://vega.github.io/vega-lite/docs/selection.html)
 
