@@ -202,7 +202,15 @@ encoding(x: {field: "a", type: "ordinal"})
 projection(type: "albersUsa")
 ```
 
-### Configuration
+### Selections [master]
+
+[Docs](https://vega.github.io/vega-lite/docs/selection.html)
+
+```ruby
+selection(x: {type: "single"})
+```
+
+### Config
 
 [Docs](https://vega.github.io/vega-lite/docs/config.html)
 
