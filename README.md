@@ -82,19 +82,7 @@ Create a bar chart
 
 ```ruby
 Vega.lite
-  .data(
-    values: [
-      {a: "A", b: 28},
-      {a: "B", b: 55},
-      {a: "C", b: 43},
-      {a: "D", b: 91},
-      {a: "E", b: 81},
-      {a: "F", b: 53},
-      {a: "G", b: 19},
-      {a: "H", b: 87},
-      {a: "I", b: 52}
-    ]
-  )
+  .data([{a: "A", b: 28}, {a: "B", b: 55}, {a: "C", b: 43}])
   .mark(type: "bar", tooltip: true)
   .encoding(
     x: {field: "a", type: "ordinal"},
