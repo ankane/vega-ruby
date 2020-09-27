@@ -5,10 +5,10 @@ module Vega
       :background, :padding, :autosize, :title, :name, :description, :width, :height, :mark, :spec
 
     hash_methods \
-      :config, :usermeta, :projection, :datasets, :encoding, :repeat, :resolve, :selection
+      :config, :usermeta, :projection, :datasets, :encoding, :facet, :repeat, :resolve, :selection
 
     array_methods \
-      :transform, :layer, :hconcat, :vconcat
+      :transform, :layer, :hconcat, :vconcat, :concat
 
     def initialize
       @schema = "https://vega.github.io/schema/vega-lite/v4.json"
