@@ -82,11 +82,11 @@ Create a bar chart
 
 ```ruby
 Vega.lite
-  .data([{a: "A", b: 28}, {a: "B", b: 55}, {a: "C", b: 43}])
+  .data([{city: "A", sales: 28}, {city: "B", sales: 55}, {city: "C", sales: 43}])
   .mark(type: "bar", tooltip: true)
   .encoding(
-    x: {field: "a", type: "ordinal"},
-    y: {field: "b", type: "quantitative"}
+    x: {field: "city", type: "ordinal"},
+    y: {field: "sales", type: "quantitative"}
   )
 ```
 
