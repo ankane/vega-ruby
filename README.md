@@ -209,21 +209,21 @@ projection(type: "albersUsa")
 Faceting
 
 ```ruby
-facet(...)
+facet(row: {field: "x"})
 ```
 
 Layering
 
 ```ruby
-layer(...)
+layer(view)
 ```
 
 Concatenation
 
 ```ruby
-hconcat(...)
-vconcat(...)
-concat(...)
+hconcat(view)
+vconcat(view)
+concat(view)
 ```
 
 Repeating
