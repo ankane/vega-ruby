@@ -202,6 +202,42 @@ encoding(x: {field: "a", type: "ordinal"})
 projection(type: "albersUsa")
 ```
 
+### View Composition [master]
+
+[Docs](https://vega.github.io/vega-lite/docs/composition.html)
+
+Faceting
+
+```ruby
+facet(...)
+```
+
+Layering
+
+```ruby
+layer(...)
+```
+
+Concatenation
+
+```ruby
+hconcat(...)
+vconcat(...)
+concat(...)
+```
+
+Repeating
+
+```ruby
+repeat(["a", "b", "c"])
+```
+
+Resolving
+
+```ruby
+resolve(scale: {color: "independent"})
+```
+
 ### Selections [master]
 
 [Docs](https://vega.github.io/vega-lite/docs/selection.html)

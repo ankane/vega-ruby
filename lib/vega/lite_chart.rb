@@ -2,10 +2,10 @@ module Vega
   class LiteChart < BaseChart
     # https://vega.github.io/vega-lite/docs/spec.html
     scalar_methods \
-      :background, :padding, :autosize, :title, :name, :description, :width, :height, :mark, :spec
+      :background, :padding, :autosize, :title, :name, :description, :width, :height, :mark, :spec, :repeat
 
     hash_methods \
-      :config, :usermeta, :projection, :datasets, :encoding, :facet, :repeat, :resolve, :selection
+      :config, :usermeta, :projection, :datasets, :encoding, :facet, :resolve, :selection
 
     array_methods \
       :transform, :layer, :hconcat, :vconcat, :concat
