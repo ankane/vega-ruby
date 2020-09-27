@@ -5,7 +5,7 @@ module Vega
       :background, :padding, :autosize, :title, :name, :description, :width, :height, :mark, :spec, :repeat
 
     hash_methods \
-      :config, :usermeta, :projection, :datasets, :encoding, :facet, :resolve, :selection
+      :config, :usermeta, :projection, :datasets, :encoding, :facet, :resolve, :selection, :view
 
     array_methods \
       :transform, :layer, :hconcat, :vconcat, :concat
