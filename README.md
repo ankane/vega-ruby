@@ -229,7 +229,7 @@ concat(...)
 Repeating
 
 ```ruby
-repeat(["a", "b", "c"])
+repeat(row: ["a", "b", "c"])
 ```
 
 Resolving
