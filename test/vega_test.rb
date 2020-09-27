@@ -59,6 +59,14 @@ class VegaTest < Minitest::Test
     assert_equal expected, b.spec[:encoding]
   end
 
+  def test_concat
+    expected = [{x: 1}, {y: 2}]
+    a = Vega.lite.concat(x: 1).concat(y: 2)
+    b = Vega.lite.concat(expected)
+    assert_equal expected, a.spec[:concat]
+    assert_equal expected, b.spec[:concat]
+  end
+
   def test_spec
     expected = {x: 1}
     assert_equal expected, Vega.lite.spec(x: 1).spec[:spec]
