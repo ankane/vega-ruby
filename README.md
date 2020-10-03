@@ -2,7 +2,7 @@
 
 Interactive charts for Ruby, powered by [Vega](https://vega.github.io/vega/) and [Vega-Lite](https://vega.github.io/vega-lite/)
 
-[See what’s possible](https://vega.github.io/vega-lite/examples/)
+[See it in action](https://vega.dokkuapp.com)
 
 Works with Rails, iRuby, and other frameworks
 
@@ -85,7 +85,7 @@ Vega.lite
   .data([{city: "A", sales: 28}, {city: "B", sales: 55}, {city: "C", sales: 43}])
   .mark(type: "bar", tooltip: true)
   .encoding(
-    x: {field: "city", type: "ordinal"},
+    x: {field: "city", type: "nominal"},
     y: {field: "sales", type: "quantitative"}
   )
 ```
