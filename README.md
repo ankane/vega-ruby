@@ -56,9 +56,9 @@ No additional set up is needed.
 For Sinatra and other web frameworks, include the Vega JavaScript files on pages with charts:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vega@5.16.1"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@4.16.2"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
 ```
 
 ## Getting Started

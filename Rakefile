@@ -20,7 +20,7 @@ def download_package(name, version)
 end
 
 task :update do
-  # update in lib/vega/spec.rb as well
+  # update in lib/vega/spec.rb and README.md as well
   download_package("vega", "5.19.1")
   download_package("vega-lite", "4.17.0")
   download_package("vega-embed", "6.15.1")
