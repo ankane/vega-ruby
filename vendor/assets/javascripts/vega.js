@@ -4,6 +4,88 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.vega = {}));
 }(this, (function (exports) { 'use strict';
 
+  var name = "vega";
+  var version = "5.19.1";
+  var description = "The Vega visualization grammar.";
+  var keywords = [
+  	"vega",
+  	"visualization",
+  	"interaction",
+  	"dataflow",
+  	"library",
+  	"data",
+  	"d3"
+  ];
+  var license = "BSD-3-Clause";
+  var author = "UW Interactive Data Lab (http://idl.cs.washington.edu)";
+  var main = "build/vega-node.js";
+  var module = "build/vega.module.js";
+  var unpkg = "build/vega.min.js";
+  var jsdelivr = "build/vega.min.js";
+  var types = "index.d.ts";
+  var repository = "vega/vega";
+  var scripts = {
+  	bundle: "rollup -c --config-bundle",
+  	prebuild: "rimraf build && rimraf build-es5",
+  	build: "rollup -c --config-core --config-bundle --config-ie",
+  	postbuild: "node schema-copy",
+  	pretest: "yarn build --config-test",
+  	test: "TZ=America/Los_Angeles tape 'test/**/*-test.js'",
+  	prepublishOnly: "yarn test && yarn build",
+  	postpublish: "./schema-deploy.sh"
+  };
+  var dependencies = {
+  	"vega-crossfilter": "~4.0.5",
+  	"vega-dataflow": "~5.7.3",
+  	"vega-encode": "~4.8.3",
+  	"vega-event-selector": "~2.0.6",
+  	"vega-expression": "~4.0.1",
+  	"vega-force": "~4.0.7",
+  	"vega-format": "~1.0.4",
+  	"vega-functions": "~5.12.0",
+  	"vega-geo": "~4.3.8",
+  	"vega-hierarchy": "~4.0.9",
+  	"vega-label": "~1.0.0",
+  	"vega-loader": "~4.4.0",
+  	"vega-parser": "~6.1.3",
+  	"vega-projection": "~1.4.5",
+  	"vega-regression": "~1.0.9",
+  	"vega-runtime": "~6.1.3",
+  	"vega-scale": "~7.1.1",
+  	"vega-scenegraph": "~4.9.3",
+  	"vega-statistics": "~1.7.9",
+  	"vega-time": "~2.0.4",
+  	"vega-transforms": "~4.9.3",
+  	"vega-typings": "~0.19.2",
+  	"vega-util": "~1.16.0",
+  	"vega-view": "~5.9.2",
+  	"vega-view-transforms": "~4.5.8",
+  	"vega-voronoi": "~4.1.5",
+  	"vega-wordcloud": "~4.1.3"
+  };
+  var devDependencies = {
+  	"vega-schema": "*"
+  };
+  var gitHead = "f112ee55fc5ddd025df8820fce371803106a3968";
+  var pkg = {
+  	name: name,
+  	version: version,
+  	description: description,
+  	keywords: keywords,
+  	license: license,
+  	author: author,
+  	main: main,
+  	module: module,
+  	unpkg: unpkg,
+  	jsdelivr: jsdelivr,
+  	types: types,
+  	repository: repository,
+  	scripts: scripts,
+  	dependencies: dependencies,
+  	devDependencies: devDependencies,
+  	gitHead: gitHead
+  };
+
   function accessor(fn, fields, name) {
     fn.fields = fields || [];
     fn.fname = name;
@@ -662,6 +744,10 @@
     return Object.prototype.toString.call(_) === '[object Date]';
   }
 
+  function isIterable(_) {
+    return _ && isFunction(_[Symbol.iterator]);
+  }
+
   function isNumber(_) {
     return typeof _ === 'number';
   }
@@ -851,6 +937,231 @@
     }
   }
 
+  //   https://...    file://...    //...
+
+  const protocol_re = /^([A-Za-z]+:)?\/\//; // Matches allowed URIs. From https://github.com/cure53/DOMPurify/blob/master/src/regexp.js with added file://
+
+  const allowed_re = /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|file|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i; // eslint-disable-line no-useless-escape
+
+  const whitespace_re = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g; // eslint-disable-line no-control-regex
+  // Special treatment in node.js for the file: protocol
+
+  const fileProtocol = 'file://';
+  /**
+   * Factory for a loader constructor that provides methods for requesting
+   * files from either the network or disk, and for sanitizing request URIs.
+   * @param {function} fetch - The Fetch API for HTTP network requests.
+   *   If null or undefined, HTTP loading will be disabled.
+   * @param {object} fs - The file system interface for file loading.
+   *   If null or undefined, local file loading will be disabled.
+   * @return {function} A loader constructor with the following signature:
+   *   param {object} [options] - Optional default loading options to use.
+   *   return {object} - A new loader instance.
+   */
+
+  function loaderFactory (fetch, fs) {
+    return options => ({
+      options: options || {},
+      sanitize: sanitize,
+      load: load,
+      fileAccess: !!fs,
+      file: fileLoader(fs),
+      http: httpLoader(fetch)
+    });
+  }
+  /**
+   * Load an external resource, typically either from the web or from the local
+   * filesystem. This function uses {@link sanitize} to first sanitize the uri,
+   * then calls either {@link http} (for web requests) or {@link file} (for
+   * filesystem loading).
+   * @param {string} uri - The resource indicator (e.g., URL or filename).
+   * @param {object} [options] - Optional loading options. These options will
+   *   override any existing default options.
+   * @return {Promise} - A promise that resolves to the loaded content.
+   */
+
+  async function load(uri, options) {
+    const opt = await this.sanitize(uri, options),
+          url = opt.href;
+    return opt.localFile ? this.file(url) : this.http(url, options);
+  }
+  /**
+   * URI sanitizer function.
+   * @param {string} uri - The uri (url or filename) to check.
+   * @param {object} options - An options hash.
+   * @return {Promise} - A promise that resolves to an object containing
+   *  sanitized uri data, or rejects it the input uri is deemed invalid.
+   *  The properties of the resolved object are assumed to be
+   *  valid attributes for an HTML 'a' tag. The sanitized uri *must* be
+   *  provided by the 'href' property of the returned object.
+   */
+
+
+  async function sanitize(uri, options) {
+    options = extend({}, this.options, options);
+    const fileAccess = this.fileAccess,
+          result = {
+      href: null
+    };
+    let isFile, loadFile, base;
+    const isAllowed = allowed_re.test(uri.replace(whitespace_re, ''));
+
+    if (uri == null || typeof uri !== 'string' || !isAllowed) {
+      error('Sanitize failure, invalid URI: ' + $(uri));
+    }
+
+    const hasProtocol = protocol_re.test(uri); // if relative url (no protocol/host), prepend baseURL
+
+    if ((base = options.baseURL) && !hasProtocol) {
+      // Ensure that there is a slash between the baseURL (e.g. hostname) and url
+      if (!uri.startsWith('/') && base[base.length - 1] !== '/') {
+        uri = '/' + uri;
+      }
+
+      uri = base + uri;
+    } // should we load from file system?
+
+
+    loadFile = (isFile = uri.startsWith(fileProtocol)) || options.mode === 'file' || options.mode !== 'http' && !hasProtocol && fileAccess;
+
+    if (isFile) {
+      // strip file protocol
+      uri = uri.slice(fileProtocol.length);
+    } else if (uri.startsWith('//')) {
+      if (options.defaultProtocol === 'file') {
+        // if is file, strip protocol and set loadFile flag
+        uri = uri.slice(2);
+        loadFile = true;
+      } else {
+        // if relative protocol (starts with '//'), prepend default protocol
+        uri = (options.defaultProtocol || 'http') + ':' + uri;
+      }
+    } // set non-enumerable mode flag to indicate local file load
+
+
+    Object.defineProperty(result, 'localFile', {
+      value: !!loadFile
+    }); // set uri
+
+    result.href = uri; // set default result target, if specified
+
+    if (options.target) {
+      result.target = options.target + '';
+    } // set default result rel, if specified (#1542)
+
+
+    if (options.rel) {
+      result.rel = options.rel + '';
+    } // provide control over cross-origin image handling (#2238)
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+
+
+    if (options.context === 'image' && options.crossOrigin) {
+      result.crossOrigin = options.crossOrigin + '';
+    } // return
+
+
+    return result;
+  }
+  /**
+   * File system loader factory.
+   * @param {object} fs - The file system interface.
+   * @return {function} - A file loader with the following signature:
+   *   param {string} filename - The file system path to load.
+   *   param {string} filename - The file system path to load.
+   *   return {Promise} A promise that resolves to the file contents.
+   */
+
+
+  function fileLoader(fs) {
+    return fs ? filename => new Promise((accept, reject) => {
+      fs.readFile(filename, (error, data) => {
+        if (error) reject(error);else accept(data);
+      });
+    }) : fileReject;
+  }
+  /**
+   * Default file system loader that simply rejects.
+   */
+
+
+  async function fileReject() {
+    error('No file system access.');
+  }
+  /**
+   * HTTP request handler factory.
+   * @param {function} fetch - The Fetch API method.
+   * @return {function} - An http loader with the following signature:
+   *   param {string} url - The url to request.
+   *   param {object} options - An options hash.
+   *   return {Promise} - A promise that resolves to the file contents.
+   */
+
+
+  function httpLoader(fetch) {
+    return fetch ? async function (url, options) {
+      const opt = extend({}, this.options.http, options),
+            type = options && options.response,
+            response = await fetch(url, opt);
+      return !response.ok ? error(response.status + '' + response.statusText) : isFunction(response[type]) ? response[type]() : response.text();
+    } : httpReject;
+  }
+  /**
+   * Default http request handler that simply rejects.
+   */
+
+
+  async function httpReject() {
+    error('No HTTP fetch method available.');
+  }
+
+  const isValid = _ => _ != null && _ === _;
+
+  const isBoolean$1 = _ => _ === 'true' || _ === 'false' || _ === true || _ === false;
+
+  const isDate$1 = _ => !Number.isNaN(Date.parse(_));
+
+  const isNumber$1 = _ => !Number.isNaN(+_) && !(_ instanceof Date);
+
+  const isInteger = _ => isNumber$1(_) && Number.isInteger(+_);
+
+  const typeParsers = {
+    boolean: toBoolean,
+    integer: toNumber,
+    number: toNumber,
+    date: toDate,
+    string: toString,
+    unknown: identity
+  };
+  const typeTests = [isBoolean$1, isInteger, isNumber$1, isDate$1];
+  const typeList = ['boolean', 'integer', 'number', 'date'];
+  function inferType(values, field) {
+    if (!values || !values.length) return 'unknown';
+    const n = values.length,
+          m = typeTests.length,
+          a = typeTests.map((_, i) => i + 1);
+
+    for (let i = 0, t = 0, j, value; i < n; ++i) {
+      value = field ? values[i][field] : values[i];
+
+      for (j = 0; j < m; ++j) {
+        if (a[j] && isValid(value) && !typeTests[j](value)) {
+          a[j] = 0;
+          ++t;
+          if (t === typeTests.length) return 'string';
+        }
+      }
+    }
+
+    return typeList[a.reduce((u, v) => u === 0 ? v : u, 0) - 1];
+  }
+  function inferTypes(data, fields) {
+    return fields.reduce((types, field) => {
+      types[field] = inferType(data, field);
+      return types;
+    }, {});
+  }
+
   var EOL = {},
       EOF = {},
       QUOTE = 34,
@@ -1017,6 +1328,44 @@
       formatRow: formatRow,
       formatValue: formatValue
     };
+  }
+
+  function delimitedFormat(delimiter) {
+    const parse = function (data, format) {
+      const delim = {
+        delimiter: delimiter
+      };
+      return dsv(data, format ? extend(format, delim) : delim);
+    };
+
+    parse.responseType = 'text';
+    return parse;
+  }
+  function dsv(data, format) {
+    if (format.header) {
+      data = format.header.map($).join(format.delimiter) + '\n' + data;
+    }
+
+    return dsvFormat(format.delimiter).parse(data + '');
+  }
+  dsv.responseType = 'text';
+
+  function isBuffer(_) {
+    return typeof Buffer === 'function' && isFunction(Buffer.isBuffer) ? Buffer.isBuffer(_) : false;
+  }
+
+  function json(data, format) {
+    const prop = format && format.property ? field(format.property) : identity;
+    return isObject(data) && !isBuffer(data) ? parseJSON(prop(data), format) : prop(JSON.parse(data));
+  }
+  json.responseType = 'json';
+
+  function parseJSON(data, format) {
+    if (!isArray(data) && isIterable(data)) {
+      data = [...data];
+    }
+
+    return format && format.copy ? JSON.parse(JSON.stringify(data)) : data;
   }
 
   function identity$1 (x) {
@@ -1323,6 +1672,50 @@
       if (filter(geoms[0].g, geoms[geoms.length - 1].g)) arcs.push(geoms[0].i);
     });
     return arcs;
+  }
+
+  const filters = {
+    interior: (a, b) => a !== b,
+    exterior: (a, b) => a === b
+  };
+  function topojson(data, format) {
+    let method, object, property, filter;
+    data = json(data, format);
+
+    if (format && format.feature) {
+      method = feature;
+      property = format.feature;
+    } else if (format && format.mesh) {
+      method = mesh;
+      property = format.mesh;
+      filter = filters[format.filter];
+    } else {
+      error('Missing TopoJSON feature or mesh parameter.');
+    }
+
+    object = (object = data.objects[property]) ? method(data, object, filter) : error('Invalid TopoJSON object: ' + property);
+    return object && object.features || [object];
+  }
+  topojson.responseType = 'json';
+
+  const format = {
+    dsv: dsv,
+    csv: delimitedFormat(','),
+    tsv: delimitedFormat('\t'),
+    json: json,
+    topojson: topojson
+  };
+  function formats(name, reader) {
+    if (arguments.length > 1) {
+      format[name] = reader;
+      return this;
+    } else {
+      return has(format, name) ? format[name] : null;
+    }
+  }
+  function responseType(type) {
+    const f = formats(type);
+    return f && f.responseType || 'text';
   }
 
   function ascending$1 (a, b) {
@@ -2010,7 +2403,7 @@
   }
 
   var locale;
-  var format;
+  var format$1;
   var formatPrefix;
   defaultLocale({
     thousands: ",",
@@ -2019,7 +2412,7 @@
   });
   function defaultLocale(definition) {
     locale = formatLocale(definition);
-    format = locale.format;
+    format$1 = locale.format;
     formatPrefix = locale.formatPrefix;
     return locale;
   }
@@ -3480,7 +3873,7 @@
 
   function resetNumberFormatDefaultLocale() {
     return defaultNumberLocale = numberLocale({
-      format: format,
+      format: format$1,
       formatPrefix: formatPrefix
     });
   }
@@ -3575,317 +3968,7 @@
     return defaultLocale$2();
   }
 
-  const protocol_re = /^([A-Za-z]+:)?\/\//; // Matches allowed URIs. From https://github.com/cure53/DOMPurify/blob/master/src/regexp.js with added file://
-
-  const allowed_re = /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|file|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i; // eslint-disable-line no-useless-escape
-
-  const whitespace_re = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g; // eslint-disable-line no-control-regex
-  // Special treatment in node.js for the file: protocol
-
-  const fileProtocol = 'file://';
-  /**
-   * Factory for a loader constructor that provides methods for requesting
-   * files from either the network or disk, and for sanitizing request URIs.
-   * @param {function} fetch - The Fetch API for HTTP network requests.
-   *   If null or undefined, HTTP loading will be disabled.
-   * @param {object} fs - The file system interface for file loading.
-   *   If null or undefined, local file loading will be disabled.
-   * @return {function} A loader constructor with the following signature:
-   *   param {object} [options] - Optional default loading options to use.
-   *   return {object} - A new loader instance.
-   */
-
-  function loaderFactory(fetch, fs) {
-    return options => ({
-      options: options || {},
-      sanitize: sanitize,
-      load: load,
-      fileAccess: !!fs,
-      file: fileLoader(fs),
-      http: httpLoader(fetch)
-    });
-  }
-  /**
-   * Load an external resource, typically either from the web or from the local
-   * filesystem. This function uses {@link sanitize} to first sanitize the uri,
-   * then calls either {@link http} (for web requests) or {@link file} (for
-   * filesystem loading).
-   * @param {string} uri - The resource indicator (e.g., URL or filename).
-   * @param {object} [options] - Optional loading options. These options will
-   *   override any existing default options.
-   * @return {Promise} - A promise that resolves to the loaded content.
-   */
-
-
-  async function load(uri, options) {
-    const opt = await this.sanitize(uri, options),
-          url = opt.href;
-    return opt.localFile ? this.file(url) : this.http(url, options);
-  }
-  /**
-   * URI sanitizer function.
-   * @param {string} uri - The uri (url or filename) to sanity check.
-   * @param {object} options - An options hash.
-   * @return {Promise} - A promise that resolves to an object containing
-   *  sanitized uri data, or rejects it the input uri is deemed invalid.
-   *  The properties of the resolved object are assumed to be
-   *  valid attributes for an HTML 'a' tag. The sanitized uri *must* be
-   *  provided by the 'href' property of the returned object.
-   */
-
-
-  async function sanitize(uri, options) {
-    options = extend({}, this.options, options);
-    const fileAccess = this.fileAccess,
-          result = {
-      href: null
-    };
-    let isFile, loadFile, base;
-    const isAllowed = allowed_re.test(uri.replace(whitespace_re, ''));
-
-    if (uri == null || typeof uri !== 'string' || !isAllowed) {
-      error('Sanitize failure, invalid URI: ' + $(uri));
-    }
-
-    const hasProtocol = protocol_re.test(uri); // if relative url (no protocol/host), prepend baseURL
-
-    if ((base = options.baseURL) && !hasProtocol) {
-      // Ensure that there is a slash between the baseURL (e.g. hostname) and url
-      if (!uri.startsWith('/') && base[base.length - 1] !== '/') {
-        uri = '/' + uri;
-      }
-
-      uri = base + uri;
-    } // should we load from file system?
-
-
-    loadFile = (isFile = uri.startsWith(fileProtocol)) || options.mode === 'file' || options.mode !== 'http' && !hasProtocol && fileAccess;
-
-    if (isFile) {
-      // strip file protocol
-      uri = uri.slice(fileProtocol.length);
-    } else if (uri.startsWith('//')) {
-      if (options.defaultProtocol === 'file') {
-        // if is file, strip protocol and set loadFile flag
-        uri = uri.slice(2);
-        loadFile = true;
-      } else {
-        // if relative protocol (starts with '//'), prepend default protocol
-        uri = (options.defaultProtocol || 'http') + ':' + uri;
-      }
-    } // set non-enumerable mode flag to indicate local file load
-
-
-    Object.defineProperty(result, 'localFile', {
-      value: !!loadFile
-    }); // set uri
-
-    result.href = uri; // set default result target, if specified
-
-    if (options.target) {
-      result.target = options.target + '';
-    } // set default result rel, if specified (#1542)
-
-
-    if (options.rel) {
-      result.rel = options.rel + '';
-    } // provide control over cross-origin image handling (#2238)
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-
-
-    if (options.context === 'image' && options.crossOrigin) {
-      result.crossOrigin = options.crossOrigin + '';
-    } // return
-
-
-    return result;
-  }
-  /**
-   * File system loader factory.
-   * @param {object} fs - The file system interface.
-   * @return {function} - A file loader with the following signature:
-   *   param {string} filename - The file system path to load.
-   *   param {string} filename - The file system path to load.
-   *   return {Promise} A promise that resolves to the file contents.
-   */
-
-
-  function fileLoader(fs) {
-    return fs ? filename => new Promise((accept, reject) => {
-      fs.readFile(filename, (error, data) => {
-        if (error) reject(error);else accept(data);
-      });
-    }) : fileReject;
-  }
-  /**
-   * Default file system loader that simply rejects.
-   */
-
-
-  async function fileReject() {
-    error('No file system access.');
-  }
-  /**
-   * HTTP request handler factory.
-   * @param {function} fetch - The Fetch API method.
-   * @return {function} - An http loader with the following signature:
-   *   param {string} url - The url to request.
-   *   param {object} options - An options hash.
-   *   return {Promise} - A promise that resolves to the file contents.
-   */
-
-
-  function httpLoader(fetch) {
-    return fetch ? async function (url, options) {
-      const opt = extend({}, this.options.http, options),
-            type = options && options.response,
-            response = await fetch(url, opt);
-      return !response.ok ? error(response.status + '' + response.statusText) : isFunction(response[type]) ? response[type]() : response.text();
-    } : httpReject;
-  }
-  /**
-   * Default http request handler that simply rejects.
-   */
-
-
-  async function httpReject() {
-    error('No HTTP fetch method available.');
-  }
-
-  const isValid = _ => _ != null && _ === _;
-
-  const isBoolean$1 = _ => _ === 'true' || _ === 'false' || _ === true || _ === false;
-
-  const isDate$1 = _ => !Number.isNaN(Date.parse(_));
-
-  const isNumber$1 = _ => !Number.isNaN(+_) && !(_ instanceof Date);
-
-  const isInteger = _ => isNumber$1(_) && Number.isInteger(+_);
-
-  const typeParsers = {
-    boolean: toBoolean,
-    integer: toNumber,
-    number: toNumber,
-    date: toDate,
-    string: toString,
-    unknown: identity
-  };
-  const typeTests = [isBoolean$1, isInteger, isNumber$1, isDate$1];
-  const typeList = ['boolean', 'integer', 'number', 'date'];
-
-  function inferType(values, field) {
-    if (!values || !values.length) return 'unknown';
-    const n = values.length,
-          m = typeTests.length,
-          a = typeTests.map((_, i) => i + 1);
-
-    for (let i = 0, t = 0, j, value; i < n; ++i) {
-      value = field ? values[i][field] : values[i];
-
-      for (j = 0; j < m; ++j) {
-        if (a[j] && isValid(value) && !typeTests[j](value)) {
-          a[j] = 0;
-          ++t;
-          if (t === typeTests.length) return 'string';
-        }
-      }
-    }
-
-    return typeList[a.reduce((u, v) => u === 0 ? v : u, 0) - 1];
-  }
-
-  function inferTypes(data, fields) {
-    return fields.reduce((types, field) => {
-      types[field] = inferType(data, field);
-      return types;
-    }, {});
-  }
-
-  function delimitedFormat(delimiter) {
-    const parse = function (data, format) {
-      const delim = {
-        delimiter: delimiter
-      };
-      return dsv(data, format ? extend(format, delim) : delim);
-    };
-
-    parse.responseType = 'text';
-    return parse;
-  }
-
-  function dsv(data, format) {
-    if (format.header) {
-      data = format.header.map($).join(format.delimiter) + '\n' + data;
-    }
-
-    return dsvFormat(format.delimiter).parse(data + '');
-  }
-
-  dsv.responseType = 'text';
-
-  function isBuffer(_) {
-    return typeof Buffer === 'function' && isFunction(Buffer.isBuffer) ? Buffer.isBuffer(_) : false;
-  }
-
-  function json(data, format) {
-    const prop = format && format.property ? field(format.property) : identity;
-    return isObject(data) && !isBuffer(data) ? parseJSON(prop(data), format) : prop(JSON.parse(data));
-  }
-
-  json.responseType = 'json';
-
-  function parseJSON(data, format) {
-    return format && format.copy ? JSON.parse(JSON.stringify(data)) : data;
-  }
-
-  const filters = {
-    interior: (a, b) => a !== b,
-    exterior: (a, b) => a === b
-  };
-
-  function topojson(data, format) {
-    let method, object, property, filter;
-    data = json(data, format);
-
-    if (format && format.feature) {
-      method = feature;
-      property = format.feature;
-    } else if (format && format.mesh) {
-      method = mesh;
-      property = format.mesh;
-      filter = filters[format.filter];
-    } else {
-      error('Missing TopoJSON feature or mesh parameter.');
-    }
-
-    object = (object = data.objects[property]) ? method(data, object, filter) : error('Invalid TopoJSON object: ' + property);
-    return object && object.features || [object];
-  }
-
-  topojson.responseType = 'json';
-  const format$1 = {
-    dsv: dsv,
-    csv: delimitedFormat(','),
-    tsv: delimitedFormat('\t'),
-    json: json,
-    topojson: topojson
-  };
-
-  function formats(name, reader) {
-    if (arguments.length > 1) {
-      format$1[name] = reader;
-      return this;
-    } else {
-      return has(format$1, name) ? format$1[name] : null;
-    }
-  }
-
-  function responseType(type) {
-    const f = formats(type);
-    return f && f.responseType || 'text';
-  }
-
-  function read(data, schema, timeParser, utcParser) {
+  function read (data, schema, timeParser, utcParser) {
     schema = schema || {};
     const reader = formats(schema.type || 'json');
     if (!reader) error('Unknown data format type: ' + schema.type);
@@ -13294,7 +13377,6 @@
 
     return null;
   }
-
   const domImage = () => typeof Image !== 'undefined' ? Image : null;
 
   function initRange(domain, range) {
@@ -14662,7 +14744,7 @@
         }
     }
 
-    return format(specifier);
+    return format$1(specifier);
   }
 
   function linearish(scale) {
@@ -14880,7 +14962,7 @@
 
     scale.tickFormat = function (count, specifier) {
       if (specifier == null) specifier = base === 10 ? ".0e" : ",";
-      if (typeof specifier !== "function") specifier = format(specifier);
+      if (typeof specifier !== "function") specifier = format$1(specifier);
       if (count === Infinity) return specifier;
       if (count == null) count = 10;
       var k = Math.max(1, base * count / scale.ticks().length); // TODO fast estimate?
@@ -18697,7 +18779,7 @@
 
   function useCanvas(use) {
     textMetrics.width = use && context$1 ? measureWidth : estimateWidth;
-  } // make dumb, simple estimate if no canvas is available
+  } // make simple estimate if no canvas is available
 
 
   function estimateWidth(item, text) {
@@ -20301,7 +20383,8 @@
     'stroke-miterlimit': 10
   };
   const RootIndex = 0,
-        ns = metadata.xmlns;
+        xmlns = 'http://www.w3.org/2000/xmlns/',
+        svgns = metadata.xmlns;
 
   function SVGRenderer(loader) {
     Renderer.call(this, loader);
@@ -20332,14 +20415,19 @@
       this._clearDefs();
 
       if (el) {
-        this._svg = domChild(el, 0, 'svg', ns);
-        setAttributes(this._svg, metadata);
+        this._svg = domChild(el, 0, 'svg', svgns);
+
+        this._svg.setAttributeNS(xmlns, 'xmlns', svgns);
+
+        this._svg.setAttributeNS(xmlns, 'xmlns:xlink', metadata['xmlns:xlink']);
+
+        this._svg.setAttribute('version', metadata['version']);
 
         this._svg.setAttribute('class', 'marks');
 
         domClear(el, 1); // set the svg root group
 
-        this._root = domChild(this._svg, RootIndex, 'g', ns);
+        this._root = domChild(this._svg, RootIndex, 'g', svgns);
         setAttributes(this._root, rootAttributes); // ensure no additional child elements
 
         domClear(this._svg, RootIndex + 1);
@@ -20408,7 +20496,7 @@
 
       if (bg) {
         svg.removeAttribute('style');
-        node = domChild(svg, RootIndex, 'rect', ns);
+        node = domChild(svg, RootIndex, 'rect', svgns);
         setAttributes(node, {
           width: this._width,
           height: this._height,
@@ -20647,12 +20735,12 @@
           index = 0;
 
       for (const id in defs.gradient) {
-        if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', ns);
+        if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', svgns);
         index = updateGradient(el, defs.gradient[id], index);
       }
 
       for (const id in defs.clipping) {
-        if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', ns);
+        if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', svgns);
         index = updateClipping(el, defs.clipping[id], index);
       } // clean-up
 
@@ -20692,7 +20780,7 @@
       // coordinates, in a way that is cumbersome to replicate in canvas.
       // We wrap the radial gradient in a pattern element, allowing us to
       // maintain a circular gradient that matches what canvas provides.
-      let pt = domChild(el, index++, 'pattern', ns);
+      let pt = domChild(el, index++, 'pattern', svgns);
       setAttributes(pt, {
         id: patternPrefix + grad.id,
         viewBox: '0,0,1,1',
@@ -20700,13 +20788,13 @@
         height: '100%',
         preserveAspectRatio: 'xMidYMid slice'
       });
-      pt = domChild(pt, 0, 'rect', ns);
+      pt = domChild(pt, 0, 'rect', svgns);
       setAttributes(pt, {
         width: 1,
         height: 1,
         fill: "url(".concat(href(), "#").concat(grad.id, ")")
       });
-      el = domChild(el, index++, 'radialGradient', ns);
+      el = domChild(el, index++, 'radialGradient', svgns);
       setAttributes(el, {
         id: grad.id,
         fx: grad.x1,
@@ -20717,7 +20805,7 @@
         r: grad.r2
       });
     } else {
-      el = domChild(el, index++, 'linearGradient', ns);
+      el = domChild(el, index++, 'linearGradient', svgns);
       setAttributes(el, {
         id: grad.id,
         x1: grad.x1,
@@ -20728,7 +20816,7 @@
     }
 
     for (i = 0, n = grad.stops.length; i < n; ++i) {
-      stop = domChild(el, i, 'stop', ns);
+      stop = domChild(el, i, 'stop', svgns);
       stop.setAttribute('offset', grad.stops[i].offset);
       stop.setAttribute('stop-color', grad.stops[i].color);
     }
@@ -20740,14 +20828,14 @@
 
   function updateClipping(el, clip, index) {
     let mask;
-    el = domChild(el, index, 'clipPath', ns);
+    el = domChild(el, index, 'clipPath', svgns);
     el.setAttribute('id', clip.id);
 
     if (clip.path) {
-      mask = domChild(el, 0, 'path', ns);
+      mask = domChild(el, 0, 'path', svgns);
       mask.setAttribute('d', clip.path);
     } else {
-      mask = domChild(el, 0, 'rect', ns);
+      mask = domChild(el, 0, 'rect', svgns);
       setAttributes(mask, {
         x: 0,
         y: 0,
@@ -20781,7 +20869,7 @@
 
     if (!node) {
       doc = el.ownerDocument;
-      node = domCreate(doc, tag, ns);
+      node = domCreate(doc, tag, svgns);
       item._svg = node;
 
       if (item.mark) {
@@ -20791,13 +20879,13 @@
         }; // if group, create background, content, and foreground elements
 
         if (tag === 'g') {
-          const bg = domCreate(doc, 'path', ns);
+          const bg = domCreate(doc, 'path', svgns);
           node.appendChild(bg);
           bg.__data__ = item;
-          const cg = domCreate(doc, 'g', ns);
+          const cg = domCreate(doc, 'g', svgns);
           node.appendChild(cg);
           cg.__data__ = item;
-          const fg = domCreate(doc, 'path', ns);
+          const fg = domCreate(doc, 'path', svgns);
           node.appendChild(fg);
           fg.__data__ = item;
           fg.__values__ = {
@@ -20887,7 +20975,7 @@
           doc = el.ownerDocument;
           lh = lineHeight(item);
           value.forEach((t, i) => {
-            const ts = domCreate(doc, 'tspan', ns);
+            const ts = domCreate(doc, 'tspan', svgns);
             ts.__data__ = item; // data binding
 
             ts.textContent = t;
@@ -27175,7 +27263,7 @@
           stop = ex[1],
           span = stop - start,
           step = nice ? tickStep(start, stop, k) : span / (k + 1);
-      return range$1(step, stop, step);
+      return range$1(start + step, stop, step);
     };
   }
   /**
@@ -35888,8 +35976,6 @@
     resolvefilter: ResolveFilter
   });
 
-  var version = "5.16.1";
-
   const RawCode = 'RawCode';
   const Literal = 'Literal';
   const Property = 'Property';
@@ -36087,7 +36173,7 @@
   } // 7.6.1.1 Keywords
 
 
-  const keywords = {
+  const keywords$1 = {
     'if': 1,
     'in': 1,
     'do': 1,
@@ -36279,7 +36365,7 @@
 
     if (id.length === 1) {
       type = TokenIdentifier;
-    } else if (keywords.hasOwnProperty(id)) {
+    } else if (keywords$1.hasOwnProperty(id)) {
       // eslint-disable-line no-prototype-builtins
       type = TokenKeyword;
     } else if (id === 'null') {
@@ -36433,6 +36519,10 @@
         start: start,
         end: index$1
       };
+    }
+
+    if (ch2 === '//') {
+      throwError({}, MessageUnexpectedToken, ILLEGAL);
     } // 1-character punctuators: < > = ! + - * % & | ^ /
 
 
@@ -37535,13 +37625,6 @@
       utcmilliseconds: fn('getUTCMilliseconds', DATE, 0),
       // sequence functions
       length: fn('length', null, -1),
-      join: fn('join', null),
-      indexof: fn('indexOf', null),
-      lastindexof: fn('lastIndexOf', null),
-      slice: fn('slice', null),
-      reverse: function (args) {
-        return '(' + codegen(args[0]) + ').slice().reverse()';
-      },
       // STRING functions
       parseFloat: 'parseFloat',
       parseInt: 'parseInt',
@@ -37549,7 +37632,6 @@
       lower: fn('toLowerCase', STRING, 0),
       substring: fn('substring', STRING),
       split: fn('split', STRING),
-      replace: fn('replace', STRING),
       trim: fn('trim', STRING, 0),
       // REGEXP functions
       regexp: REGEXP,
@@ -37633,7 +37715,7 @@
         return isFunction(fn) ? fn(args) : fn + '(' + args.map(visit).join(',') + ')';
       },
       ArrayExpression: n => '[' + n.elements.map(visit).join(',') + ']',
-      BinaryExpression: n => '(' + visit(n.left) + n.operator + visit(n.right) + ')',
+      BinaryExpression: n => '(' + visit(n.left) + ' ' + n.operator + ' ' + visit(n.right) + ')',
       UnaryExpression: n => '(' + n.operator + visit(n.argument) + ')',
       ConditionalExpression: n => '(' + visit(n.test) + '?' + visit(n.consequent) + ':' + visit(n.alternate) + ')',
       LogicalExpression: n => '(' + visit(n.left) + n.operator + visit(n.right) + ')',
@@ -37662,17 +37744,75 @@
     return codegen;
   }
 
+  function ascending$3(a, b) {
+    return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+  }
+
+  function bisector$1(f) {
+    let delta = f;
+    let compare = f;
+
+    if (f.length === 1) {
+      delta = (d, x) => f(d) - x;
+
+      compare = ascendingComparator$1(f);
+    }
+
+    function left(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+
+      while (lo < hi) {
+        const mid = lo + hi >>> 1;
+        if (compare(a[mid], x) < 0) lo = mid + 1;else hi = mid;
+      }
+
+      return lo;
+    }
+
+    function right(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+
+      while (lo < hi) {
+        const mid = lo + hi >>> 1;
+        if (compare(a[mid], x) > 0) hi = mid;else lo = mid + 1;
+      }
+
+      return lo;
+    }
+
+    function center(a, x, lo, hi) {
+      if (lo == null) lo = 0;
+      if (hi == null) hi = a.length;
+      const i = left(a, x, lo, hi - 1);
+      return i > lo && delta(a[i - 1], x) > -delta(a[i], x) ? i - 1 : i;
+    }
+
+    return {
+      left,
+      center,
+      right
+    };
+  }
+
+  function ascendingComparator$1(f) {
+    return (d, x) => ascending$3(f(d), x);
+  }
+
   const Intersect = 'intersect';
   const Union = 'union';
   const VlMulti = 'vlMulti';
+  const VlPoint = 'vlPoint';
   const Or = 'or';
   const And = 'and';
-  var TYPE_ENUM = 'E',
-      TYPE_RANGE_INC = 'R',
-      TYPE_RANGE_EXC = 'R-E',
-      TYPE_RANGE_LE = 'R-LE',
-      TYPE_RANGE_RE = 'R-RE',
-      UNIT_INDEX = 'index:unit'; // TODO: revisit date coercion?
+  const SELECTION_ID = '_vgsid_',
+        TYPE_ENUM = 'E',
+        TYPE_RANGE_INC = 'R',
+        TYPE_RANGE_EXC = 'R-E',
+        TYPE_RANGE_LE = 'R-LE',
+        TYPE_RANGE_RE = 'R-RE',
+        UNIT_INDEX = 'index:unit'; // TODO: revisit date coercion?
 
   function testPoint(datum, entry) {
     var fields = entry.fields,
@@ -37770,16 +37910,59 @@
 
     return n && intersect;
   }
+
+  const selectionId = field(SELECTION_ID),
+        bisect = bisector$1(selectionId),
+        bisectLeft$1 = bisect.left,
+        bisectRight$1 = bisect.right;
+
+  function selectionIdTest(name, datum, op) {
+    const data = this.context.data[name],
+          entries = data ? data.values.value : [],
+          unitIdx = data ? data[UNIT_INDEX] && data[UNIT_INDEX].value : undefined,
+          intersect = op === Intersect,
+          value = selectionId(datum),
+          index = bisectLeft$1(entries, value);
+    if (index === entries.length) return false;
+    if (selectionId(entries[index]) !== value) return false;
+
+    if (unitIdx && intersect) {
+      if (unitIdx.size === 1) return true;
+      if (bisectRight$1(entries, value) - index < unitIdx.size) return false;
+    }
+
+    return true;
+  }
+  /**
+   * Maps an array of scene graph items to an array of selection tuples.
+   * @param {string} name  - The name of the dataset representing the selection.
+   * @param {string} unit  - The name of the unit view.
+   *
+   * @returns {array} An array of selection entries for the given unit.
+   */
+
+
+  function selectionTuples(array, base) {
+    return array.map(x => extend({
+      values: base.fields.map(f => (f.getter || (f.getter = field(f.field)))(x.datum))
+    }, base));
+  }
   /**
    * Resolves selection for use as a scale domain or reads via the API.
    * @param {string} name - The name of the dataset representing the selection
    * @param {string} [op='union'] - The set operation for combining selections.
    *                 One of 'intersect' or 'union' (default).
+   * @param {boolean} isMulti - Identifies a "multi" selection to perform more
+   *                 expensive resolution computation.
+   * @param {boolean} vl5 - With Vega-Lite v5, "multi" selections are now called "point"
+   *                 selections, and thus the resolved tuple should reflect this name.
+   *                 This parameter allows us to reflect this change without triggering
+   *                 a major version bump for Vega.
    * @returns {object} An object of selected fields and values.
    */
 
 
-  function selectionResolve(name, op, isMulti) {
+  function selectionResolve(name, op, isMulti, vl5) {
     var data = this.context.data[name],
         entries = data ? data.values.value : [],
         resolved = {},
@@ -37834,7 +38017,8 @@
     entries = Object.keys(multiRes);
 
     if (isMulti && entries.length) {
-      resolved[VlMulti] = op === Union ? {
+      const key = vl5 ? VlPoint : VlMulti;
+      resolved[key] = op === Union ? {
         [Or]: entries.reduce((acc, k) => (acc.push(...multiRes[k]), acc), [])
       } : {
         [And]: entries.map(k => ({
@@ -38234,6 +38418,46 @@
     return Math.atan2(t[0].clientY - t[1].clientY, t[0].clientX - t[1].clientX);
   }
 
+  const accessors = {};
+
+  function pluck(data, name) {
+    const accessor = accessors[name] || (accessors[name] = field(name));
+    return isArray(data) ? data.map(accessor) : accessor(data);
+  }
+
+  function array$5(seq) {
+    return isArray(seq) || ArrayBuffer.isView(seq) ? seq : null;
+  }
+
+  function sequence$1(seq) {
+    return array$5(seq) || (isString(seq) ? seq : null);
+  }
+
+  function join$1(seq, ...args) {
+    return array$5(seq).join(...args);
+  }
+
+  function indexof(seq, ...args) {
+    return sequence$1(seq).indexOf(...args);
+  }
+
+  function lastindexof(seq, ...args) {
+    return sequence$1(seq).lastIndexOf(...args);
+  }
+
+  function slice$1(seq, ...args) {
+    return sequence$1(seq).slice(...args);
+  }
+
+  function replace$1(str, pattern, repl) {
+    if (isFunction(repl)) error('Function argument passed to replace.');
+    return String(str).replace(pattern, repl);
+  }
+
+  function reverse$1(seq) {
+    return array$5(seq).slice().reverse();
+  }
+
   function bandspace(count, paddingInner, paddingOuter) {
     return bandSpace(count || 0, paddingInner || 0, paddingOuter || 0);
   }
@@ -38407,11 +38631,18 @@
     toDate,
     toNumber,
     toString,
+    indexof,
+    join: join$1,
+    lastindexof,
+    replace: replace$1,
+    reverse: reverse$1,
+    slice: slice$1,
     flush,
     lerp,
     merge: merge$3,
     pad,
     peek,
+    pluck,
     span,
     inrange,
     truncate,
@@ -38535,7 +38766,9 @@
   expressionFunction('treeAncestors', treeAncestors, dataVisitor); // register Vega-Lite selection functions
 
   expressionFunction('vlSelectionTest', selectionTest, selectionVisitor);
+  expressionFunction('vlSelectionIdTest', selectionIdTest, selectionVisitor);
   expressionFunction('vlSelectionResolve', selectionResolve, selectionVisitor);
+  expressionFunction('vlSelectionTuples', selectionTuples);
 
   function parser$1(expr, scope) {
     const params = {}; // parse the expression to an abstract syntax tree (ast)
@@ -39473,12 +39706,8 @@
       item: constant(item || {}),
       group: group,
       xy: xy,
-      x: function (item) {
-        return xy(item)[0];
-      },
-      y: function (item) {
-        return xy(item)[1];
-      }
+      x: item => xy(item)[0],
+      y: item => xy(item)[1]
     };
   }
 
@@ -43389,8 +43618,8 @@
 
     if (data.values) {
       // hard-wired input data set
-      if (hasSignal(data.values) || hasSignal(data.format)) {
-        // if either values or format has signal, use dynamic loader
+      if (isSignal(data.values) || hasSignal(data.format)) {
+        // if either values is signal or format has signal, use dynamic loader
         output.push(load$1(scope, data));
         output.push(source = collect());
       } else {
@@ -44919,6 +45148,8 @@
   // -- Transforms -----
   extend(transforms, tx, vtx, encode, geo, force, label, tree$1, reg, voronoi, wordcloud, xf); // -- Exports -----
 
+  const version$1 = pkg.version;
+
   exports.Bounds = Bounds;
   exports.CanvasHandler = CanvasHandler;
   exports.CanvasRenderer = CanvasRenderer;
@@ -45003,7 +45234,7 @@
   exports.font = font;
   exports.fontFamily = fontFamily;
   exports.fontSize = fontSize;
-  exports.format = format$1;
+  exports.format = format;
   exports.formatLocale = numberFormatDefaultLocale;
   exports.formats = formats;
   exports.hasOwnProperty = has;
@@ -45026,6 +45257,7 @@
   exports.isBoolean = isBoolean;
   exports.isDate = isDate;
   exports.isFunction = isFunction;
+  exports.isIterable = isIterable;
   exports.isNumber = isNumber;
   exports.isObject = isObject;
   exports.isRegExp = isRegExp;
@@ -45132,7 +45364,7 @@
   exports.utcdayofyear = utcdayofyear;
   exports.utcquarter = utcquarter;
   exports.utcweek = utcweek;
-  exports.version = version;
+  exports.version = version$1;
   exports.visitArray = visitArray;
   exports.week = week;
   exports.writeConfig = writeConfig;

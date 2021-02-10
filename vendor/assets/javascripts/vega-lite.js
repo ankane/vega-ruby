@@ -1,10 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('vega')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'vega'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.vegaLite = {}));
 }(this, (function (exports) { 'use strict';
 
-  var version = "4.16.2";
+  var version = "4.17.0";
 
   function accessor(fn, fields, name) {
     fn.fields = fields || [];
@@ -14637,7 +14637,7 @@
   function defaultLabelOverlap(type, scaleType, hasTimeUnit, sort) {
     // do not prevent overlap for nominal data because there is no way to infer what the missing labels are
     if (hasTimeUnit && !isObject(sort) || type !== 'nominal' && type !== 'ordinal') {
-      if (scaleType === 'log') {
+      if (scaleType === 'log' || scaleType === 'symlog') {
         return 'greedy';
       }
 
@@ -15647,7 +15647,7 @@
   }
 
   function defaultLabelOverlap$1(scaleType) {
-    if (contains(['quantile', 'threshold', 'log'], scaleType)) {
+    if (contains(['quantile', 'threshold', 'log', 'symlog'], scaleType)) {
       return 'greedy';
     }
 
@@ -17918,7 +17918,7 @@
 
   class RemoveUnusedSubtrees extends BottomUpOptimizer {
     run(node) {
-      if (node instanceof OutputNode || node.numChildren() > 0 || node instanceof FacetNode) ; else {
+      if (node instanceof OutputNode || node.numChildren() > 0 || node instanceof FacetNode) ; else if (node instanceof SourceNode) ; else {
         this.setModified();
         node.remove();
       }

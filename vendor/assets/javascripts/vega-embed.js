@@ -5,30 +5,154 @@
 }(this, (function (vegaImport, vegaLiteImport) { 'use strict';
 
   function _interopNamespace(e) {
-    if (e && e.__esModule) { return e; } else {
-      var n = Object.create(null);
-      if (e) {
-        Object.keys(e).forEach(function (k) {
-          if (k !== 'default') {
-            var d = Object.getOwnPropertyDescriptor(e, k);
-            Object.defineProperty(n, k, d.get ? d : {
-              enumerable: true,
-              get: function () {
-                return e[k];
-              }
-            });
-          }
-        });
-      }
-      n['default'] = e;
-      return Object.freeze(n);
+    if (e && e.__esModule) return e;
+    var n = Object.create(null);
+    if (e) {
+      Object.keys(e).forEach(function (k) {
+        if (k !== 'default') {
+          var d = Object.getOwnPropertyDescriptor(e, k);
+          Object.defineProperty(n, k, d.get ? d : {
+            enumerable: true,
+            get: function () {
+              return e[k];
+            }
+          });
+        }
+      });
     }
+    n['default'] = e;
+    return Object.freeze(n);
   }
 
   var vegaImport__namespace = /*#__PURE__*/_interopNamespace(vegaImport);
   var vegaLiteImport__namespace = /*#__PURE__*/_interopNamespace(vegaLiteImport);
 
-  var version = "6.12.2";
+  var name = "vega-embed";
+  var version = "6.15.1";
+  var description = "Publish Vega visualizations as embedded web components.";
+  var keywords = [
+  	"vega",
+  	"data",
+  	"visualization",
+  	"component",
+  	"embed"
+  ];
+  var repository = {
+  	type: "git",
+  	url: "http://github.com/vega/vega-embed.git"
+  };
+  var author = {
+  	name: "UW Interactive Data Lab",
+  	url: "http://idl.cs.washington.edu"
+  };
+  var contributors = [
+  	{
+  		name: "Dominik Moritz",
+  		url: "https://www.domoritz.de"
+  	}
+  ];
+  var bugs = {
+  	url: "https://github.com/vega/vega-embed/issues"
+  };
+  var homepage = "https://github.com/vega/vega-embed#readme";
+  var license = "BSD-3-Clause";
+  var main = "build/vega-embed.js";
+  var module = "build/vega-embed.module.js";
+  var unpkg = "build/vega-embed.min.js";
+  var jsdelivr = "build/vega-embed.min.js";
+  var types = "build/vega-embed.module.d.ts";
+  var files = [
+  	"src",
+  	"build",
+  	"build-es5"
+  ];
+  var devDependencies = {
+  	"@rollup/plugin-commonjs": "17.1.0",
+  	"@rollup/plugin-json": "^4.1.0",
+  	"@rollup/plugin-node-resolve": "^11.1.1",
+  	"@types/semver": "^7.3.4",
+  	"@wessberg/rollup-plugin-ts": "^1.3.8",
+  	"browser-sync": "^2.26.14",
+  	concurrently: "^5.3.0",
+  	"jest-canvas-mock": "^2.3.0",
+  	"node-sass": "^5.0.0",
+  	rollup: "^2.38.3",
+  	"rollup-plugin-bundle-size": "^1.0.3",
+  	"rollup-plugin-terser": "^7.0.2",
+  	typescript: "^4.1.3",
+  	vega: "^5.10.0",
+  	"vega-lite": "^4.7.0",
+  	"vega-lite-dev-config": "^0.14.8"
+  };
+  var peerDependencies = {
+  	vega: "^5.13.0",
+  	"vega-lite": "*"
+  };
+  var dependencies = {
+  	"fast-json-patch": "^3.0.0-1",
+  	"json-stringify-pretty-compact": "^2.0.0",
+  	semver: "^7.3.4",
+  	"vega-schema-url-parser": "^2.1.0",
+  	"vega-themes": "^2.9.1",
+  	"vega-tooltip": "^0.25.0"
+  };
+  var scripts = {
+  	prebuild: "yarn clean && yarn build:style",
+  	build: "rollup -c",
+  	"build:style": "./build-style.sh",
+  	clean: "rimraf build && rimraf build-es5 && rimraf src/style.ts",
+  	prepublishOnly: "yarn clean && yarn build",
+  	preversion: "yarn lint && yarn test",
+  	serve: "browser-sync start --directory -s -f build *.html",
+  	start: "yarn build && concurrently --kill-others -n Server,Rollup 'yarn serve' 'rollup -c -w'",
+  	pretest: "yarn build:style",
+  	test: "beemo jest",
+  	"test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+  	prepare: "beemo create-config",
+  	prettierbase: "beemo prettier '*.{css,scss,html}'",
+  	eslintbase: "beemo eslint .",
+  	format: "yarn eslintbase --fix && yarn prettierbase --write",
+  	lint: "yarn eslintbase && yarn prettierbase --check"
+  };
+  var beemo = {
+  	module: "vega-lite-dev-config",
+  	drivers: [
+  		"typescript",
+  		"prettier",
+  		"eslint",
+  		"babel",
+  		"jest"
+  	],
+  	jest: {
+  		testURL: "http://localhost/",
+  		setupFiles: [
+  			"jest-canvas-mock"
+  		]
+  	}
+  };
+  var pkg = {
+  	name: name,
+  	version: version,
+  	description: description,
+  	keywords: keywords,
+  	repository: repository,
+  	author: author,
+  	contributors: contributors,
+  	bugs: bugs,
+  	homepage: homepage,
+  	license: license,
+  	main: main,
+  	module: module,
+  	unpkg: unpkg,
+  	jsdelivr: jsdelivr,
+  	types: types,
+  	files: files,
+  	devDependencies: devDependencies,
+  	peerDependencies: peerDependencies,
+  	dependencies: dependencies,
+  	scripts: scripts,
+  	beemo: beemo
+  };
 
   /*! *****************************************************************************
   Copyright (c) Microsoft Corporation.
@@ -960,18 +1084,9 @@
     })(passedObj, "", 0);
   };
 
-  function createCommonjsModule(fn, basedir, module) {
-  	return module = {
-  	  path: basedir,
-  	  exports: {},
-  	  require: function (path, base) {
-        return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-      }
-  	}, fn(module, module.exports), module.exports;
-  }
-
-  function commonjsRequire () {
-  	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+  function createCommonjsModule(fn) {
+    var module = { exports: {} };
+  	return fn(module, module.exports), module.exports;
   }
 
   // Note: this is the semver.org version of the spec that it implements
@@ -1187,6 +1302,18 @@
   createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$');
   });
 
+  // parse out just the options we care about so we always get a consistent
+  // obj with keys in a consistent order.
+  const opts = ['includePrerelease', 'loose', 'rtl'];
+  const parseOptions = options =>
+    !options ? {}
+    : typeof options !== 'object' ? { loose: true }
+    : opts.filter(k => options[k]).reduce((options, k) => {
+      options[k] = true;
+      return options
+    }, {});
+  var parseOptions_1 = parseOptions;
+
   const numeric = /^[0-9]+$/;
   const compareIdentifiers = (a, b) => {
     const anum = numeric.test(a);
@@ -1214,15 +1341,12 @@
   const { MAX_LENGTH: MAX_LENGTH$1, MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1 } = constants;
   const { re, t } = re_1;
 
+
   const { compareIdentifiers: compareIdentifiers$1 } = identifiers;
   class SemVer {
     constructor (version, options) {
-      if (!options || typeof options !== 'object') {
-        options = {
-          loose: !!options,
-          includePrerelease: false
-        };
-      }
+      options = parseOptions_1(options);
+
       if (version instanceof SemVer) {
         if (version.loose === !!options.loose &&
             version.includePrerelease === !!options.includePrerelease) {
@@ -1505,13 +1629,9 @@
   const { re: re$1, t: t$1 } = re_1;
 
 
+
   const parse = (version, options) => {
-    if (!options || typeof options !== 'object') {
-      options = {
-        loose: !!options,
-        includePrerelease: false
-      };
-    }
+    options = parseOptions_1(options);
 
     if (version instanceof semver) {
       return version
@@ -1735,15 +1855,777 @@
   };
   var coerce_1 = coerce;
 
+  var iterator = function (Yallist) {
+    Yallist.prototype[Symbol.iterator] = function* () {
+      for (let walker = this.head; walker; walker = walker.next) {
+        yield walker.value;
+      }
+    };
+  };
+
+  var yallist = Yallist;
+
+  Yallist.Node = Node;
+  Yallist.create = Yallist;
+
+  function Yallist (list) {
+    var self = this;
+    if (!(self instanceof Yallist)) {
+      self = new Yallist();
+    }
+
+    self.tail = null;
+    self.head = null;
+    self.length = 0;
+
+    if (list && typeof list.forEach === 'function') {
+      list.forEach(function (item) {
+        self.push(item);
+      });
+    } else if (arguments.length > 0) {
+      for (var i = 0, l = arguments.length; i < l; i++) {
+        self.push(arguments[i]);
+      }
+    }
+
+    return self
+  }
+
+  Yallist.prototype.removeNode = function (node) {
+    if (node.list !== this) {
+      throw new Error('removing node which does not belong to this list')
+    }
+
+    var next = node.next;
+    var prev = node.prev;
+
+    if (next) {
+      next.prev = prev;
+    }
+
+    if (prev) {
+      prev.next = next;
+    }
+
+    if (node === this.head) {
+      this.head = next;
+    }
+    if (node === this.tail) {
+      this.tail = prev;
+    }
+
+    node.list.length--;
+    node.next = null;
+    node.prev = null;
+    node.list = null;
+
+    return next
+  };
+
+  Yallist.prototype.unshiftNode = function (node) {
+    if (node === this.head) {
+      return
+    }
+
+    if (node.list) {
+      node.list.removeNode(node);
+    }
+
+    var head = this.head;
+    node.list = this;
+    node.next = head;
+    if (head) {
+      head.prev = node;
+    }
+
+    this.head = node;
+    if (!this.tail) {
+      this.tail = node;
+    }
+    this.length++;
+  };
+
+  Yallist.prototype.pushNode = function (node) {
+    if (node === this.tail) {
+      return
+    }
+
+    if (node.list) {
+      node.list.removeNode(node);
+    }
+
+    var tail = this.tail;
+    node.list = this;
+    node.prev = tail;
+    if (tail) {
+      tail.next = node;
+    }
+
+    this.tail = node;
+    if (!this.head) {
+      this.head = node;
+    }
+    this.length++;
+  };
+
+  Yallist.prototype.push = function () {
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      push(this, arguments[i]);
+    }
+    return this.length
+  };
+
+  Yallist.prototype.unshift = function () {
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      unshift(this, arguments[i]);
+    }
+    return this.length
+  };
+
+  Yallist.prototype.pop = function () {
+    if (!this.tail) {
+      return undefined
+    }
+
+    var res = this.tail.value;
+    this.tail = this.tail.prev;
+    if (this.tail) {
+      this.tail.next = null;
+    } else {
+      this.head = null;
+    }
+    this.length--;
+    return res
+  };
+
+  Yallist.prototype.shift = function () {
+    if (!this.head) {
+      return undefined
+    }
+
+    var res = this.head.value;
+    this.head = this.head.next;
+    if (this.head) {
+      this.head.prev = null;
+    } else {
+      this.tail = null;
+    }
+    this.length--;
+    return res
+  };
+
+  Yallist.prototype.forEach = function (fn, thisp) {
+    thisp = thisp || this;
+    for (var walker = this.head, i = 0; walker !== null; i++) {
+      fn.call(thisp, walker.value, i, this);
+      walker = walker.next;
+    }
+  };
+
+  Yallist.prototype.forEachReverse = function (fn, thisp) {
+    thisp = thisp || this;
+    for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
+      fn.call(thisp, walker.value, i, this);
+      walker = walker.prev;
+    }
+  };
+
+  Yallist.prototype.get = function (n) {
+    for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
+      // abort out of the list early if we hit a cycle
+      walker = walker.next;
+    }
+    if (i === n && walker !== null) {
+      return walker.value
+    }
+  };
+
+  Yallist.prototype.getReverse = function (n) {
+    for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
+      // abort out of the list early if we hit a cycle
+      walker = walker.prev;
+    }
+    if (i === n && walker !== null) {
+      return walker.value
+    }
+  };
+
+  Yallist.prototype.map = function (fn, thisp) {
+    thisp = thisp || this;
+    var res = new Yallist();
+    for (var walker = this.head; walker !== null;) {
+      res.push(fn.call(thisp, walker.value, this));
+      walker = walker.next;
+    }
+    return res
+  };
+
+  Yallist.prototype.mapReverse = function (fn, thisp) {
+    thisp = thisp || this;
+    var res = new Yallist();
+    for (var walker = this.tail; walker !== null;) {
+      res.push(fn.call(thisp, walker.value, this));
+      walker = walker.prev;
+    }
+    return res
+  };
+
+  Yallist.prototype.reduce = function (fn, initial) {
+    var acc;
+    var walker = this.head;
+    if (arguments.length > 1) {
+      acc = initial;
+    } else if (this.head) {
+      walker = this.head.next;
+      acc = this.head.value;
+    } else {
+      throw new TypeError('Reduce of empty list with no initial value')
+    }
+
+    for (var i = 0; walker !== null; i++) {
+      acc = fn(acc, walker.value, i);
+      walker = walker.next;
+    }
+
+    return acc
+  };
+
+  Yallist.prototype.reduceReverse = function (fn, initial) {
+    var acc;
+    var walker = this.tail;
+    if (arguments.length > 1) {
+      acc = initial;
+    } else if (this.tail) {
+      walker = this.tail.prev;
+      acc = this.tail.value;
+    } else {
+      throw new TypeError('Reduce of empty list with no initial value')
+    }
+
+    for (var i = this.length - 1; walker !== null; i--) {
+      acc = fn(acc, walker.value, i);
+      walker = walker.prev;
+    }
+
+    return acc
+  };
+
+  Yallist.prototype.toArray = function () {
+    var arr = new Array(this.length);
+    for (var i = 0, walker = this.head; walker !== null; i++) {
+      arr[i] = walker.value;
+      walker = walker.next;
+    }
+    return arr
+  };
+
+  Yallist.prototype.toArrayReverse = function () {
+    var arr = new Array(this.length);
+    for (var i = 0, walker = this.tail; walker !== null; i++) {
+      arr[i] = walker.value;
+      walker = walker.prev;
+    }
+    return arr
+  };
+
+  Yallist.prototype.slice = function (from, to) {
+    to = to || this.length;
+    if (to < 0) {
+      to += this.length;
+    }
+    from = from || 0;
+    if (from < 0) {
+      from += this.length;
+    }
+    var ret = new Yallist();
+    if (to < from || to < 0) {
+      return ret
+    }
+    if (from < 0) {
+      from = 0;
+    }
+    if (to > this.length) {
+      to = this.length;
+    }
+    for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
+      walker = walker.next;
+    }
+    for (; walker !== null && i < to; i++, walker = walker.next) {
+      ret.push(walker.value);
+    }
+    return ret
+  };
+
+  Yallist.prototype.sliceReverse = function (from, to) {
+    to = to || this.length;
+    if (to < 0) {
+      to += this.length;
+    }
+    from = from || 0;
+    if (from < 0) {
+      from += this.length;
+    }
+    var ret = new Yallist();
+    if (to < from || to < 0) {
+      return ret
+    }
+    if (from < 0) {
+      from = 0;
+    }
+    if (to > this.length) {
+      to = this.length;
+    }
+    for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
+      walker = walker.prev;
+    }
+    for (; walker !== null && i > from; i--, walker = walker.prev) {
+      ret.push(walker.value);
+    }
+    return ret
+  };
+
+  Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
+    if (start > this.length) {
+      start = this.length - 1;
+    }
+    if (start < 0) {
+      start = this.length + start;
+    }
+
+    for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
+      walker = walker.next;
+    }
+
+    var ret = [];
+    for (var i = 0; walker && i < deleteCount; i++) {
+      ret.push(walker.value);
+      walker = this.removeNode(walker);
+    }
+    if (walker === null) {
+      walker = this.tail;
+    }
+
+    if (walker !== this.head && walker !== this.tail) {
+      walker = walker.prev;
+    }
+
+    for (var i = 0; i < nodes.length; i++) {
+      walker = insert(this, walker, nodes[i]);
+    }
+    return ret;
+  };
+
+  Yallist.prototype.reverse = function () {
+    var head = this.head;
+    var tail = this.tail;
+    for (var walker = head; walker !== null; walker = walker.prev) {
+      var p = walker.prev;
+      walker.prev = walker.next;
+      walker.next = p;
+    }
+    this.head = tail;
+    this.tail = head;
+    return this
+  };
+
+  function insert (self, node, value) {
+    var inserted = node === self.head ?
+      new Node(value, null, node, self) :
+      new Node(value, node, node.next, self);
+
+    if (inserted.next === null) {
+      self.tail = inserted;
+    }
+    if (inserted.prev === null) {
+      self.head = inserted;
+    }
+
+    self.length++;
+
+    return inserted
+  }
+
+  function push (self, item) {
+    self.tail = new Node(item, self.tail, null, self);
+    if (!self.head) {
+      self.head = self.tail;
+    }
+    self.length++;
+  }
+
+  function unshift (self, item) {
+    self.head = new Node(item, null, self.head, self);
+    if (!self.tail) {
+      self.tail = self.head;
+    }
+    self.length++;
+  }
+
+  function Node (value, prev, next, list) {
+    if (!(this instanceof Node)) {
+      return new Node(value, prev, next, list)
+    }
+
+    this.list = list;
+    this.value = value;
+
+    if (prev) {
+      prev.next = this;
+      this.prev = prev;
+    } else {
+      this.prev = null;
+    }
+
+    if (next) {
+      next.prev = this;
+      this.next = next;
+    } else {
+      this.next = null;
+    }
+  }
+
+  try {
+    // add if support for Symbol.iterator is present
+    iterator(Yallist);
+  } catch (er) {}
+
+  // A linked list to keep track of recently-used-ness
+
+
+  const MAX = Symbol('max');
+  const LENGTH = Symbol('length');
+  const LENGTH_CALCULATOR = Symbol('lengthCalculator');
+  const ALLOW_STALE = Symbol('allowStale');
+  const MAX_AGE = Symbol('maxAge');
+  const DISPOSE = Symbol('dispose');
+  const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet');
+  const LRU_LIST = Symbol('lruList');
+  const CACHE = Symbol('cache');
+  const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet');
+
+  const naiveLength = () => 1;
+
+  // lruList is a yallist where the head is the youngest
+  // item, and the tail is the oldest.  the list contains the Hit
+  // objects as the entries.
+  // Each Hit object has a reference to its Yallist.Node.  This
+  // never changes.
+  //
+  // cache is a Map (or PseudoMap) that matches the keys to
+  // the Yallist.Node object.
+  class LRUCache {
+    constructor (options) {
+      if (typeof options === 'number')
+        options = { max: options };
+
+      if (!options)
+        options = {};
+
+      if (options.max && (typeof options.max !== 'number' || options.max < 0))
+        throw new TypeError('max must be a non-negative number')
+      // Kind of weird to have a default max of Infinity, but oh well.
+      this[MAX] = options.max || Infinity;
+
+      const lc = options.length || naiveLength;
+      this[LENGTH_CALCULATOR] = (typeof lc !== 'function') ? naiveLength : lc;
+      this[ALLOW_STALE] = options.stale || false;
+      if (options.maxAge && typeof options.maxAge !== 'number')
+        throw new TypeError('maxAge must be a number')
+      this[MAX_AGE] = options.maxAge || 0;
+      this[DISPOSE] = options.dispose;
+      this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false;
+      this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false;
+      this.reset();
+    }
+
+    // resize the cache when the max changes.
+    set max (mL) {
+      if (typeof mL !== 'number' || mL < 0)
+        throw new TypeError('max must be a non-negative number')
+
+      this[MAX] = mL || Infinity;
+      trim(this);
+    }
+    get max () {
+      return this[MAX]
+    }
+
+    set allowStale (allowStale) {
+      this[ALLOW_STALE] = !!allowStale;
+    }
+    get allowStale () {
+      return this[ALLOW_STALE]
+    }
+
+    set maxAge (mA) {
+      if (typeof mA !== 'number')
+        throw new TypeError('maxAge must be a non-negative number')
+
+      this[MAX_AGE] = mA;
+      trim(this);
+    }
+    get maxAge () {
+      return this[MAX_AGE]
+    }
+
+    // resize the cache when the lengthCalculator changes.
+    set lengthCalculator (lC) {
+      if (typeof lC !== 'function')
+        lC = naiveLength;
+
+      if (lC !== this[LENGTH_CALCULATOR]) {
+        this[LENGTH_CALCULATOR] = lC;
+        this[LENGTH] = 0;
+        this[LRU_LIST].forEach(hit => {
+          hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key);
+          this[LENGTH] += hit.length;
+        });
+      }
+      trim(this);
+    }
+    get lengthCalculator () { return this[LENGTH_CALCULATOR] }
+
+    get length () { return this[LENGTH] }
+    get itemCount () { return this[LRU_LIST].length }
+
+    rforEach (fn, thisp) {
+      thisp = thisp || this;
+      for (let walker = this[LRU_LIST].tail; walker !== null;) {
+        const prev = walker.prev;
+        forEachStep(this, fn, walker, thisp);
+        walker = prev;
+      }
+    }
+
+    forEach (fn, thisp) {
+      thisp = thisp || this;
+      for (let walker = this[LRU_LIST].head; walker !== null;) {
+        const next = walker.next;
+        forEachStep(this, fn, walker, thisp);
+        walker = next;
+      }
+    }
+
+    keys () {
+      return this[LRU_LIST].toArray().map(k => k.key)
+    }
+
+    values () {
+      return this[LRU_LIST].toArray().map(k => k.value)
+    }
+
+    reset () {
+      if (this[DISPOSE] &&
+          this[LRU_LIST] &&
+          this[LRU_LIST].length) {
+        this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value));
+      }
+
+      this[CACHE] = new Map(); // hash of items by key
+      this[LRU_LIST] = new yallist(); // list of items in order of use recency
+      this[LENGTH] = 0; // length of items in the list
+    }
+
+    dump () {
+      return this[LRU_LIST].map(hit =>
+        isStale(this, hit) ? false : {
+          k: hit.key,
+          v: hit.value,
+          e: hit.now + (hit.maxAge || 0)
+        }).toArray().filter(h => h)
+    }
+
+    dumpLru () {
+      return this[LRU_LIST]
+    }
+
+    set (key, value, maxAge) {
+      maxAge = maxAge || this[MAX_AGE];
+
+      if (maxAge && typeof maxAge !== 'number')
+        throw new TypeError('maxAge must be a number')
+
+      const now = maxAge ? Date.now() : 0;
+      const len = this[LENGTH_CALCULATOR](value, key);
+
+      if (this[CACHE].has(key)) {
+        if (len > this[MAX]) {
+          del(this, this[CACHE].get(key));
+          return false
+        }
+
+        const node = this[CACHE].get(key);
+        const item = node.value;
+
+        // dispose of the old one before overwriting
+        // split out into 2 ifs for better coverage tracking
+        if (this[DISPOSE]) {
+          if (!this[NO_DISPOSE_ON_SET])
+            this[DISPOSE](key, item.value);
+        }
+
+        item.now = now;
+        item.maxAge = maxAge;
+        item.value = value;
+        this[LENGTH] += len - item.length;
+        item.length = len;
+        this.get(key);
+        trim(this);
+        return true
+      }
+
+      const hit = new Entry(key, value, len, now, maxAge);
+
+      // oversized objects fall out of cache automatically.
+      if (hit.length > this[MAX]) {
+        if (this[DISPOSE])
+          this[DISPOSE](key, value);
+
+        return false
+      }
+
+      this[LENGTH] += hit.length;
+      this[LRU_LIST].unshift(hit);
+      this[CACHE].set(key, this[LRU_LIST].head);
+      trim(this);
+      return true
+    }
+
+    has (key) {
+      if (!this[CACHE].has(key)) return false
+      const hit = this[CACHE].get(key).value;
+      return !isStale(this, hit)
+    }
+
+    get (key) {
+      return get(this, key, true)
+    }
+
+    peek (key) {
+      return get(this, key, false)
+    }
+
+    pop () {
+      const node = this[LRU_LIST].tail;
+      if (!node)
+        return null
+
+      del(this, node);
+      return node.value
+    }
+
+    del (key) {
+      del(this, this[CACHE].get(key));
+    }
+
+    load (arr) {
+      // reset the cache
+      this.reset();
+
+      const now = Date.now();
+      // A previous serialized cache has the most recent items first
+      for (let l = arr.length - 1; l >= 0; l--) {
+        const hit = arr[l];
+        const expiresAt = hit.e || 0;
+        if (expiresAt === 0)
+          // the item was created without expiration in a non aged cache
+          this.set(hit.k, hit.v);
+        else {
+          const maxAge = expiresAt - now;
+          // dont add already expired items
+          if (maxAge > 0) {
+            this.set(hit.k, hit.v, maxAge);
+          }
+        }
+      }
+    }
+
+    prune () {
+      this[CACHE].forEach((value, key) => get(this, key, false));
+    }
+  }
+
+  const get = (self, key, doUse) => {
+    const node = self[CACHE].get(key);
+    if (node) {
+      const hit = node.value;
+      if (isStale(self, hit)) {
+        del(self, node);
+        if (!self[ALLOW_STALE])
+          return undefined
+      } else {
+        if (doUse) {
+          if (self[UPDATE_AGE_ON_GET])
+            node.value.now = Date.now();
+          self[LRU_LIST].unshiftNode(node);
+        }
+      }
+      return hit.value
+    }
+  };
+
+  const isStale = (self, hit) => {
+    if (!hit || (!hit.maxAge && !self[MAX_AGE]))
+      return false
+
+    const diff = Date.now() - hit.now;
+    return hit.maxAge ? diff > hit.maxAge
+      : self[MAX_AGE] && (diff > self[MAX_AGE])
+  };
+
+  const trim = self => {
+    if (self[LENGTH] > self[MAX]) {
+      for (let walker = self[LRU_LIST].tail;
+        self[LENGTH] > self[MAX] && walker !== null;) {
+        // We know that we're about to delete this one, and also
+        // what the next least recently used key will be, so just
+        // go ahead and set it now.
+        const prev = walker.prev;
+        del(self, walker);
+        walker = prev;
+      }
+    }
+  };
+
+  const del = (self, node) => {
+    if (node) {
+      const hit = node.value;
+      if (self[DISPOSE])
+        self[DISPOSE](hit.key, hit.value);
+
+      self[LENGTH] -= hit.length;
+      self[CACHE].delete(hit.key);
+      self[LRU_LIST].removeNode(node);
+    }
+  };
+
+  class Entry {
+    constructor (key, value, length, now, maxAge) {
+      this.key = key;
+      this.value = value;
+      this.length = length;
+      this.now = now;
+      this.maxAge = maxAge || 0;
+    }
+  }
+
+  const forEachStep = (self, fn, node, thisp) => {
+    let hit = node.value;
+    if (isStale(self, hit)) {
+      del(self, node);
+      if (!self[ALLOW_STALE])
+        hit = undefined;
+    }
+    if (hit)
+      fn.call(thisp, hit.value, hit.key, self);
+  };
+
+  var lruCache = LRUCache;
+
   // hoisted class for cyclic dependency
   class Range {
     constructor (range, options) {
-      if (!options || typeof options !== 'object') {
-        options = {
-          loose: !!options,
-          includePrerelease: false
-        };
-      }
+      options = parseOptions_1(options);
 
       if (range instanceof Range) {
         if (
@@ -1783,6 +2665,24 @@
         throw new TypeError(`Invalid SemVer Range: ${range}`)
       }
 
+      // if we have any that are not the null set, throw out null sets.
+      if (this.set.length > 1) {
+        // keep the first one, in case they're all null sets
+        const first = this.set[0];
+        this.set = this.set.filter(c => !isNullSet(c[0]));
+        if (this.set.length === 0)
+          this.set = [first];
+        else if (this.set.length > 1) {
+          // if we have any that are *, then the range is just *
+          for (const c of this.set) {
+            if (c.length === 1 && isAny(c[0])) {
+              this.set = [c];
+              break
+            }
+          }
+        }
+      }
+
       this.format();
     }
 
@@ -1801,8 +2701,17 @@
     }
 
     parseRange (range) {
-      const loose = this.options.loose;
       range = range.trim();
+
+      // memoize range parsing for performance.
+      // this is a very hot path, and fully deterministic.
+      const memoOpts = Object.keys(this.options).join(',');
+      const memoKey = `parseRange:${memoOpts}:${range}`;
+      const cached = cache.get(memoKey);
+      if (cached)
+        return cached
+
+      const loose = this.options.loose;
       // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
       const hr = loose ? re$3[t$3.HYPHENRANGELOOSE] : re$3[t$3.HYPHENRANGE];
       range = range.replace(hr, hyphenReplace(this.options.includePrerelease));
@@ -1824,15 +2733,33 @@
       // ready to be split into comparators.
 
       const compRe = loose ? re$3[t$3.COMPARATORLOOSE] : re$3[t$3.COMPARATOR];
-      return range
+      const rangeList = range
         .split(' ')
         .map(comp => parseComparator(comp, this.options))
         .join(' ')
         .split(/\s+/)
+        // >=0.0.0 is equivalent to *
         .map(comp => replaceGTE0(comp, this.options))
         // in loose mode, throw out any that are not valid comparators
         .filter(this.options.loose ? comp => !!comp.match(compRe) : () => true)
-        .map(comp => new comparator(comp, this.options))
+        .map(comp => new comparator(comp, this.options));
+
+      // if any comparators are the null set, then replace with JUST null set
+      // if more than one comparator, remove any * comparators
+      // also, don't include the same comparator more than once
+      rangeList.length;
+      const rangeMap = new Map();
+      for (const comp of rangeList) {
+        if (isNullSet(comp))
+          return [comp]
+        rangeMap.set(comp.value, comp);
+      }
+      if (rangeMap.size > 1 && rangeMap.has(''))
+        rangeMap.delete('');
+
+      const result = [...rangeMap.values()];
+      cache.set(memoKey, result);
+      return result
     }
 
     intersects (range, options) {
@@ -1882,6 +2809,10 @@
   var range = Range;
 
 
+  const cache = new lruCache({ max: 1000 });
+
+
+
 
 
   const {
@@ -1891,6 +2822,9 @@
     tildeTrimReplace,
     caretTrimReplace
   } = re_1;
+
+  const isNullSet = c => c.value === '<0.0.0-0';
+  const isAny = c => c.value === '';
 
   // take a set of comparators and determine whether there
   // exists a version which can satisfy it
@@ -2206,12 +3140,7 @@
       return ANY
     }
     constructor (comp, options) {
-      if (!options || typeof options !== 'object') {
-        options = {
-          loose: !!options,
-          includePrerelease: false
-        };
-      }
+      options = parseOptions_1(options);
 
       if (comp instanceof Comparator) {
         if (comp.loose === !!options.loose) {
@@ -2333,6 +3262,7 @@
 
   var comparator = Comparator;
 
+
   const {re: re$4, t: t$4} = re_1;
 
   const satisfies = (version, range$1, options) => {
@@ -2415,6 +3345,7 @@
     for (let i = 0; i < range$1.set.length; ++i) {
       const comparators = range$1.set[i];
 
+      let setMin = null;
       comparators.forEach((comparator) => {
         // Clone to avoid manipulating the comparator's semver object.
         const compver = new semver(comparator.semver.version);
@@ -2429,8 +3360,8 @@
             /* fallthrough */
           case '':
           case '>=':
-            if (!minver || gt_1(minver, compver)) {
-              minver = compver;
+            if (!setMin || gt_1(compver, setMin)) {
+              setMin = compver;
             }
             break
           case '<':
@@ -2442,6 +3373,8 @@
             throw new Error(`Unexpected operation: ${comparator.operator}`)
         }
       });
+      if (setMin && (!minver || gt_1(minver, setMin)))
+        minver = setMin;
     }
 
     if (minver && range$1.test(minver)) {
@@ -2495,7 +3428,7 @@
         throw new TypeError('Must provide a hilo val of "<" or ">"')
     }
 
-    // If it satisifes the range it is not outside
+    // If it satisfies the range it is not outside
     if (satisfies_1(version, range$1, options)) {
       return false
     }
@@ -2625,15 +3558,18 @@
   //   - If EQ satisfies every C, return true
   //   - Else return false
   // - If GT
-  //   - If GT is lower than any > or >= comp in C, return false
+  //   - If GT.semver is lower than any > or >= comp in C, return false
   //   - If GT is >=, and GT.semver does not satisfy every C, return false
   // - If LT
-  //   - If LT.semver is greater than that of any > comp in C, return false
+  //   - If LT.semver is greater than any < or <= comp in C, return false
   //   - If LT is <=, and LT.semver does not satisfy every C, return false
   // - If any C is a = range, and GT or LT are set, return false
   // - Else return true
 
   const subset = (sub, dom, options) => {
+    if (sub === dom)
+      return true
+
     sub = new range(sub, options);
     dom = new range(dom, options);
     let sawNonNull = false;
@@ -2656,6 +3592,9 @@
   };
 
   const simpleSubset = (sub, dom, options) => {
+    if (sub === dom)
+      return true
+
     if (sub.length === 1 && sub[0].semver === ANY$2)
       return dom.length === 1 && dom[0].semver === ANY$2
 
@@ -2694,6 +3633,7 @@
         if (!satisfies_1(eq, String(c), options))
           return false
       }
+
       return true
     }
 
@@ -2705,7 +3645,7 @@
       if (gt) {
         if (c.operator === '>' || c.operator === '>=') {
           higher = higherGT(gt, c, options);
-          if (higher === c)
+          if (higher === c && higher !== gt)
             return false
         } else if (gt.operator === '>=' && !satisfies_1(gt.semver, String(c), options))
           return false
@@ -2713,7 +3653,7 @@
       if (lt) {
         if (c.operator === '<' || c.operator === '<=') {
           lower = lowerLT(lt, c, options);
-          if (lower === c)
+          if (lower === c && lower !== lt)
             return false
         } else if (lt.operator === '<=' && !satisfies_1(lt.semver, String(c), options))
           return false
@@ -2809,21 +3749,21 @@
 
   function schemaParser(e){const[n,r]=/\/schema\/([\w-]+)\/([\w\.\-]+)\.json$/g.exec(e).slice(1,3);return {library:n,version:r}}
 
-  var name = "vega-themes";
-  var version$1 = "2.9.0";
-  var description = "Themes for stylized Vega and Vega-Lite visualizations.";
-  var keywords = [
+  var name$1 = "vega-themes";
+  var version$1 = "2.9.1";
+  var description$1 = "Themes for stylized Vega and Vega-Lite visualizations.";
+  var keywords$1 = [
   	"vega",
   	"vega-lite",
   	"themes",
   	"style"
   ];
-  var license = "BSD-3-Clause";
-  var author = {
+  var license$1 = "BSD-3-Clause";
+  var author$1 = {
   	name: "UW Interactive Data Lab",
   	url: "https://idl.cs.washington.edu"
   };
-  var contributors = [
+  var contributors$1 = [
   	{
   		name: "Emily Gu",
   		url: "https://github.com/emilygu"
@@ -2841,20 +3781,20 @@
   		url: "https://www.domoritz.de"
   	}
   ];
-  var main = "build/vega-themes.js";
-  var module = "build/vega-themes.module.js";
-  var unpkg = "build/vega-themes.min.js";
-  var jsdelivr = "build/vega-themes.min.js";
-  var types = "build/vega-themes.module.d.ts";
-  var repository = {
+  var main$1 = "build/vega-themes.js";
+  var module$1 = "build/vega-themes.module.js";
+  var unpkg$1 = "build/vega-themes.min.js";
+  var jsdelivr$1 = "build/vega-themes.min.js";
+  var types$1 = "build/vega-themes.module.d.ts";
+  var repository$1 = {
   	type: "git",
   	url: "https://github.com/vega/vega-themes.git"
   };
-  var files = [
+  var files$1 = [
   	"src",
   	"build"
   ];
-  var scripts = {
+  var scripts$1 = {
   	prebuild: "yarn clean",
   	build: "rollup -c",
   	clean: "rimraf build && rimraf examples/build",
@@ -2870,26 +3810,26 @@
   	format: "yarn eslintbase --fix",
   	lint: "yarn eslintbase"
   };
-  var devDependencies = {
+  var devDependencies$1 = {
   	"@rollup/plugin-json": "^4.1.0",
   	"@rollup/plugin-node-resolve": "^9.0.0",
   	"@wessberg/rollup-plugin-ts": "^1.3.4",
-  	"browser-sync": "^2.26.7",
-  	concurrently: "^5.2.0",
+  	"browser-sync": "^2.26.12",
+  	concurrently: "^5.3.0",
   	"gh-pages": "^3.1.0",
-  	rollup: "^2.26.10",
+  	rollup: "^2.26.11",
   	"rollup-plugin-bundle-size": "^1.0.3",
   	"rollup-plugin-terser": "^7.0.2",
   	typescript: "^4.0.2",
   	vega: "^5.10.0",
   	"vega-lite": "^4.8.1",
-  	"vega-lite-dev-config": "^0.14.2"
+  	"vega-lite-dev-config": "^0.14.6"
   };
-  var peerDependencies = {
+  var peerDependencies$1 = {
   	vega: "*",
   	"vega-lite": "*"
   };
-  var beemo = {
+  var beemo$1 = {
   	module: "vega-lite-dev-config",
   	drivers: [
   		"typescript",
@@ -2897,25 +3837,25 @@
   		"eslint"
   	]
   };
-  var pkg = {
-  	name: name,
+  var pkg$1 = {
+  	name: name$1,
   	version: version$1,
-  	description: description,
-  	keywords: keywords,
-  	license: license,
-  	author: author,
-  	contributors: contributors,
-  	main: main,
-  	module: module,
-  	unpkg: unpkg,
-  	jsdelivr: jsdelivr,
-  	types: types,
-  	repository: repository,
-  	files: files,
-  	scripts: scripts,
-  	devDependencies: devDependencies,
-  	peerDependencies: peerDependencies,
-  	beemo: beemo
+  	description: description$1,
+  	keywords: keywords$1,
+  	license: license$1,
+  	author: author$1,
+  	contributors: contributors$1,
+  	main: main$1,
+  	module: module$1,
+  	unpkg: unpkg$1,
+  	jsdelivr: jsdelivr$1,
+  	types: types$1,
+  	repository: repository$1,
+  	files: files$1,
+  	scripts: scripts$1,
+  	devDependencies: devDependencies$1,
+  	peerDependencies: peerDependencies$1,
+  	beemo: beemo$1
   };
 
   const lightColor = '#fff';
@@ -3484,7 +4424,7 @@
       },
   };
 
-  const version$1$1 = pkg.version;
+  const version$1$1 = pkg$1.version;
 
   var themes = /*#__PURE__*/Object.freeze({
     __proto__: null,
@@ -3500,43 +4440,44 @@
     vox: voxTheme
   });
 
-  function accessor(fn, fields, name) {
+  function accessor (fn, fields, name) {
     fn.fields = fields || [];
     fn.fname = name;
     return fn;
   }
 
-  function getter(path) {
+  function getter (path) {
     return path.length === 1 ? get1(path[0]) : getN(path);
   }
 
-  const get1 = field => function(obj) {
+  const get1 = field => function (obj) {
     return obj[field];
   };
 
   const getN = path => {
     const len = path.length;
-    return function(obj) {
+    return function (obj) {
       for (let i = 0; i < len; ++i) {
         obj = obj[path[i]];
       }
+
       return obj;
     };
   };
 
-  function error(message) {
+  function error (message) {
     throw Error(message);
   }
 
-  function splitAccessPath(p) {
+  function splitAccessPath (p) {
     const path = [],
           n = p.length;
-
     let q = null,
         b = 0,
         s = '',
-        i, j, c;
-
+        i,
+        j,
+        c;
     p = p + '';
 
     function push() {
@@ -3545,8 +4486,9 @@
       i = j + 1;
     }
 
-    for (i=j=0; j<n; ++j) {
+    for (i = j = 0; j < n; ++j) {
       c = p[j];
+
       if (c === '\\') {
         s += p.substring(i, j);
         s += p.substring(++j, ++j);
@@ -3591,35 +4533,26 @@
     return path;
   }
 
-  function field(field, name, opt) {
+  function field (field, name, opt) {
     const path = splitAccessPath(field);
     field = path.length === 1 ? path[0] : field;
-    return accessor(
-      (opt && opt.get || getter)(path),
-      [field],
-      name || field
-    );
+    return accessor((opt && opt.get || getter)(path), [field], name || field);
   }
 
-  const id = field('id');
-
-  const identity = accessor(_ => _, [], 'identity');
-
-  const zero = accessor(() => 0, [], 'zero');
-
-  const one = accessor(() => 1, [], 'one');
-
-  const truthy = accessor(() => true, [], 'true');
-
-  const falsy = accessor(() => false, [], 'false');
+  field('id');
+  accessor(_ => _, [], 'identity');
+  accessor(() => 0, [], 'zero');
+  accessor(() => 1, [], 'one');
+  accessor(() => true, [], 'true');
+  accessor(() => false, [], 'false');
 
   var isArray = Array.isArray;
 
-  function isObject(_) {
+  function isObject (_) {
     return _ === Object(_);
   }
 
-  function isString(_) {
+  function isString (_) {
     return typeof _ === 'string';
   }
 
@@ -3851,6 +4784,7 @@
       constructor(options) {
           this.options = Object.assign(Object.assign({}, DEFAULT_OPTIONS), options);
           const elementId = this.options.id;
+          this.el = null;
           // bind this to call
           this.call = this.tooltipHandler.bind(this);
           // prepend a default stylesheet for tooltips to the head
@@ -3866,21 +4800,22 @@
                   head.appendChild(style);
               }
           }
-          // append a div element that we use as a tooltip unless it already exists
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          this.el = document.getElementById(elementId);
-          if (!this.el) {
-              this.el = document.createElement('div');
-              this.el.setAttribute('id', elementId);
-              this.el.classList.add('vg-tooltip');
-              document.body.appendChild(this.el);
-          }
       }
       /**
        * The tooltip handler function.
        */
       tooltipHandler(handler, event, item, value) {
           // console.log(handler, event, item, value);
+          // append a div element that we use as a tooltip unless it already exists
+          this.el = document.getElementById(this.options.id);
+          if (!this.el) {
+              this.el = document.createElement('div');
+              this.el.setAttribute('id', this.options.id);
+              this.el.classList.add('vg-tooltip');
+              document.body.appendChild(this.el);
+          }
+          const tooltipContainer = document.fullscreenElement != null ? document.fullscreenElement : document.body;
+          tooltipContainer.appendChild(this.el);
           // hide tooltip for null, undefined, or empty string values
           if (value == null || value === '') {
               this.el.classList.remove('visible', `${this.options.theme}-theme`);
@@ -3927,7 +4862,7 @@
   }
 
   // generated with build-style.sh
-  var embedStyle = ".vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box; }\n  .vega-embed.has-actions {\n    padding-right: 38px; }\n  .vega-embed details:not([open]) > :not(summary) {\n    display: none !important; }\n  .vega-embed summary {\n    list-style: none;\n    position: absolute;\n    top: 0;\n    right: 0;\n    padding: 6px;\n    z-index: 1000;\n    background: white;\n    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n    color: #1b1e23;\n    border: 1px solid #aaa;\n    border-radius: 999px;\n    opacity: 0.2;\n    transition: opacity 0.4s ease-in;\n    outline: none;\n    cursor: pointer;\n    line-height: 0px; }\n    .vega-embed summary::-webkit-details-marker {\n      display: none; }\n    .vega-embed summary:active {\n      box-shadow: #aaa 0px 0px 0px 1px inset; }\n    .vega-embed summary svg {\n      width: 14px;\n      height: 14px; }\n  .vega-embed details[open] summary {\n    opacity: 0.7; }\n  .vega-embed:hover summary,\n  .vega-embed:focus summary {\n    opacity: 1 !important;\n    transition: opacity 0.2s ease; }\n  .vega-embed .vega-actions {\n    position: absolute;\n    z-index: 1001;\n    top: 35px;\n    right: -9px;\n    display: flex;\n    flex-direction: column;\n    padding-bottom: 8px;\n    padding-top: 8px;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n    border: 1px solid #d9d9d9;\n    background: white;\n    animation-duration: 0.15s;\n    animation-name: scale-in;\n    animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n    text-align: left; }\n    .vega-embed .vega-actions a {\n      padding: 8px 16px;\n      font-family: sans-serif;\n      font-size: 14px;\n      font-weight: 600;\n      white-space: nowrap;\n      color: #434a56;\n      text-decoration: none; }\n      .vega-embed .vega-actions a:hover {\n        background-color: #f7f7f9;\n        color: black; }\n    .vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n      content: \"\";\n      display: inline-block;\n      position: absolute; }\n    .vega-embed .vega-actions::before {\n      left: auto;\n      right: 14px;\n      top: -16px;\n      border: 8px solid #0000;\n      border-bottom-color: #d9d9d9; }\n    .vega-embed .vega-actions::after {\n      left: auto;\n      right: 15px;\n      top: -14px;\n      border: 7px solid #0000;\n      border-bottom-color: #fff; }\n  .vega-embed .chart-wrapper {\n    width: 100%;\n    height: 100%; }\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: scroll;\n  padding-right: 14px; }\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6); }\n  to {\n    opacity: 1;\n    transform: scale(1); } }\n";
+  var embedStyle = ".vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box; }\n  .vega-embed.has-actions {\n    padding-right: 38px; }\n  .vega-embed details:not([open]) > :not(summary) {\n    display: none !important; }\n  .vega-embed summary {\n    list-style: none;\n    position: absolute;\n    top: 0;\n    right: 0;\n    padding: 6px;\n    z-index: 1000;\n    background: white;\n    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n    color: #1b1e23;\n    border: 1px solid #aaa;\n    border-radius: 999px;\n    opacity: 0.2;\n    transition: opacity 0.4s ease-in;\n    outline: none;\n    cursor: pointer;\n    line-height: 0px; }\n    .vega-embed summary::-webkit-details-marker {\n      display: none; }\n    .vega-embed summary:active {\n      box-shadow: #aaa 0px 0px 0px 1px inset; }\n    .vega-embed summary svg {\n      width: 14px;\n      height: 14px; }\n  .vega-embed details[open] summary {\n    opacity: 0.7; }\n  .vega-embed:hover summary,\n  .vega-embed:focus summary {\n    opacity: 1 !important;\n    transition: opacity 0.2s ease; }\n  .vega-embed .vega-actions {\n    position: absolute;\n    z-index: 1001;\n    top: 35px;\n    right: -9px;\n    display: flex;\n    flex-direction: column;\n    padding-bottom: 8px;\n    padding-top: 8px;\n    border-radius: 4px;\n    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n    border: 1px solid #d9d9d9;\n    background: white;\n    animation-duration: 0.15s;\n    animation-name: scale-in;\n    animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n    text-align: left; }\n    .vega-embed .vega-actions a {\n      padding: 8px 16px;\n      font-family: sans-serif;\n      font-size: 14px;\n      font-weight: 600;\n      white-space: nowrap;\n      color: #434a56;\n      text-decoration: none; }\n      .vega-embed .vega-actions a:hover {\n        background-color: #f7f7f9;\n        color: black; }\n    .vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n      content: \"\";\n      display: inline-block;\n      position: absolute; }\n    .vega-embed .vega-actions::before {\n      left: auto;\n      right: 14px;\n      top: -16px;\n      border: 8px solid #0000;\n      border-bottom-color: #d9d9d9; }\n    .vega-embed .vega-actions::after {\n      left: auto;\n      right: 15px;\n      top: -14px;\n      border: 7px solid #0000;\n      border-bottom-color: #fff; }\n  .vega-embed .chart-wrapper {\n    width: 100%;\n    height: 100%; }\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: auto;\n  padding-right: 14px; }\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6); }\n  to {\n    opacity: 1;\n    transform: scale(1); } }\n";
 
   // polyfill for IE
   if (!String.prototype.startsWith) {
@@ -4036,6 +4971,13 @@
   function isLoader(o) {
       return !!(o && 'load' in o);
   }
+  function createLoader(opts) {
+      return isLoader(opts) ? opts : vega.loader(opts);
+  }
+  function embedOptionsFromUsermeta(parsedSpec) {
+      var _a;
+      return (_a = (parsedSpec.usermeta && parsedSpec.usermeta['embedOptions'])) !== null && _a !== void 0 ? _a : {};
+  }
   /**
    * Embed a Vega visualization component in a web page. This function returns a promise.
    *
@@ -4048,31 +4990,35 @@
       var _a, _b, _c;
       if (opts === void 0) { opts = {}; }
       return __awaiter(this, void 0, void 0, function () {
-          var loader, parsedSpec, _d, _e, _f, usermetaOpts, parsedOpts, mergedOpts;
-          return __generator(this, function (_g) {
-              switch (_g.label) {
+          var parsedSpec, loader, _d, _e, usermetaLoader, usermetaOpts, parsedOpts, mergedOpts;
+          return __generator(this, function (_f) {
+              switch (_f.label) {
                   case 0:
-                      loader = isLoader(opts.loader) ? opts.loader : vega.loader(opts.loader);
                       if (!vegaImport.isString(spec)) return [3 /*break*/, 2];
-                      _f = (_e = JSON).parse;
+                      loader = createLoader(opts.loader);
+                      _e = (_d = JSON).parse;
                       return [4 /*yield*/, loader.load(spec)];
                   case 1:
-                      _d = _f.apply(_e, [_g.sent()]);
+                      parsedSpec = _e.apply(_d, [_f.sent()]);
                       return [3 /*break*/, 3];
                   case 2:
-                      _d = spec;
-                      _g.label = 3;
+                      parsedSpec = spec;
+                      _f.label = 3;
                   case 3:
-                      parsedSpec = _d;
-                      return [4 /*yield*/, loadOpts((_a = (parsedSpec.usermeta && parsedSpec.usermeta['embedOptions'])) !== null && _a !== void 0 ? _a : {}, loader)];
+                      usermetaLoader = embedOptionsFromUsermeta(parsedSpec).loader;
+                      // either create the loader for the first time or create a new loader if the spec has new loader options
+                      if (!loader || usermetaLoader) {
+                          loader = createLoader((_a = opts.loader) !== null && _a !== void 0 ? _a : usermetaLoader);
+                      }
+                      return [4 /*yield*/, loadOpts(embedOptionsFromUsermeta(parsedSpec), loader)];
                   case 4:
-                      usermetaOpts = _g.sent();
+                      usermetaOpts = _f.sent();
                       return [4 /*yield*/, loadOpts(opts, loader)];
                   case 5:
-                      parsedOpts = _g.sent();
+                      parsedOpts = _f.sent();
                       mergedOpts = __assign(__assign({}, mergeDeep(parsedOpts, usermetaOpts)), { config: vegaImport.mergeConfig((_b = parsedOpts.config) !== null && _b !== void 0 ? _b : {}, (_c = usermetaOpts.config) !== null && _c !== void 0 ? _c : {}) });
                       return [4 /*yield*/, _embed(el, parsedSpec, mergedOpts, loader)];
-                  case 6: return [2 /*return*/, _g.sent()];
+                  case 6: return [2 /*return*/, _f.sent()];
               }
           });
       });
@@ -4131,7 +5077,7 @@
               }
               view.finalize();
           }
-          var config, actions, i18n, renderer, logLevel, downloadFileName, div, ID, _g, root, rootContainer, style, mode, vgSpec, parsed, target, chartWrapper, patch, ast, runtime, view, handler, hover, _h, hoverSet, updateSet, documentClickHandler, wrapper, details_1, summary, ctrl, _loop_1, _i, _j, ext, viewSourceLink, compileLink, editorUrl_1, editorLink;
+          var config, actions, i18n, renderer, logLevel, downloadFileName, element, ID, _g, root, rootContainer, style, mode, vgSpec, parsed, container, chartWrapper, patch, ast, runtime, view, handler, hover, _h, hoverSet, updateSet, documentClickHandler, wrapper, details_1, summary, ctrl, _loop_1, _i, _j, ext, viewSourceLink, compileLink, editorUrl_1, editorLink;
           return __generator(this, function (_k) {
               switch (_k.label) {
                   case 0:
@@ -4141,13 +5087,13 @@
                       renderer = (_c = opts.renderer) !== null && _c !== void 0 ? _c : 'canvas';
                       logLevel = (_d = opts.logLevel) !== null && _d !== void 0 ? _d : vega.Warn;
                       downloadFileName = (_e = opts.downloadFileName) !== null && _e !== void 0 ? _e : 'visualization';
-                      div = typeof el === 'string' ? document.querySelector(el) : el;
-                      if (!div) {
+                      element = typeof el === 'string' ? document.querySelector(el) : el;
+                      if (!element) {
                           throw new Error(el + " does not exist");
                       }
                       if (opts.defaultStyle !== false) {
                           ID = 'vega-embed-style';
-                          _g = getRoot(div), root = _g.root, rootContainer = _g.rootContainer;
+                          _g = getRoot(element), root = _g.root, rootContainer = _g.rootContainer;
                           if (!root.getElementById(ID)) {
                               style = document.createElement('style');
                               style.id = ID;
@@ -4168,17 +5114,17 @@
                               }
                           }
                       }
-                      div.classList.add('vega-embed');
+                      element.classList.add('vega-embed');
                       if (actions) {
-                          div.classList.add('has-actions');
+                          element.classList.add('has-actions');
                       }
-                      div.innerHTML = ''; // clear container
-                      target = div;
+                      element.innerHTML = ''; // clear container
+                      container = element;
                       if (actions) {
                           chartWrapper = document.createElement('div');
                           chartWrapper.classList.add(CHART_WRAPPER_CLASS);
-                          div.appendChild(chartWrapper);
-                          target = chartWrapper;
+                          element.appendChild(chartWrapper);
+                          container = chartWrapper;
                       }
                       patch = opts.patch;
                       if (patch) {
@@ -4231,15 +5177,15 @@
                               view.padding(opts.padding);
                           }
                       }
-                      return [4 /*yield*/, view.initialize(target).runAsync()];
+                      return [4 /*yield*/, view.initialize(container, opts.bind).runAsync()];
                   case 1:
                       _k.sent();
                       if (actions !== false) {
-                          wrapper = div;
+                          wrapper = element;
                           if (opts.defaultStyle !== false) {
                               details_1 = document.createElement('details');
                               details_1.title = i18n.CLICK_TO_VIEW_ACTIONS;
-                              div.append(details_1);
+                              element.append(details_1);
                               wrapper = details_1;
                               summary = document.createElement('summary');
                               summary.innerHTML = SVG_CIRCLES;
@@ -4390,7 +5336,7 @@
   wrapper.embed = embed;
   wrapper.vega = vega;
   wrapper["default"] = embed;
-  wrapper.version = version;
+  wrapper.version = pkg.version;
 
   return wrapper;
 

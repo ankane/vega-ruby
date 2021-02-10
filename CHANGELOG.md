@@ -1,3 +1,7 @@
+## 0.1.2 (unreleased)
+
+- Updated Vega to 5.19.1, Vega-Lite to 4.17.0, and Vega-Embed to 6.15.1
+
 ## 0.1.1 (2020-09-27)
 
 - Added `repeat`, `resolve`, `spec` and `selection` methods
