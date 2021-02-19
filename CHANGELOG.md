@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Added Vega-Interpreter
+
 ## 0.1.2 (2021-02-09)
 
 - Updated Vega to 5.19.1, Vega-Lite to 4.17.0, and Vega-Embed to 6.15.1

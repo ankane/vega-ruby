@@ -318,6 +318,28 @@ Get the spec for a chart
 chart.spec
 ```
 
+## Content Security Policy (CSP) [master]
+
+By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
+
+For Rails 6 / Webpacker, run:
+
+```sh
+yarn add vega-interpreter
+```
+
+For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
+
+```js
+//= require vega-interpreter
+```
+
+And set embed options for your charts
+
+```ruby
+embed_options(ast: true)
+```
+
 ## History
 
 View the [changelog](https://github.com/ankane/vega/blob/master/CHANGELOG.md)

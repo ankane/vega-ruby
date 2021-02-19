@@ -24,4 +24,5 @@ task :update do
   download_package("vega", "5.19.1")
   download_package("vega-lite", "4.17.0")
   download_package("vega-embed", "6.15.1")
+  download_package("vega-interpreter", "1.0.4")
 end
