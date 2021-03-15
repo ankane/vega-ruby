@@ -318,7 +318,7 @@ Get the spec for a chart
 chart.spec
 ```
 
-## Content Security Policy (CSP) [master]
+## Content Security Policy (CSP)
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
 
