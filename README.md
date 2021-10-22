@@ -6,7 +6,7 @@ Interactive charts for Ruby, powered by [Vega](https://vega.github.io/vega/) and
 
 Works with Rails, iRuby, and other frameworks
 
-[![Build Status](https://github.com/ankane/vega/workflows/build/badge.svg?branch=master)](https://github.com/ankane/vega/actions)
+[![Build Status](https://github.com/ankane/vega-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/vega-ruby/actions)
 
 ## Installation
 
@@ -342,22 +342,22 @@ embed_options(ast: true)
 
 ## History
 
-View the [changelog](https://github.com/ankane/vega/blob/master/CHANGELOG.md)
+View the [changelog](https://github.com/ankane/vega-ruby/blob/master/CHANGELOG.md)
 
 ## Contributing
 
 Everyone is encouraged to help improve this project. Here are a few ways you can help:
 
-- [Report bugs](https://github.com/ankane/vega/issues)
-- Fix bugs and [submit pull requests](https://github.com/ankane/vega/pulls)
+- [Report bugs](https://github.com/ankane/vega-ruby/issues)
+- Fix bugs and [submit pull requests](https://github.com/ankane/vega-ruby/pulls)
 - Write, clarify, or fix documentation
 - Suggest or add new features
 
 To get started with development:
 
 ```sh
-git clone https://github.com/ankane/vega.git
-cd vega
+git clone https://github.com/ankane/vega-ruby.git
+cd vega-ruby
 bundle install
 bundle exec rake test
 ```

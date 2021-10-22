@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name          = "vega"
   spec.version       = Vega::VERSION
   spec.summary       = "Interactive charts for Ruby, powered by Vega and Vega-Lite"
-  spec.homepage      = "https://github.com/ankane/vega"
+  spec.homepage      = "https://github.com/ankane/vega-ruby"
   spec.license       = "BSD-3-Clause"
 
   spec.author        = "Andrew Kane"
