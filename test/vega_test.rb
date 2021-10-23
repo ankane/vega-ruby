@@ -74,7 +74,7 @@ class VegaTest < Minitest::Test
 
   def test_to_json
     result = JSON.parse(Vega.lite.to_json)
-    assert_equal "https://vega.github.io/schema/vega-lite/v4.json", result["$schema"]
+    assert_equal "https://vega.github.io/schema/vega-lite/v5.json", result["$schema"]
   end
 
   def test_start
@@ -87,6 +87,6 @@ class VegaTest < Minitest::Test
   def test_to_iruby
     result = Vega.lite.to_iruby
     assert_equal "text/html", result[0]
-    assert_match "require(['vega', 'vega-lite', 'vega-embed']", result[1]
+    assert_match "require(['vega', 'vega-util', 'vega-lite', 'vega-embed']", result[1]
   end
 end
