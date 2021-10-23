@@ -1,4 +1,4 @@
-## 0.2.0 (unreleased)
+## 0.2.0 (2021-10-23)
 
 - Added experimental support for `importmap-rails`
 - Updated Vega to 5.21.0, Vega-Lite to 5.1.1, and Vega-Embed to 6.19.1

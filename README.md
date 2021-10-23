@@ -18,7 +18,7 @@ gem 'vega'
 
 The follow the instructions for how you plan to use it:
 
-- [Rails 7 / Importmap](#rails-7--importmap) (unreleased, experimental)
+- [Rails 7 / Importmap](#rails-7--importmap) (experimental)
 - [Rails 6 / Webpacker](#rails-6--webpacker)
 - [Rails 5 / Sprockets](#rails-5--sprockets)
 - [iRuby](#iruby)
