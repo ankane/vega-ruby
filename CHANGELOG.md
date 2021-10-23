@@ -1,3 +1,7 @@
+## 0.1.4 (unreleased)
+
+- Added experimental support for `importmap-rails`
+
 ## 0.1.3 (2021-03-14)
 
 - Added Vega-Interpreter

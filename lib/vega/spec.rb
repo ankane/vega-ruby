@@ -11,7 +11,14 @@ module Vega
       output = <<~EOS
         #{html}
         <script>
-          #{js}
+          (function() {
+            var createChart = function() { #{js} };
+            if ("vegaEmbed" in window) {
+              createChart();
+            } else {
+              window.addEventListener("vega:load", createChart, true);
+            }
+          })();
         </script>
       EOS
       output.respond_to?(:html_safe) ? output.html_safe : output

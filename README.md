@@ -18,10 +18,23 @@ gem 'vega'
 
 The follow the instructions for how you plan to use it:
 
+- [Rails 7 / Importmap](#rails-7--importmap) (unreleased, experimental)
 - [Rails 6 / Webpacker](#rails-6--webpacker)
 - [Rails 5 / Sprockets](#rails-5--sprockets)
 - [iRuby](#iruby)
 - [Other](#other)
+
+### Rails 7 / Importmap
+
+Add to `app/javascript/application.js`:
+
+```js
+import "vega"
+import "vega-lite"
+import "vega-embed"
+
+window.dispatchEvent(new Event("vega:load"));
+```
 
 ### Rails 6 / Webpacker
 
@@ -321,6 +334,12 @@ chart.spec
 ## Content Security Policy (CSP)
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
+
+For Rails 7 / Importmap, add to `app/javascript/application.js`:
+
+```js
+import "vega-interpreter"
+```
 
 For Rails 6 / Webpacker, run:
 
