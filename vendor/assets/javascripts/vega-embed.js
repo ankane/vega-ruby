@@ -6066,4 +6066,3 @@
   return wrapper;
 
 })));
-//# sourceMappingURL=vega-embed.js.map

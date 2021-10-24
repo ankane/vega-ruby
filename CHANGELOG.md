@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Fixed source map warnings
+
 ## 0.2.0 (2021-10-23)
 
 - Added experimental support for `importmap-rails`

@@ -14,7 +14,12 @@ def download_package(name, version)
   Dir.chdir(Dir.mktmpdir) do
     system "npm", "pack", "#{name}@#{version}", "-q"
     system "tar", "xzf", "#{name}-#{version}.tgz"
-    FileUtils.cp("package/build/#{name}.js", File.expand_path("vendor/assets/javascripts/#{name}.js", __dir__))
+
+    contents = File.read("package/build/#{name}.js")
+    # remove source map to prevent console warnings
+    contents.sub!("//# sourceMappingURL=#{name}.js.map\n", "")
+    File.write(File.expand_path("vendor/assets/javascripts/#{name}.js", __dir__), contents)
+
     FileUtils.cp("package/LICENSE", File.expand_path("licenses/LICENSE-#{name}.txt", __dir__))
   end
 end
