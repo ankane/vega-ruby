@@ -67,6 +67,18 @@ class VegaTest < Minitest::Test
     assert_equal expected, b.spec[:concat]
   end
 
+  def test_width_default
+    assert_match "width: 100%;", Vega.lite.to_s
+  end
+
+  def test_width_integer
+    assert_match "width: 100px;", Vega.lite.width(100).to_s
+  end
+
+  def test_width_nil
+    assert_match "width: 100%;", Vega.lite.width(nil).to_s
+  end
+
   def test_height_default
     assert_match "height: 300px;", Vega.lite.to_s
   end
