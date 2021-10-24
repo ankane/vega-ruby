@@ -32,10 +32,10 @@ module Vega
         <script>
           require.config({
             paths: {
-              'vega': 'https://cdn.jsdelivr.net/npm/vega@5.21.0?noext',
-              'vega-util': 'https://cdn.jsdelivr.net/npm/vega-util@1.17.0?noext',
-              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@5.1.1?noext',
-              'vega-embed': 'https://cdn.jsdelivr.net/npm/vega-embed@6.19.1?noext'
+              'vega': 'https://cdn.jsdelivr.net/npm/vega@5.21.0/build/vega.min',
+              'vega-util': 'https://cdn.jsdelivr.net/npm/vega-util@1.17.0/build/vega-util.min',
+              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@5.1.1/build/vega-lite.min',
+              'vega-embed': 'https://cdn.jsdelivr.net/npm/vega-embed@6.19.1/build/vega-embed.min'
             }
           });
           require(['vega', 'vega-util', 'vega-lite', 'vega-embed'], function(vega, vegaUtil, vegaLite, vegaEmbed) {
