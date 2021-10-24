@@ -67,6 +67,18 @@ class VegaTest < Minitest::Test
     assert_equal expected, b.spec[:concat]
   end
 
+  def test_height_default
+    assert_match "height: 300px;", Vega.lite.to_s
+  end
+
+  def test_height_integer
+    assert_match "height: 100px;", Vega.lite.height(100).to_s
+  end
+
+  def test_height_nil
+    assert_match "height: auto;", Vega.lite.height(nil).to_s
+  end
+
   def test_spec
     expected = {x: 1}
     assert_equal expected, Vega.lite.spec(x: 1).spec[:spec]

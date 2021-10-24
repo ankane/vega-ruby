@@ -52,6 +52,7 @@ module Vega
       id = "chart-#{SecureRandom.hex(16)}" # 2**128 values
       width = @spec["width"].is_a?(Integer) ? "#{@spec["width"]}px" : "100%"
       height = @spec["height"].is_a?(Integer) ? "#{@spec["height"]}px" : "300px"
+      height = "auto" if @spec["height"].nil?
 
       # user can override with usermeta: {embedOptions: ...}
       embed_options = {actions: false}
