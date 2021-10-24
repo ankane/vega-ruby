@@ -1,4 +1,4 @@
-## 0.2.1 (unreleased)
+## 0.2.1 (2021-10-24)
 
 - Added support for `nil` height
 - Fixed source map warnings
