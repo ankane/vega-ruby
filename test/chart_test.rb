@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class VegaTest < Minitest::Test
+class ChartTest < Minitest::Test
   def test_data_inline
     values = [{x: "A", y: 1}, {x: "B", y: 2}]
     expected = {values: values}
