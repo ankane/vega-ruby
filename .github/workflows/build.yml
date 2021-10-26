@@ -10,4 +10,8 @@ jobs:
       with:
         ruby-version: 3.0
         bundler-cache: true
-    - run: bundle exec rake test
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 14
+    - run: yarn add vega-cli vega-lite
+    - run: TEST_EXPORT=1 bundle exec rake test
