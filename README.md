@@ -333,7 +333,7 @@ chart.spec
 
 ## Exporting Charts (experimental)
 
-Export charts to PNG, SVG, or PDF. This requires Node.js. Run:
+Export charts to PNG, SVG, or PDF. This requires Node.js and npm 7+. Run:
 
 ```sh
 yarn add vega-cli vega-lite
