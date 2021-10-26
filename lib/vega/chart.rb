@@ -23,5 +23,17 @@ module Vega
       self
     end
     immutable_method :data
+
+    def to_png
+      export("vg2png")
+    end
+
+    def to_svg
+      export("vg2svg")
+    end
+
+    def to_pdf
+      export("vg2pdf")
+    end
   end
 end

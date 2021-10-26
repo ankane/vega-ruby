@@ -1,3 +1,7 @@
+## 0.2.2 (unreleased)
+
+- Added experimental support for exporting charts
+
 ## 0.2.1 (2021-10-24)
 
 - Added support for `nil` height

@@ -29,5 +29,17 @@ module Vega
         dup.spec!(*args)
       end
     end
+
+    def to_png
+      export("vl2png")
+    end
+
+    def to_svg
+      export("vl2svg")
+    end
+
+    def to_pdf
+      export("vl2pdf")
+    end
   end
 end

@@ -50,5 +50,15 @@ module Vega
         value
       end
     end
+
+    def export(cmd)
+      require "open3"
+
+      pkg = cmd.start_with?("vg") ? "vega-cli" : "vega-lite"
+      # use --no to prevent automatic installs
+      stdout, stderr, status = Open3.capture3("npm", "exec", "--no", "--package=#{pkg}", "--", cmd, stdin_data: to_json, binmode: true)
+      raise "Command failed: #{stderr}" unless status.success? && stdout.bytesize > 0
+      stdout
+    end
   end
 end

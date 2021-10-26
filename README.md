@@ -331,6 +331,32 @@ Get the spec for a chart
 chart.spec
 ```
 
+## Exporting Charts (experimental)
+
+Export charts to PNG, SVG, or PDF. This requires Node.js. Run:
+
+```sh
+yarn add vega-cli vega-lite
+```
+
+For PNG, use:
+
+```ruby
+File.binwrite("chart.png", chart.to_png)
+```
+
+For SVG, use:
+
+```ruby
+File.binwrite("chart.svg", chart.to_svg)
+```
+
+For PDF, use:
+
+```ruby
+File.binwrite("chart.pdf", chart.to_pdf)
+```
+
 ## Content Security Policy (CSP)
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
