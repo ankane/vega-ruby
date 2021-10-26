@@ -6,15 +6,16 @@ class ExportTest < Minitest::Test
   end
 
   def test_to_png
-    # TODO
+    # TODO fix - requires valid spec
+    # assert_match "\x89PNG".b, chart.to_png
   end
 
   def test_to_svg
-    # TODO
+    assert_match "<svg", chart.to_svg
   end
 
   def test_to_pdf
-    # TODO
+    assert_match "%PDF", chart.to_pdf
   end
 
   def test_error
@@ -26,15 +27,15 @@ class ExportTest < Minitest::Test
   end
 
   def test_lite_to_png
-    assert_match "\x89PNG".b, Vega.lite.mark("bar").to_png
+    assert_match "\x89PNG".b, lite_chart.to_png
   end
 
   def test_lite_to_svg
-    assert_match "<svg", Vega.lite.mark("bar").to_svg
+    assert_match "<svg", lite_chart.to_svg
   end
 
   def test_lite_to_pdf
-    assert_match "%PDF".b, Vega.lite.mark("bar").to_pdf
+    assert_match "%PDF", lite_chart.to_pdf
   end
 
   def test_lite_error
@@ -42,5 +43,13 @@ class ExportTest < Minitest::Test
       Vega.lite.to_png
     end
     assert_match "Invalid specification", error.message
+  end
+
+  def chart
+    Vega.start
+  end
+
+  def lite_chart
+    Vega.lite.mark("bar")
   end
 end
