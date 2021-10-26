@@ -6,8 +6,7 @@ class ExportTest < Minitest::Test
   end
 
   def test_to_png
-    # TODO fix - requires valid spec
-    # assert_match "\x89PNG".b, chart.to_png
+    assert_match "\x89PNG".b, chart.to_png
   end
 
   def test_to_svg
@@ -46,7 +45,7 @@ class ExportTest < Minitest::Test
   end
 
   def chart
-    Vega.start
+    Vega.start.width(100).height(100)
   end
 
   def lite_chart
