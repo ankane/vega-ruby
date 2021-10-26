@@ -12,6 +12,6 @@ jobs:
         bundler-cache: true
     - uses: actions/setup-node@v2
       with:
-        node-version: 14
+        node-version: 16
     - run: yarn add vega-cli vega-lite
     - run: TEST_EXPORT=1 bundle exec rake test
