@@ -26,7 +26,15 @@ The follow the instructions for how you plan to use it:
 
 ### Rails 7 / Importmap
 
-Add to `app/javascript/application.js`:
+Add to `config/importmap.rb`:
+
+```ruby
+pin "vega", to: "vega.js"
+pin "vega-lite", to: "vega-lite.js"
+pin "vega-embed", to: "vega-embed.js"
+```
+
+And add to `app/javascript/application.js`:
 
 ```js
 import "vega"
@@ -361,7 +369,13 @@ File.binwrite("chart.pdf", chart.to_pdf)
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
 
-For Rails 7 / Importmap, add to `app/javascript/application.js`:
+For Rails 7 / Importmap, add to `config/importmap.rb`:
+
+```ruby
+pin "vega-interpreter", to: "vega-interpreter.js"
+```
+
+And add to `app/javascript/application.js`:
 
 ```js
 import "vega-interpreter"
