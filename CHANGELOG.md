@@ -1,4 +1,4 @@
-## 0.2.2 (unreleased)
+## 0.2.2 (2021-11-06)
 
 - Added experimental support for exporting charts
 - Removed automatic pinning for `importmap-rails` (still experimental)

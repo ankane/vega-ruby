@@ -339,7 +339,7 @@ Get the spec for a chart
 chart.spec
 ```
 
-## Exporting Charts (unreleased, experimental)
+## Exporting Charts (experimental)
 
 Export charts to PNG, SVG, or PDF. This requires Node.js and npm 7+. Run:
 
