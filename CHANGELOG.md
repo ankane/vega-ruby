@@ -1,4 +1,4 @@
-## 0.2.3 (unreleased)
+## 0.2.3 (2021-11-15)
 
 - Updated Vega-Embed to 6.20.1 to fix spec version warnings
 - Fixed error with iRuby
