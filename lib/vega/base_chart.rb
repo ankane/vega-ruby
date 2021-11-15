@@ -26,6 +26,11 @@ module Vega
       Spec.new(spec).to_iruby
     end
 
+    # for https://github.com/SciRuby/iruby/issues/314
+    def to_iruby_mimebundle(**)
+      [[to_iruby].to_h, {}]
+    end
+
     def to_json
       spec.to_json
     end
