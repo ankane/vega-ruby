@@ -28,7 +28,7 @@ module Vega
 
     # for https://github.com/SciRuby/iruby/issues/314
     def to_iruby_mimebundle(**)
-      [[to_iruby].to_h, nil]
+      [[to_iruby].to_h, {}]
     end
 
     def to_json
