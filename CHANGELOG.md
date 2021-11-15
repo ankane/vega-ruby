@@ -1,3 +1,7 @@
+## 0.2.3 (unreleased)
+
+- Updated Vega-Embed to 6.20.1 to fix spec version warnings
+
 ## 0.2.2 (2021-11-06)
 
 - Added experimental support for exporting charts

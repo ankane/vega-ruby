@@ -28,6 +28,6 @@ task :update do
   # update in lib/vega/spec.rb and README.md as well
   download_package("vega", "5.21.0")
   download_package("vega-lite", "5.1.1")
-  download_package("vega-embed", "6.19.1")
+  download_package("vega-embed", "6.20.1")
   download_package("vega-interpreter", "1.0.4")
 end
