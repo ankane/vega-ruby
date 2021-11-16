@@ -3,8 +3,8 @@ module Vega
     # for assets
 
     # for importmap
-    if defined?(Importmap)
-      initializer "vega.importmap", after: "importmap" do |app|
+    initializer "vega.importmap" do |app|
+      if defined?(Importmap)
         app.config.assets.precompile << "vega-embed.js"
         app.config.assets.precompile << "vega-interpreter.js"
         app.config.assets.precompile << "vega-lite.js"
