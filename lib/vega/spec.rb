@@ -6,11 +6,11 @@ module Vega
       @spec = spec.transform_keys!(&:to_s)
     end
 
-    def to_s
+    def to_s(nonce: nil)
       html, js = generate_output
       output = <<~EOS
         #{html}
-        <script>
+        #{nonce ? "<script nonce=\"#{nonce}\">" : "<script>"}
           (function() {
             var createChart = function() { #{js} };
             if ("vegaEmbed" in window) {
