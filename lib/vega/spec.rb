@@ -10,7 +10,7 @@ module Vega
       html, js = generate_output
       output = <<~EOS
         #{html}
-        #{none ? "<script none=\"#{nonce}\">" ? "<script>"}
+        #{nonce ? "<script nonce=\"#{nonce}\">" : "<script>"}
           (function() {
             var createChart = function() { #{js} };
             if ("vegaEmbed" in window) {
