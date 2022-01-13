@@ -16,7 +16,7 @@ Add this line to your application’s Gemfile:
 gem 'vega'
 ```
 
-The follow the instructions for how you plan to use it:
+Then follow the instructions for how you plan to use it:
 
 - [Rails 7 / Importmap](#rails-7--importmap) (experimental)
 - [Rails 6 / Webpacker](#rails-6--webpacker)
