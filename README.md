@@ -13,7 +13,7 @@ Works with Rails, iRuby, and other frameworks
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'vega'
+gem "vega"
 ```
 
 Then follow the instructions for how you plan to use it:
