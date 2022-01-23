@@ -78,8 +78,8 @@ For Sinatra and other web frameworks, include the Vega JavaScript files on pages
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.1"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.19.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.5"></script>
 ```
 
 ## Getting Started
