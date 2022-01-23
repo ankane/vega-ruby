@@ -1589,7 +1589,11 @@
 
     try {
       // add if support for Symbol.iterator is present
-      require('./iterator.js')(Yallist$1);
+      Yallist$1.prototype[Symbol.iterator] = function* () {
+        for (let walker = this.head; walker; walker = walker.next) {
+          yield walker.value;
+        }
+      };
     } catch (er) {}
 
     const Yallist = yallist;
@@ -4546,7 +4550,7 @@
     }
 
     // generated with build-style.sh
-    var embedStyle = "$ /home/runner/work/vega-embed/vega-embed/node_modules/.bin/sass vega-embed.scss\n.vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box;\n}\n.vega-embed.has-actions {\n  padding-right: 38px;\n}\n.vega-embed details:not([open]) > :not(summary) {\n  display: none !important;\n}\n.vega-embed summary {\n  list-style: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  padding: 6px;\n  z-index: 1000;\n  background: white;\n  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n  color: #1b1e23;\n  border: 1px solid #aaa;\n  border-radius: 999px;\n  opacity: 0.2;\n  transition: opacity 0.4s ease-in;\n  outline: none;\n  cursor: pointer;\n  line-height: 0px;\n}\n.vega-embed summary::-webkit-details-marker {\n  display: none;\n}\n.vega-embed summary:active {\n  box-shadow: #aaa 0px 0px 0px 1px inset;\n}\n.vega-embed summary svg {\n  width: 14px;\n  height: 14px;\n}\n.vega-embed details[open] summary {\n  opacity: 0.7;\n}\n.vega-embed:hover summary, .vega-embed:focus summary {\n  opacity: 1 !important;\n  transition: opacity 0.2s ease;\n}\n.vega-embed .vega-actions {\n  position: absolute;\n  z-index: 1001;\n  top: 35px;\n  right: -9px;\n  display: flex;\n  flex-direction: column;\n  padding-bottom: 8px;\n  padding-top: 8px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n  border: 1px solid #d9d9d9;\n  background: white;\n  animation-duration: 0.15s;\n  animation-name: scale-in;\n  animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n  text-align: left;\n}\n.vega-embed .vega-actions a {\n  padding: 8px 16px;\n  font-family: sans-serif;\n  font-size: 14px;\n  font-weight: 600;\n  white-space: nowrap;\n  color: #434a56;\n  text-decoration: none;\n}\n.vega-embed .vega-actions a:hover {\n  background-color: #f7f7f9;\n  color: black;\n}\n.vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n}\n.vega-embed .vega-actions::before {\n  left: auto;\n  right: 14px;\n  top: -16px;\n  border: 8px solid #0000;\n  border-bottom-color: #d9d9d9;\n}\n.vega-embed .vega-actions::after {\n  left: auto;\n  right: 15px;\n  top: -14px;\n  border: 7px solid #0000;\n  border-bottom-color: #fff;\n}\n.vega-embed .chart-wrapper.fit-x {\n  width: 100%;\n}\n.vega-embed .chart-wrapper.fit-y {\n  height: 100%;\n}\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: auto;\n  padding-right: 14px;\n}\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n";
+    var embedStyle = ".vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box;\n}\n.vega-embed.has-actions {\n  padding-right: 38px;\n}\n.vega-embed details:not([open]) > :not(summary) {\n  display: none !important;\n}\n.vega-embed summary {\n  list-style: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  padding: 6px;\n  z-index: 1000;\n  background: white;\n  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n  color: #1b1e23;\n  border: 1px solid #aaa;\n  border-radius: 999px;\n  opacity: 0.2;\n  transition: opacity 0.4s ease-in;\n  outline: none;\n  cursor: pointer;\n  line-height: 0px;\n}\n.vega-embed summary::-webkit-details-marker {\n  display: none;\n}\n.vega-embed summary:active {\n  box-shadow: #aaa 0px 0px 0px 1px inset;\n}\n.vega-embed summary svg {\n  width: 14px;\n  height: 14px;\n}\n.vega-embed details[open] summary {\n  opacity: 0.7;\n}\n.vega-embed:hover summary, .vega-embed:focus summary {\n  opacity: 1 !important;\n  transition: opacity 0.2s ease;\n}\n.vega-embed .vega-actions {\n  position: absolute;\n  z-index: 1001;\n  top: 35px;\n  right: -9px;\n  display: flex;\n  flex-direction: column;\n  padding-bottom: 8px;\n  padding-top: 8px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n  border: 1px solid #d9d9d9;\n  background: white;\n  animation-duration: 0.15s;\n  animation-name: scale-in;\n  animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n  text-align: left;\n}\n.vega-embed .vega-actions a {\n  padding: 8px 16px;\n  font-family: sans-serif;\n  font-size: 14px;\n  font-weight: 600;\n  white-space: nowrap;\n  color: #434a56;\n  text-decoration: none;\n}\n.vega-embed .vega-actions a:hover {\n  background-color: #f7f7f9;\n  color: black;\n}\n.vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n}\n.vega-embed .vega-actions::before {\n  left: auto;\n  right: 14px;\n  top: -16px;\n  border: 8px solid #0000;\n  border-bottom-color: #d9d9d9;\n}\n.vega-embed .vega-actions::after {\n  left: auto;\n  right: 15px;\n  top: -14px;\n  border: 7px solid #0000;\n  border-bottom-color: #fff;\n}\n.vega-embed .chart-wrapper.fit-x {\n  width: 100%;\n}\n.vega-embed .chart-wrapper.fit-y {\n  height: 100%;\n}\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: auto;\n  padding-right: 14px;\n}\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n";
 
     if (!String.prototype.startsWith) {
       // eslint-disable-next-line no-extend-native,func-names
@@ -4577,7 +4581,7 @@
     }
 
     var name = "vega-embed";
-    var version$1 = "6.20.1";
+    var version$1 = "6.20.5";
     var description = "Publish Vega visualizations as embedded web components.";
     var keywords = ["vega", "data", "visualization", "component", "embed"];
     var repository = {
@@ -4602,31 +4606,34 @@
     var unpkg = "build/vega-embed.min.js";
     var jsdelivr = "build/vega-embed.min.js";
     var types = "build/vega-embed.module.d.ts";
-    var files = ["src", "build", "build-es5"];
+    var files = ["src", "build", "build-es5", "patches"];
     var devDependencies = {
-      "@auto-it/conventional-commits": "^10.32.2",
-      "@auto-it/first-time-contributor": "^10.32.2",
+      "@auto-it/conventional-commits": "^10.32.3",
+      "@auto-it/first-time-contributor": "^10.32.3",
+      "@babel/plugin-transform-runtime": "^7.16.4",
       "@rollup/plugin-commonjs": "21.0.1",
       "@rollup/plugin-json": "^4.1.0",
       "@rollup/plugin-node-resolve": "^13.0.6",
       "@types/semver": "^7.3.9",
-      "rollup-plugin-ts": "^1.4.7",
-      auto: "^10.32.2",
+      auto: "^10.32.3",
       "browser-sync": "^2.27.7",
       concurrently: "^6.4.0",
       "del-cli": "^4.0.1",
       "jest-canvas-mock": "^2.3.1",
-      sass: "^1.43.4",
+      "patch-package": "^6.4.7",
+      "postinstall-postinstall": "^2.1.0",
+      rollup: "2.60.1",
       "rollup-plugin-bundle-size": "^1.0.3",
       "rollup-plugin-terser": "^7.0.2",
-      rollup: "2.60.0",
-      typescript: "^4.4.4",
-      "vega-lite-dev-config": "^0.20.0",
+      "rollup-plugin-ts": "^2.0.4",
+      sass: "^1.43.5",
+      typescript: "^4.5.2",
+      vega: "^5.21.0",
       "vega-lite": "^5.0.0",
-      vega: "^5.21.0"
+      "vega-lite-dev-config": "^0.20.0"
     };
     var peerDependencies = {
-      vega: "^5.20.2",
+      vega: "^5.21.0",
       "vega-lite": "*"
     };
     var dependencies = {
@@ -4639,6 +4646,7 @@
       "vega-themes": "^2.10.0",
       "vega-tooltip": "^0.27.0"
     };
+    var bundledDependencies = ["yallist"];
     var scripts = {
       prebuild: "yarn clean && yarn build:style",
       build: "rollup -c",
@@ -4651,12 +4659,12 @@
       pretest: "yarn build:style",
       test: "beemo jest --stdio stream",
       "test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
-      prepare: "beemo create-config",
+      prepare: "beemo create-config && npx patch-package",
       prettierbase: "beemo prettier '*.{css,scss,html}'",
       eslintbase: "beemo eslint .",
       format: "yarn eslintbase --fix && yarn prettierbase --write",
       lint: "yarn eslintbase && yarn prettierbase --check",
-      release: "auto shipit"
+      release: "yarn build && auto shipit"
     };
     var pkg = {
       name: name,
@@ -4678,6 +4686,7 @@
       devDependencies: devDependencies,
       peerDependencies: peerDependencies,
       dependencies: dependencies,
+      bundledDependencies: bundledDependencies,
       scripts: scripts
     };
 
