@@ -19,6 +19,7 @@ gem "vega"
 Then follow the instructions for how you plan to use it:
 
 - [Rails 7 / Importmap](#rails-7--importmap)
+- [Rails 7 / esbuild or Webpack](#rails-7--esbuild-or-webpack)
 - [Rails 6 / Webpacker](#rails-6--webpacker)
 - [Rails 5 / Sprockets](#rails-5--sprockets)
 - [iRuby](#iruby)
@@ -44,15 +45,20 @@ import "vega-embed"
 window.dispatchEvent(new Event("vega:load"))
 ```
 
-### Rails 7 / esbuild
+### Rails 7 / esbuild or Webpack
 
-Add to `app/javascript/application.js`:
+Run:
 
+```sh
+yarn add vega vega-lite vega-embed
 ```
-window.vega = require("vega")
-window.vegaLite = require("vega-lite")
-window.vegaEmbed = require("vega-embed")
 
+And add to `app/javascript/application.js`:
+
+```js
+import embed from "vega-embed"
+
+window.vegaEmbed = embed
 window.dispatchEvent(new Event("vega:load"))
 ```
 
