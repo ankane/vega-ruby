@@ -41,7 +41,7 @@ import "vega"
 import "vega-lite"
 import "vega-embed"
 
-window.dispatchEvent(new Event("vega:load"));
+window.dispatchEvent(new Event("vega:load"))
 ```
 
 ### Rails 6 / Webpacker
