@@ -92,12 +92,12 @@ No additional set up is needed.
 
 ### Other
 
-For Sinatra and other web frameworks, include the Vega JavaScript files on pages with charts:
+For Sinatra and other web frameworks, download [Vega](https://cdn.jsdelivr.net/npm/vega@5), [Vega-Lite](https://cdn.jsdelivr.net/npm/vega-lite@5), and [Vega-Embed](https://cdn.jsdelivr.net/npm/vega-embed@6) and include them on pages with charts:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.5"></script>
+<script src="vega.js"></script>
+<script src="vega-lite.js"></script>
+<script src="vega-embed.js"></script>
 ```
 
 ## Getting Started
