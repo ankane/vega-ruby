@@ -44,6 +44,18 @@ import "vega-embed"
 window.dispatchEvent(new Event("vega:load"))
 ```
 
+### Rails 7 / esbuild
+
+Add to `app/javascript/application.js`:
+
+```
+window.vega = require("vega")
+window.vegaLite = require("vega-lite")
+window.vegaEmbed = require("vega-embed")
+
+window.dispatchEvent(new Event("vega:load"))
+```
+
 ### Rails 6 / Webpacker
 
 Run:
