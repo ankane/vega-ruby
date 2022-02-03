@@ -96,6 +96,14 @@ class ChartTest < Minitest::Test
     assert_equal expected, Vega.lite.spec(x: 1).spec[:spec]
   end
 
+  def test_nonce
+    assert_match "nonce=\"test-123\"", Vega.lite.to_s(nonce: "test-123")
+  end
+
+  def test_nonce_escaped
+    assert_match "nonce=\"test-123&quot;\"", Vega.lite.to_s(nonce: "test-123\"")
+  end
+
   def test_to_json
     result = JSON.parse(Vega.lite.to_json)
     assert_equal "https://vega.github.io/schema/vega-lite/v5.json", result["$schema"]
