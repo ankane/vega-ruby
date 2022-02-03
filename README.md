@@ -342,7 +342,7 @@ spec = {
 And render it in Rails
 
 ```erb
-<%= Vega.render(spec) %>
+<%= vega_chart spec %>
 ```
 
 Or display it in iRuby
@@ -400,13 +400,7 @@ end
 
 ### Nonce [unreleased]
 
-Add a nonce with:
-
-```erb
-<%= chart.to_html(nonce: content_security_policy_nonce) %>
-```
-
-There’s also a helper to add it automatically when configured in Rails.
+Automatically add a nonce when configured in Rails with:
 
 ```erb
 <%= vega_chart chart %>
