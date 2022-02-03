@@ -12,13 +12,14 @@ class HelperTest < Minitest::Test
   end
 
   def test_nonce_chart
-    stub(:content_security_policy_nonce, "test123") do
+    with_nonce do
       assert_match '<script nonce="test123">', vega_chart(Vega.lite)
     end
+    refute_match "nonce", vega_chart(Vega.lite, nonce: false)
   end
 
   def test_nonce_spec
-    stub(:content_security_policy_nonce, "test123") do
+    with_nonce do
       assert_match '<script nonce="test123">', vega_chart(Vega.lite.spec)
     end
   end
@@ -33,6 +34,12 @@ class HelperTest < Minitest::Test
       vega_chart Object.new
     end
     assert_equal "expected Vega chart or spec", error.message
+  end
+
+  def with_nonce
+    stub(:content_security_policy_nonce, "test123") do
+      yield
+    end
   end
 
   # for stubbing
