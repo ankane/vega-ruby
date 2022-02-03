@@ -1,6 +1,7 @@
 ## 0.2.6 (unreleased)
 
 - Added `nonce` option
+- Added `vega_chart` helper
 
 ## 0.2.5 (2022-01-22)
 

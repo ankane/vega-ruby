@@ -9,6 +9,7 @@ require "vega/base_chart"
 require "vega/chart"
 require "vega/lite_chart"
 require "vega/spec"
+require "vega/helper"
 require "vega/version"
 
 # integrations
@@ -32,5 +33,11 @@ module Vega
     def display(spec)
       IRuby.display(Spec.new(spec))
     end
+  end
+end
+
+if defined?(ActiveSupport.on_load)
+  ActiveSupport.on_load(:action_view) do
+    include Vega::Helper
   end
 end
