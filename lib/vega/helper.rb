@@ -1,7 +1,9 @@
 module Vega
   module Helper
     def vega_chart(chart, nonce: true)
-      raise TypeError, "expected Vega chart" unless chart.is_a?(Vega::BaseChart)
+      unless chart.is_a?(Vega::BaseChart) || chart.is_a?(Hash)
+        raise TypeError, "expected Vega chart or spec"
+      end
 
       if nonce == true
         # Secure Headers also defines content_security_policy_nonce but it takes an argument
@@ -17,7 +19,11 @@ module Vega
         end
       end
 
-      chart.to_html(nonce: nonce)
+      if chart.is_a?(Hash)
+        Vega.render(chart, nonce: nonce)
+      else
+        chart.to_html(nonce: nonce)
+      end
     end
   end
 end
