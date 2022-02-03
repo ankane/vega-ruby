@@ -6,7 +6,7 @@ module Vega
       @spec = spec.transform_keys!(&:to_s)
     end
 
-    def to_s(nonce: nil)
+    def to_html(nonce: nil)
       html, js = generate_output
       nonce_html = nonce ? " nonce=\"#{ERB::Util.html_escape(nonce)}\"" : nil
       output = <<~EOS
@@ -24,6 +24,7 @@ module Vega
       EOS
       output.respond_to?(:html_safe) ? output.html_safe : output
     end
+    alias_method :to_s, :to_html
 
     # TODO only load vega-lite if $schema requires it
     def to_iruby

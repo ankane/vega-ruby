@@ -97,11 +97,11 @@ class ChartTest < Minitest::Test
   end
 
   def test_nonce
-    assert_match '<script nonce="test-123">', Vega.lite.to_s(nonce: "test-123")
+    assert_match '<script nonce="test-123">', Vega.lite.to_html(nonce: "test-123")
   end
 
   def test_nonce_escaped
-    assert_match '<script nonce="test-123&quot;">', Vega.lite.to_s(nonce: "test-123\"")
+    assert_match '<script nonce="test-123&quot;">', Vega.lite.to_html(nonce: "test-123\"")
   end
 
   def test_to_json
@@ -120,5 +120,9 @@ class ChartTest < Minitest::Test
     result = Vega.lite.to_iruby
     assert_equal "text/html", result[0]
     assert_match "require(['vega', 'vega-util', 'vega-lite', 'vega-embed']", result[1]
+  end
+
+  def test_inspect
+    assert_match "#<Vega::LiteChart", Vega.lite.inspect
   end
 end

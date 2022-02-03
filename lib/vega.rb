@@ -27,7 +27,7 @@ module Vega
     end
 
     def render(spec, nonce: nil)
-      Spec.new(spec).to_s(nonce: nonce)
+      Spec.new(spec).to_html(nonce: nonce)
     end
 
     def display(spec)

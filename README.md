@@ -403,7 +403,7 @@ end
 Add a nonce with:
 
 ```erb
-<%= chart.to_s(nonce: content_security_policy_nonce) %>
+<%= chart.to_html(nonce: content_security_policy_nonce) %>
 ```
 
 There’s also a helper to add it automatically when configured in Rails.

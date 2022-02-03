@@ -17,7 +17,7 @@ module Vega
         end
       end
 
-      chart.to_s(nonce: nonce)
+      chart.to_html(nonce: nonce)
     end
   end
 end
