@@ -398,7 +398,7 @@ class ChartsController < ApplicationController
 end
 ```
 
-### Nonce [unreleased]
+### Nonce
 
 Automatically add a nonce when configured in Rails with:
 
