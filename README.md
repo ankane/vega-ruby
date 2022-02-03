@@ -385,6 +385,33 @@ File.binwrite("chart.pdf", chart.to_pdf)
 
 ## Content Security Policy (CSP)
 
+### Styles and Frames
+
+Enable unsafe inline styles and blob frames on actions that have charts
+
+```ruby
+class ChartsController < ApplicationController
+  content_security_policy only: :index do |policy|
+    policy.style_src :self, :unsafe_inline
+    policy.frame_src :blob
+  end
+end
+```
+
+### Nonce [unreleased]
+
+Add a nonce with:
+
+```erb
+<%= chart.to_s(nonce: content_security_policy_nonce) %>
+```
+
+There’s also a helper to add it automatically when configured in Rails.
+
+```erb
+<%= vega_chart chart %>
+```
+
 ### Interpreter
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
@@ -417,33 +444,6 @@ And set embed options for your charts
 
 ```ruby
 embed_options(ast: true)
-```
-
-### Styles and Frames
-
-Enable unsafe inline styles and blob frames on actions that have charts
-
-```ruby
-class ChartsController < ApplicationController
-  content_security_policy only: :index do |policy|
-    policy.style_src :self, :unsafe_inline
-    policy.frame_src :blob
-  end
-end
-```
-
-### Nonce [unreleased]
-
-Add a nonce with:
-
-```erb
-<%= chart.to_s(nonce: content_security_policy_nonce) %>
-```
-
-There’s also a helper to add it automatically when configured in Rails.
-
-```erb
-<%= vega_chart chart %>
 ```
 
 ## History
