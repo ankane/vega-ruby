@@ -423,7 +423,7 @@ To add a nonce, use: [unreleased]
 <%= chart.to_s(nonce: content_security_policy_nonce) %>
 ```
 
-There’s also a helper to add it automatically when Rails is configured. [unreleased]
+There’s also a helper to add it automatically when configured in Rails. [unreleased]
 
 ```erb
 <%= vega_chart chart %>
