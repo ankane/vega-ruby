@@ -29,6 +29,12 @@ class HelperTest < Minitest::Test
     refute_match "nonce", vega_chart(Vega.lite.spec)
   end
 
+  def test_nonce_false
+    with_nonce do
+      refute_match "nonce", vega_chart(Vega.lite, nonce: false)
+    end
+  end
+
   def test_bad_type
     error = assert_raises(TypeError) do
       vega_chart Object.new
