@@ -8,9 +8,10 @@ module Vega
 
     def to_s(nonce: nil)
       html, js = generate_output
+      nonce_html = nonce ? " nonce=\"#{ERB::Util.html_escape(nonce)}\"" : nil
       output = <<~EOS
         #{html}
-        #{nonce ? "<script nonce=\"#{ERB::Util.html_escape(nonce)}\">" : "<script>"}
+        <script#{nonce_html}>
           (function() {
             var createChart = function() { #{js} };
             if ("vegaEmbed" in window) {
