@@ -124,5 +124,6 @@ class ChartTest < Minitest::Test
 
   def test_inspect
     assert_match "#<Vega::LiteChart", Vega.lite.inspect
+    assert_match "#<Vega::Chart", Vega.start.inspect
   end
 end
