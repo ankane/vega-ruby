@@ -25,8 +25,8 @@ module Vega
       LiteChart.new
     end
 
-    def render(spec)
-      Spec.new(spec).to_s
+    def render(spec, nonce: nil)
+      Spec.new(spec).to_s(nonce: nonce)
     end
 
     def display(spec)
