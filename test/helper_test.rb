@@ -9,7 +9,7 @@ class HelperTest < Minitest::Test
 
   def test_nonce
     stub(:content_security_policy_nonce, "test123") do
-      assert_match %{<script nonce="test123">}, vega_chart(Vega.lite)
+      assert_match '<script nonce="test123">', vega_chart(Vega.lite)
     end
   end
 

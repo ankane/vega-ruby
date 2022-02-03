@@ -97,11 +97,11 @@ class ChartTest < Minitest::Test
   end
 
   def test_nonce
-    assert_match "nonce=\"test-123\"", Vega.lite.to_s(nonce: "test-123")
+    assert_match '<script nonce="test-123">', Vega.lite.to_s(nonce: "test-123")
   end
 
   def test_nonce_escaped
-    assert_match "nonce=\"test-123&quot;\"", Vega.lite.to_s(nonce: "test-123\"")
+    assert_match '<script nonce="test-123&quot;">', Vega.lite.to_s(nonce: "test-123\"")
   end
 
   def test_to_json
