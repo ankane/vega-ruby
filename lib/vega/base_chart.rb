@@ -18,8 +18,8 @@ module Vega
     end
     immutable_method :embed_options
 
-    def to_s
-      Spec.new(spec).to_s
+    def to_s(nonce: nil)
+      Spec.new(spec).to_s(nonce: nonce)
     end
 
     def to_iruby
