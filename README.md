@@ -417,6 +417,17 @@ And set embed options for your charts
 embed_options(ast: true)
 ```
 
+Enable unsafe inline styles and blob frames on actions that have charts
+
+```ruby
+class ChartsController < ApplicationController
+  content_security_policy only: :index do |policy|
+    policy.style_src :self, :unsafe_inline
+    policy.frame_src :blob
+  end
+end
+```
+
 To add a nonce, use: [unreleased]
 
 ```erb
