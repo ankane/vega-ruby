@@ -417,6 +417,12 @@ And set embed options for your charts
 embed_options(ast: true)
 ```
 
+To add a nonce, use: [unreleased]
+
+```erb
+<%= chart.to_s(nonce: content_security_policy_nonce) %>
+```
+
 ## History
 
 View the [changelog](https://github.com/ankane/vega-ruby/blob/master/CHANGELOG.md)

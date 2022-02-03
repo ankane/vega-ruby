@@ -1,3 +1,7 @@
+## 0.2.6 (unreleased)
+
+- Added `nonce` option
+
 ## 0.2.5 (2022-01-22)
 
 - Updated Vega-Lite to 5.2.0 and Vega-Embed to 6.20.5
