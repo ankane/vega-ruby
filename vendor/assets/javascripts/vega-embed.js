@@ -27,8 +27,8 @@
 
     /*!
      * https://github.com/Starcounter-Jack/JSON-Patch
-     * (c) 2017 Joachim Wester
-     * MIT license
+     * (c) 2017-2022 Joachim Wester
+     * MIT licensed
      */
     var __extends = undefined && undefined.__extends || function () {
       var extendStatics = function (d, b) {
@@ -60,13 +60,13 @@
     }
     function _objectKeys(obj) {
       if (Array.isArray(obj)) {
-        var keys = new Array(obj.length);
+        var keys_1 = new Array(obj.length);
 
-        for (var k = 0; k < keys.length; k++) {
-          keys[k] = "" + k;
+        for (var k = 0; k < keys_1.length; k++) {
+          keys_1[k] = "" + k;
         }
 
-        return keys;
+        return keys_1;
       }
 
       if (Object.keys) {
@@ -154,8 +154,8 @@
 
       if (obj) {
         if (Array.isArray(obj)) {
-          for (var i = 0, len = obj.length; i < len; i++) {
-            if (hasUndefined(obj[i])) {
+          for (var i_1 = 0, len = obj.length; i_1 < len; i_1++) {
+            if (hasUndefined(obj[i_1])) {
               return true;
             }
           }
@@ -483,8 +483,8 @@
             key = unescapePathComponent(key);
           }
 
-          if (banPrototypeModifications && key == '__proto__') {
-            throw new TypeError('JSON-Patch: modifying `__proto__` prop is banned for security reasons, if this was on purpose, please set `banPrototypeModifications` flag false and pass it to this function. More info in fast-json-patch README');
+          if (banPrototypeModifications && (key == '__proto__' || key == 'prototype' && t > 0 && keys[t - 1] == 'constructor')) {
+            throw new TypeError('JSON-Patch: modifying `__proto__` or `constructor/prototype` prop is banned for security reasons, if this was on purpose, please set `banPrototypeModifications` flag false and pass it to this function. More info in fast-json-patch README');
           }
 
           if (validateOperation) {
@@ -766,7 +766,7 @@
 
     /*!
      * https://github.com/Starcounter-Jack/JSON-Patch
-     * (c) 2017 Joachim Wester
+     * (c) 2017-2021 Joachim Wester
      * MIT license
      */
     var beforeDict = new WeakMap();
@@ -1918,16 +1918,16 @@
 
     const opts = ['includePrerelease', 'loose', 'rtl'];
 
-    const parseOptions$3 = options => !options ? {} : typeof options !== 'object' ? {
+    const parseOptions$1 = options => !options ? {} : typeof options !== 'object' ? {
       loose: true
-    } : opts.filter(k => options[k]).reduce((options, k) => {
-      options[k] = true;
-      return options;
+    } : opts.filter(k => options[k]).reduce((o, k) => {
+      o[k] = true;
+      return o;
     }, {});
 
-    var parseOptions_1 = parseOptions$3;
+    var parseOptions_1 = parseOptions$1;
 
-    var re$3 = {exports: {}};
+    var re$1 = {exports: {}};
 
     // Not necessarily the package version of this code.
 
@@ -1945,14 +1945,14 @@
       MAX_SAFE_COMPONENT_LENGTH
     };
 
-    const debug$3 = typeof process === 'object' && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? function () {
+    const debug$1 = typeof process === 'object' && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? function () {
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
       return console.error('SEMVER', ...args);
     } : () => {};
-    var debug_1 = debug$3;
+    var debug_1 = debug$1;
 
     (function (module, exports) {
       const {
@@ -1968,7 +1968,7 @@
 
       const createToken = (name, value, isGlobal) => {
         const index = R++;
-        debug(index, value);
+        debug(name, index, value);
         t[name] = index;
         src[index] = value;
         re[index] = new RegExp(value, isGlobal ? 'g' : undefined);
@@ -2062,9 +2062,9 @@
 
       createToken('STAR', '(<|>)?=?\\s*\\*'); // >=0.0.0 is like a star
 
-      createToken('GTE0', '^\\s*>=\\s*0\.0\.0\\s*$');
-      createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$');
-    })(re$3, re$3.exports);
+      createToken('GTE0', '^\\s*>=\\s*0\\.0\\.0\\s*$');
+      createToken('GTE0PRE', '^\\s*>=\\s*0\\.0\\.0-0\\s*$');
+    })(re$1, re$1.exports);
 
     const numeric = /^[0-9]+$/;
 
@@ -2087,25 +2087,25 @@
       rcompareIdentifiers
     };
 
-    const debug$2 = debug_1;
+    const debug = debug_1;
     const {
       MAX_LENGTH,
       MAX_SAFE_INTEGER
     } = constants;
     const {
-      re: re$2,
-      t: t$2
-    } = re$3.exports;
-    const parseOptions$2 = parseOptions_1;
+      re,
+      t
+    } = re$1.exports;
+    const parseOptions = parseOptions_1;
     const {
       compareIdentifiers
     } = identifiers;
 
-    class SemVer$3 {
+    class SemVer$1 {
       constructor(version, options) {
-        options = parseOptions$2(options);
+        options = parseOptions(options);
 
-        if (version instanceof SemVer$3) {
+        if (version instanceof SemVer$1) {
           if (version.loose === !!options.loose && version.includePrerelease === !!options.includePrerelease) {
             return version;
           } else {
@@ -2119,13 +2119,13 @@
           throw new TypeError("version is longer than ".concat(MAX_LENGTH, " characters"));
         }
 
-        debug$2('SemVer', version, options);
+        debug('SemVer', version, options);
         this.options = options;
         this.loose = !!options.loose; // this isn't actually relevant for versions, but keep it so that we
         // don't run into trouble passing this.options around.
 
         this.includePrerelease = !!options.includePrerelease;
-        const m = version.trim().match(options.loose ? re$2[t$2.LOOSE] : re$2[t$2.FULL]);
+        const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
 
         if (!m) {
           throw new TypeError("Invalid Version: ".concat(version));
@@ -2185,14 +2185,14 @@
       }
 
       compare(other) {
-        debug$2('SemVer.compare', this.version, this.options, other);
+        debug('SemVer.compare', this.version, this.options, other);
 
-        if (!(other instanceof SemVer$3)) {
+        if (!(other instanceof SemVer$1)) {
           if (typeof other === 'string' && other === this.version) {
             return 0;
           }
 
-          other = new SemVer$3(other, this.options);
+          other = new SemVer$1(other, this.options);
         }
 
         if (other.version === this.version) {
@@ -2203,16 +2203,16 @@
       }
 
       compareMain(other) {
-        if (!(other instanceof SemVer$3)) {
-          other = new SemVer$3(other, this.options);
+        if (!(other instanceof SemVer$1)) {
+          other = new SemVer$1(other, this.options);
         }
 
         return compareIdentifiers(this.major, other.major) || compareIdentifiers(this.minor, other.minor) || compareIdentifiers(this.patch, other.patch);
       }
 
       comparePre(other) {
-        if (!(other instanceof SemVer$3)) {
-          other = new SemVer$3(other, this.options);
+        if (!(other instanceof SemVer$1)) {
+          other = new SemVer$1(other, this.options);
         } // NOT having a prerelease is > having one
 
 
@@ -2229,7 +2229,7 @@
         do {
           const a = this.prerelease[i];
           const b = other.prerelease[i];
-          debug$2('prerelease compare', i, a, b);
+          debug('prerelease compare', i, a, b);
 
           if (a === undefined && b === undefined) {
             return 0;
@@ -2246,8 +2246,8 @@
       }
 
       compareBuild(other) {
-        if (!(other instanceof SemVer$3)) {
-          other = new SemVer$3(other, this.options);
+        if (!(other instanceof SemVer$1)) {
+          other = new SemVer$1(other, this.options);
         }
 
         let i = 0;
@@ -2255,7 +2255,7 @@
         do {
           const a = this.build[i];
           const b = other.build[i];
-          debug$2('prerelease compare', i, a, b);
+          debug('prerelease compare', i, a, b);
 
           if (a === undefined && b === undefined) {
             return 0;
@@ -2372,7 +2372,7 @@
             if (identifier) {
               // 1.2.0-beta.1 bumps to 1.2.0-beta.2,
               // 1.2.0-beta.fooblz or 1.2.0-beta bumps to 1.2.0-beta.0
-              if (this.prerelease[0] === identifier) {
+              if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
                 if (isNaN(this.prerelease[1])) {
                   this.prerelease = [identifier, 0];
                 }
@@ -2394,11 +2394,11 @@
 
     }
 
-    var semver = SemVer$3;
+    var semver = SemVer$1;
 
-    const SemVer$2 = semver;
+    const SemVer = semver;
 
-    const compare$6 = (a, b, loose) => new SemVer$2(a, loose).compare(new SemVer$2(b, loose));
+    const compare$6 = (a, b, loose) => new SemVer(a, loose).compare(new SemVer(b, loose));
 
     var compare_1 = compare$6;
 
@@ -2445,16 +2445,28 @@
     const lt = lt_1;
     const lte = lte_1;
 
-    const cmp$1 = (a, op, b, loose) => {
+    const cmp = (a, op, b, loose) => {
       switch (op) {
         case '===':
-          if (typeof a === 'object') a = a.version;
-          if (typeof b === 'object') b = b.version;
+          if (typeof a === 'object') {
+            a = a.version;
+          }
+
+          if (typeof b === 'object') {
+            b = b.version;
+          }
+
           return a === b;
 
         case '!==':
-          if (typeof a === 'object') a = a.version;
-          if (typeof b === 'object') b = b.version;
+          if (typeof a === 'object') {
+            a = a.version;
+          }
+
+          if (typeof b === 'object') {
+            b = b.version;
+          }
+
           return a !== b;
 
         case '':
@@ -2482,599 +2494,641 @@
       }
     };
 
-    var cmp_1 = cmp$1;
+    var cmp_1 = cmp;
 
-    const ANY = Symbol('SemVer ANY'); // hoisted class for cyclic dependency
+    var comparator;
+    var hasRequiredComparator;
 
-    class Comparator$1 {
-      static get ANY() {
-        return ANY;
-      }
+    function requireComparator() {
+      if (hasRequiredComparator) return comparator;
+      hasRequiredComparator = 1;
+      const ANY = Symbol('SemVer ANY'); // hoisted class for cyclic dependency
 
-      constructor(comp, options) {
-        options = parseOptions$1(options);
+      class Comparator {
+        static get ANY() {
+          return ANY;
+        }
 
-        if (comp instanceof Comparator$1) {
-          if (comp.loose === !!options.loose) {
-            return comp;
+        constructor(comp, options) {
+          options = parseOptions(options);
+
+          if (comp instanceof Comparator) {
+            if (comp.loose === !!options.loose) {
+              return comp;
+            } else {
+              comp = comp.value;
+            }
+          }
+
+          debug('comparator', comp, options);
+          this.options = options;
+          this.loose = !!options.loose;
+          this.parse(comp);
+
+          if (this.semver === ANY) {
+            this.value = '';
           } else {
-            comp = comp.value;
+            this.value = this.operator + this.semver.version;
+          }
+
+          debug('comp', this);
+        }
+
+        parse(comp) {
+          const r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
+          const m = comp.match(r);
+
+          if (!m) {
+            throw new TypeError("Invalid comparator: ".concat(comp));
+          }
+
+          this.operator = m[1] !== undefined ? m[1] : '';
+
+          if (this.operator === '=') {
+            this.operator = '';
+          } // if it literally is just '>' or '' then allow anything.
+
+
+          if (!m[2]) {
+            this.semver = ANY;
+          } else {
+            this.semver = new SemVer(m[2], this.options.loose);
           }
         }
 
-        debug$1('comparator', comp, options);
-        this.options = options;
-        this.loose = !!options.loose;
-        this.parse(comp);
-
-        if (this.semver === ANY) {
-          this.value = '';
-        } else {
-          this.value = this.operator + this.semver.version;
+        toString() {
+          return this.value;
         }
 
-        debug$1('comp', this);
-      }
+        test(version) {
+          debug('Comparator.test', version, this.options.loose);
 
-      parse(comp) {
-        const r = this.options.loose ? re$1[t$1.COMPARATORLOOSE] : re$1[t$1.COMPARATOR];
-        const m = comp.match(r);
-
-        if (!m) {
-          throw new TypeError("Invalid comparator: ".concat(comp));
-        }
-
-        this.operator = m[1] !== undefined ? m[1] : '';
-
-        if (this.operator === '=') {
-          this.operator = '';
-        } // if it literally is just '>' or '' then allow anything.
-
-
-        if (!m[2]) {
-          this.semver = ANY;
-        } else {
-          this.semver = new SemVer$1(m[2], this.options.loose);
-        }
-      }
-
-      toString() {
-        return this.value;
-      }
-
-      test(version) {
-        debug$1('Comparator.test', version, this.options.loose);
-
-        if (this.semver === ANY || version === ANY) {
-          return true;
-        }
-
-        if (typeof version === 'string') {
-          try {
-            version = new SemVer$1(version, this.options);
-          } catch (er) {
-            return false;
-          }
-        }
-
-        return cmp(version, this.operator, this.semver, this.options);
-      }
-
-      intersects(comp, options) {
-        if (!(comp instanceof Comparator$1)) {
-          throw new TypeError('a Comparator is required');
-        }
-
-        if (!options || typeof options !== 'object') {
-          options = {
-            loose: !!options,
-            includePrerelease: false
-          };
-        }
-
-        if (this.operator === '') {
-          if (this.value === '') {
+          if (this.semver === ANY || version === ANY) {
             return true;
           }
 
-          return new Range$2(comp.value, options).test(this.value);
-        } else if (comp.operator === '') {
-          if (comp.value === '') {
-            return true;
+          if (typeof version === 'string') {
+            try {
+              version = new SemVer(version, this.options);
+            } catch (er) {
+              return false;
+            }
           }
 
-          return new Range$2(this.value, options).test(comp.semver);
+          return cmp(version, this.operator, this.semver, this.options);
         }
 
-        const sameDirectionIncreasing = (this.operator === '>=' || this.operator === '>') && (comp.operator === '>=' || comp.operator === '>');
-        const sameDirectionDecreasing = (this.operator === '<=' || this.operator === '<') && (comp.operator === '<=' || comp.operator === '<');
-        const sameSemVer = this.semver.version === comp.semver.version;
-        const differentDirectionsInclusive = (this.operator === '>=' || this.operator === '<=') && (comp.operator === '>=' || comp.operator === '<=');
-        const oppositeDirectionsLessThan = cmp(this.semver, '<', comp.semver, options) && (this.operator === '>=' || this.operator === '>') && (comp.operator === '<=' || comp.operator === '<');
-        const oppositeDirectionsGreaterThan = cmp(this.semver, '>', comp.semver, options) && (this.operator === '<=' || this.operator === '<') && (comp.operator === '>=' || comp.operator === '>');
-        return sameDirectionIncreasing || sameDirectionDecreasing || sameSemVer && differentDirectionsInclusive || oppositeDirectionsLessThan || oppositeDirectionsGreaterThan;
+        intersects(comp, options) {
+          if (!(comp instanceof Comparator)) {
+            throw new TypeError('a Comparator is required');
+          }
+
+          if (!options || typeof options !== 'object') {
+            options = {
+              loose: !!options,
+              includePrerelease: false
+            };
+          }
+
+          if (this.operator === '') {
+            if (this.value === '') {
+              return true;
+            }
+
+            return new Range(comp.value, options).test(this.value);
+          } else if (comp.operator === '') {
+            if (comp.value === '') {
+              return true;
+            }
+
+            return new Range(this.value, options).test(comp.semver);
+          }
+
+          const sameDirectionIncreasing = (this.operator === '>=' || this.operator === '>') && (comp.operator === '>=' || comp.operator === '>');
+          const sameDirectionDecreasing = (this.operator === '<=' || this.operator === '<') && (comp.operator === '<=' || comp.operator === '<');
+          const sameSemVer = this.semver.version === comp.semver.version;
+          const differentDirectionsInclusive = (this.operator === '>=' || this.operator === '<=') && (comp.operator === '>=' || comp.operator === '<=');
+          const oppositeDirectionsLessThan = cmp(this.semver, '<', comp.semver, options) && (this.operator === '>=' || this.operator === '>') && (comp.operator === '<=' || comp.operator === '<');
+          const oppositeDirectionsGreaterThan = cmp(this.semver, '>', comp.semver, options) && (this.operator === '<=' || this.operator === '<') && (comp.operator === '>=' || comp.operator === '>');
+          return sameDirectionIncreasing || sameDirectionDecreasing || sameSemVer && differentDirectionsInclusive || oppositeDirectionsLessThan || oppositeDirectionsGreaterThan;
+        }
+
       }
 
+      comparator = Comparator;
+      const parseOptions = parseOptions_1;
+      const {
+        re,
+        t
+      } = re$1.exports;
+      const cmp = cmp_1;
+      const debug = debug_1;
+      const SemVer = semver;
+      const Range = requireRange();
+      return comparator;
     }
 
-    var comparator = Comparator$1;
-    const parseOptions$1 = parseOptions_1;
-    const {
-      re: re$1,
-      t: t$1
-    } = re$3.exports;
-    const cmp = cmp_1;
-    const debug$1 = debug_1;
-    const SemVer$1 = semver;
-    const Range$2 = range;
+    var range;
+    var hasRequiredRange;
 
-    class Range$1 {
-      constructor(range, options) {
-        options = parseOptions(options);
+    function requireRange() {
+      if (hasRequiredRange) return range;
+      hasRequiredRange = 1; // hoisted class for cyclic dependency
 
-        if (range instanceof Range$1) {
-          if (range.loose === !!options.loose && range.includePrerelease === !!options.includePrerelease) {
-            return range;
-          } else {
-            return new Range$1(range.raw, options);
+      class Range {
+        constructor(range, options) {
+          options = parseOptions(options);
+
+          if (range instanceof Range) {
+            if (range.loose === !!options.loose && range.includePrerelease === !!options.includePrerelease) {
+              return range;
+            } else {
+              return new Range(range.raw, options);
+            }
           }
-        }
 
-        if (range instanceof Comparator) {
-          // just put it in the set and return
-          this.raw = range.value;
-          this.set = [[range]];
-          this.format();
-          return this;
-        }
+          if (range instanceof Comparator) {
+            // just put it in the set and return
+            this.raw = range.value;
+            this.set = [[range]];
+            this.format();
+            return this;
+          }
 
-        this.options = options;
-        this.loose = !!options.loose;
-        this.includePrerelease = !!options.includePrerelease; // First, split based on boolean or ||
+          this.options = options;
+          this.loose = !!options.loose;
+          this.includePrerelease = !!options.includePrerelease; // First, split based on boolean or ||
 
-        this.raw = range;
-        this.set = range.split(/\s*\|\|\s*/) // map the range to a 2d array of comparators
-        .map(range => this.parseRange(range.trim())) // throw out any comparator lists that are empty
-        // this generally means that it was not a valid range, which is allowed
-        // in loose mode, but will still throw if the WHOLE range is invalid.
-        .filter(c => c.length);
+          this.raw = range;
+          this.set = range.split('||') // map the range to a 2d array of comparators
+          .map(r => this.parseRange(r.trim())) // throw out any comparator lists that are empty
+          // this generally means that it was not a valid range, which is allowed
+          // in loose mode, but will still throw if the WHOLE range is invalid.
+          .filter(c => c.length);
 
-        if (!this.set.length) {
-          throw new TypeError("Invalid SemVer Range: ".concat(range));
-        } // if we have any that are not the null set, throw out null sets.
+          if (!this.set.length) {
+            throw new TypeError("Invalid SemVer Range: ".concat(range));
+          } // if we have any that are not the null set, throw out null sets.
 
 
-        if (this.set.length > 1) {
-          // keep the first one, in case they're all null sets
-          const first = this.set[0];
-          this.set = this.set.filter(c => !isNullSet(c[0]));
-          if (this.set.length === 0) this.set = [first];else if (this.set.length > 1) {
-            // if we have any that are *, then the range is just *
-            for (const c of this.set) {
-              if (c.length === 1 && isAny(c[0])) {
-                this.set = [c];
-                break;
+          if (this.set.length > 1) {
+            // keep the first one, in case they're all null sets
+            const first = this.set[0];
+            this.set = this.set.filter(c => !isNullSet(c[0]));
+
+            if (this.set.length === 0) {
+              this.set = [first];
+            } else if (this.set.length > 1) {
+              // if we have any that are *, then the range is just *
+              for (const c of this.set) {
+                if (c.length === 1 && isAny(c[0])) {
+                  this.set = [c];
+                  break;
+                }
               }
             }
           }
+
+          this.format();
         }
 
-        this.format();
-      }
-
-      format() {
-        this.range = this.set.map(comps => {
-          return comps.join(' ').trim();
-        }).join('||').trim();
-        return this.range;
-      }
-
-      toString() {
-        return this.range;
-      }
-
-      parseRange(range) {
-        range = range.trim(); // memoize range parsing for performance.
-        // this is a very hot path, and fully deterministic.
-
-        const memoOpts = Object.keys(this.options).join(',');
-        const memoKey = "parseRange:".concat(memoOpts, ":").concat(range);
-        const cached = cache.get(memoKey);
-        if (cached) return cached;
-        const loose = this.options.loose; // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-
-        const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE];
-        range = range.replace(hr, hyphenReplace(this.options.includePrerelease));
-        debug('hyphen replace', range); // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-
-        range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace);
-        debug('comparator trim', range, re[t.COMPARATORTRIM]); // `~ 1.2.3` => `~1.2.3`
-
-        range = range.replace(re[t.TILDETRIM], tildeTrimReplace); // `^ 1.2.3` => `^1.2.3`
-
-        range = range.replace(re[t.CARETTRIM], caretTrimReplace); // normalize spaces
-
-        range = range.split(/\s+/).join(' '); // At this point, the range is completely trimmed and
-        // ready to be split into comparators.
-
-        const compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR];
-        const rangeList = range.split(' ').map(comp => parseComparator(comp, this.options)).join(' ').split(/\s+/) // >=0.0.0 is equivalent to *
-        .map(comp => replaceGTE0(comp, this.options)) // in loose mode, throw out any that are not valid comparators
-        .filter(this.options.loose ? comp => !!comp.match(compRe) : () => true).map(comp => new Comparator(comp, this.options)); // if any comparators are the null set, then replace with JUST null set
-        // if more than one comparator, remove any * comparators
-        // also, don't include the same comparator more than once
-
-        rangeList.length;
-        const rangeMap = new Map();
-
-        for (const comp of rangeList) {
-          if (isNullSet(comp)) return [comp];
-          rangeMap.set(comp.value, comp);
+        format() {
+          this.range = this.set.map(comps => {
+            return comps.join(' ').trim();
+          }).join('||').trim();
+          return this.range;
         }
 
-        if (rangeMap.size > 1 && rangeMap.has('')) rangeMap.delete('');
-        const result = [...rangeMap.values()];
-        cache.set(memoKey, result);
-        return result;
-      }
-
-      intersects(range, options) {
-        if (!(range instanceof Range$1)) {
-          throw new TypeError('a Range is required');
+        toString() {
+          return this.range;
         }
 
-        return this.set.some(thisComparators => {
-          return isSatisfiable(thisComparators, options) && range.set.some(rangeComparators => {
-            return isSatisfiable(rangeComparators, options) && thisComparators.every(thisComparator => {
-              return rangeComparators.every(rangeComparator => {
-                return thisComparator.intersects(rangeComparator, options);
+        parseRange(range) {
+          range = range.trim(); // memoize range parsing for performance.
+          // this is a very hot path, and fully deterministic.
+
+          const memoOpts = Object.keys(this.options).join(',');
+          const memoKey = "parseRange:".concat(memoOpts, ":").concat(range);
+          const cached = cache.get(memoKey);
+
+          if (cached) {
+            return cached;
+          }
+
+          const loose = this.options.loose; // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+
+          const hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE];
+          range = range.replace(hr, hyphenReplace(this.options.includePrerelease));
+          debug('hyphen replace', range); // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+
+          range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace);
+          debug('comparator trim', range); // `~ 1.2.3` => `~1.2.3`
+
+          range = range.replace(re[t.TILDETRIM], tildeTrimReplace); // `^ 1.2.3` => `^1.2.3`
+
+          range = range.replace(re[t.CARETTRIM], caretTrimReplace); // normalize spaces
+
+          range = range.split(/\s+/).join(' '); // At this point, the range is completely trimmed and
+          // ready to be split into comparators.
+
+          let rangeList = range.split(' ').map(comp => parseComparator(comp, this.options)).join(' ').split(/\s+/) // >=0.0.0 is equivalent to *
+          .map(comp => replaceGTE0(comp, this.options));
+
+          if (loose) {
+            // in loose mode, throw out any that are not valid comparators
+            rangeList = rangeList.filter(comp => {
+              debug('loose invalid filter', comp, this.options);
+              return !!comp.match(re[t.COMPARATORLOOSE]);
+            });
+          }
+
+          debug('range list', rangeList); // if any comparators are the null set, then replace with JUST null set
+          // if more than one comparator, remove any * comparators
+          // also, don't include the same comparator more than once
+
+          const rangeMap = new Map();
+          const comparators = rangeList.map(comp => new Comparator(comp, this.options));
+
+          for (const comp of comparators) {
+            if (isNullSet(comp)) {
+              return [comp];
+            }
+
+            rangeMap.set(comp.value, comp);
+          }
+
+          if (rangeMap.size > 1 && rangeMap.has('')) {
+            rangeMap.delete('');
+          }
+
+          const result = [...rangeMap.values()];
+          cache.set(memoKey, result);
+          return result;
+        }
+
+        intersects(range, options) {
+          if (!(range instanceof Range)) {
+            throw new TypeError('a Range is required');
+          }
+
+          return this.set.some(thisComparators => {
+            return isSatisfiable(thisComparators, options) && range.set.some(rangeComparators => {
+              return isSatisfiable(rangeComparators, options) && thisComparators.every(thisComparator => {
+                return rangeComparators.every(rangeComparator => {
+                  return thisComparator.intersects(rangeComparator, options);
+                });
               });
             });
           });
-        });
-      } // if ANY of the sets match ALL of its comparators, then pass
+        } // if ANY of the sets match ALL of its comparators, then pass
 
 
-      test(version) {
-        if (!version) {
+        test(version) {
+          if (!version) {
+            return false;
+          }
+
+          if (typeof version === 'string') {
+            try {
+              version = new SemVer(version, this.options);
+            } catch (er) {
+              return false;
+            }
+          }
+
+          for (let i = 0; i < this.set.length; i++) {
+            if (testSet(this.set[i], version, this.options)) {
+              return true;
+            }
+          }
+
           return false;
         }
 
-        if (typeof version === 'string') {
-          try {
-            version = new SemVer(version, this.options);
-          } catch (er) {
+      }
+
+      range = Range;
+      const LRU = lruCache;
+      const cache = new LRU({
+        max: 1000
+      });
+      const parseOptions = parseOptions_1;
+      const Comparator = requireComparator();
+      const debug = debug_1;
+      const SemVer = semver;
+      const {
+        re,
+        t,
+        comparatorTrimReplace,
+        tildeTrimReplace,
+        caretTrimReplace
+      } = re$1.exports;
+
+      const isNullSet = c => c.value === '<0.0.0-0';
+
+      const isAny = c => c.value === ''; // take a set of comparators and determine whether there
+      // exists a version which can satisfy it
+
+
+      const isSatisfiable = (comparators, options) => {
+        let result = true;
+        const remainingComparators = comparators.slice();
+        let testComparator = remainingComparators.pop();
+
+        while (result && remainingComparators.length) {
+          result = remainingComparators.every(otherComparator => {
+            return testComparator.intersects(otherComparator, options);
+          });
+          testComparator = remainingComparators.pop();
+        }
+
+        return result;
+      }; // comprised of xranges, tildes, stars, and gtlt's at this point.
+      // already replaced the hyphen ranges
+      // turn into a set of JUST comparators.
+
+
+      const parseComparator = (comp, options) => {
+        debug('comp', comp, options);
+        comp = replaceCarets(comp, options);
+        debug('caret', comp);
+        comp = replaceTildes(comp, options);
+        debug('tildes', comp);
+        comp = replaceXRanges(comp, options);
+        debug('xrange', comp);
+        comp = replaceStars(comp, options);
+        debug('stars', comp);
+        return comp;
+      };
+
+      const isX = id => !id || id.toLowerCase() === 'x' || id === '*'; // ~, ~> --> * (any, kinda silly)
+      // ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
+      // ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
+      // ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
+      // ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
+      // ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
+
+
+      const replaceTildes = (comp, options) => comp.trim().split(/\s+/).map(c => {
+        return replaceTilde(c, options);
+      }).join(' ');
+
+      const replaceTilde = (comp, options) => {
+        const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
+        return comp.replace(r, (_, M, m, p, pr) => {
+          debug('tilde', comp, _, M, m, p, pr);
+          let ret;
+
+          if (isX(M)) {
+            ret = '';
+          } else if (isX(m)) {
+            ret = ">=".concat(M, ".0.0 <").concat(+M + 1, ".0.0-0");
+          } else if (isX(p)) {
+            // ~1.2 == >=1.2.0 <1.3.0-0
+            ret = ">=".concat(M, ".").concat(m, ".0 <").concat(M, ".").concat(+m + 1, ".0-0");
+          } else if (pr) {
+            debug('replaceTilde pr', pr);
+            ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
+          } else {
+            // ~1.2.3 == >=1.2.3 <1.3.0-0
+            ret = ">=".concat(M, ".").concat(m, ".").concat(p, " <").concat(M, ".").concat(+m + 1, ".0-0");
+          }
+
+          debug('tilde return', ret);
+          return ret;
+        });
+      }; // ^ --> * (any, kinda silly)
+      // ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
+      // ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
+      // ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
+      // ^1.2.3 --> >=1.2.3 <2.0.0-0
+      // ^1.2.0 --> >=1.2.0 <2.0.0-0
+
+
+      const replaceCarets = (comp, options) => comp.trim().split(/\s+/).map(c => {
+        return replaceCaret(c, options);
+      }).join(' ');
+
+      const replaceCaret = (comp, options) => {
+        debug('caret', comp, options);
+        const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
+        const z = options.includePrerelease ? '-0' : '';
+        return comp.replace(r, (_, M, m, p, pr) => {
+          debug('caret', comp, _, M, m, p, pr);
+          let ret;
+
+          if (isX(M)) {
+            ret = '';
+          } else if (isX(m)) {
+            ret = ">=".concat(M, ".0.0").concat(z, " <").concat(+M + 1, ".0.0-0");
+          } else if (isX(p)) {
+            if (M === '0') {
+              ret = ">=".concat(M, ".").concat(m, ".0").concat(z, " <").concat(M, ".").concat(+m + 1, ".0-0");
+            } else {
+              ret = ">=".concat(M, ".").concat(m, ".0").concat(z, " <").concat(+M + 1, ".0.0-0");
+            }
+          } else if (pr) {
+            debug('replaceCaret pr', pr);
+
+            if (M === '0') {
+              if (m === '0') {
+                ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(m, ".").concat(+p + 1, "-0");
+              } else {
+                ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
+              }
+            } else {
+              ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(+M + 1, ".0.0-0");
+            }
+          } else {
+            debug('no pr');
+
+            if (M === '0') {
+              if (m === '0') {
+                ret = ">=".concat(M, ".").concat(m, ".").concat(p).concat(z, " <").concat(M, ".").concat(m, ".").concat(+p + 1, "-0");
+              } else {
+                ret = ">=".concat(M, ".").concat(m, ".").concat(p).concat(z, " <").concat(M, ".").concat(+m + 1, ".0-0");
+              }
+            } else {
+              ret = ">=".concat(M, ".").concat(m, ".").concat(p, " <").concat(+M + 1, ".0.0-0");
+            }
+          }
+
+          debug('caret return', ret);
+          return ret;
+        });
+      };
+
+      const replaceXRanges = (comp, options) => {
+        debug('replaceXRanges', comp, options);
+        return comp.split(/\s+/).map(c => {
+          return replaceXRange(c, options);
+        }).join(' ');
+      };
+
+      const replaceXRange = (comp, options) => {
+        comp = comp.trim();
+        const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
+        return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
+          debug('xRange', comp, ret, gtlt, M, m, p, pr);
+          const xM = isX(M);
+          const xm = xM || isX(m);
+          const xp = xm || isX(p);
+          const anyX = xp;
+
+          if (gtlt === '=' && anyX) {
+            gtlt = '';
+          } // if we're including prereleases in the match, then we need
+          // to fix this to -0, the lowest possible prerelease value
+
+
+          pr = options.includePrerelease ? '-0' : '';
+
+          if (xM) {
+            if (gtlt === '>' || gtlt === '<') {
+              // nothing is allowed
+              ret = '<0.0.0-0';
+            } else {
+              // nothing is forbidden
+              ret = '*';
+            }
+          } else if (gtlt && anyX) {
+            // we know patch is an x, because we have any x at all.
+            // replace X with 0
+            if (xm) {
+              m = 0;
+            }
+
+            p = 0;
+
+            if (gtlt === '>') {
+              // >1 => >=2.0.0
+              // >1.2 => >=1.3.0
+              gtlt = '>=';
+
+              if (xm) {
+                M = +M + 1;
+                m = 0;
+                p = 0;
+              } else {
+                m = +m + 1;
+                p = 0;
+              }
+            } else if (gtlt === '<=') {
+              // <=0.7.x is actually <0.8.0, since any 0.7.x should
+              // pass.  Similarly, <=7.x is actually <8.0.0, etc.
+              gtlt = '<';
+
+              if (xm) {
+                M = +M + 1;
+              } else {
+                m = +m + 1;
+              }
+            }
+
+            if (gtlt === '<') {
+              pr = '-0';
+            }
+
+            ret = "".concat(gtlt + M, ".").concat(m, ".").concat(p).concat(pr);
+          } else if (xm) {
+            ret = ">=".concat(M, ".0.0").concat(pr, " <").concat(+M + 1, ".0.0-0");
+          } else if (xp) {
+            ret = ">=".concat(M, ".").concat(m, ".0").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
+          }
+
+          debug('xRange return', ret);
+          return ret;
+        });
+      }; // Because * is AND-ed with everything else in the comparator,
+      // and '' means "any version", just remove the *s entirely.
+
+
+      const replaceStars = (comp, options) => {
+        debug('replaceStars', comp, options); // Looseness is ignored here.  star is always as loose as it gets!
+
+        return comp.trim().replace(re[t.STAR], '');
+      };
+
+      const replaceGTE0 = (comp, options) => {
+        debug('replaceGTE0', comp, options);
+        return comp.trim().replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '');
+      }; // This function is passed to string.replace(re[t.HYPHENRANGE])
+      // M, m, patch, prerelease, build
+      // 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
+      // 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
+      // 1.2 - 3.4 => >=1.2.0 <3.5.0-0
+
+
+      const hyphenReplace = incPr => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr, tb) => {
+        if (isX(fM)) {
+          from = '';
+        } else if (isX(fm)) {
+          from = ">=".concat(fM, ".0.0").concat(incPr ? '-0' : '');
+        } else if (isX(fp)) {
+          from = ">=".concat(fM, ".").concat(fm, ".0").concat(incPr ? '-0' : '');
+        } else if (fpr) {
+          from = ">=".concat(from);
+        } else {
+          from = ">=".concat(from).concat(incPr ? '-0' : '');
+        }
+
+        if (isX(tM)) {
+          to = '';
+        } else if (isX(tm)) {
+          to = "<".concat(+tM + 1, ".0.0-0");
+        } else if (isX(tp)) {
+          to = "<".concat(tM, ".").concat(+tm + 1, ".0-0");
+        } else if (tpr) {
+          to = "<=".concat(tM, ".").concat(tm, ".").concat(tp, "-").concat(tpr);
+        } else if (incPr) {
+          to = "<".concat(tM, ".").concat(tm, ".").concat(+tp + 1, "-0");
+        } else {
+          to = "<=".concat(to);
+        }
+
+        return "".concat(from, " ").concat(to).trim();
+      };
+
+      const testSet = (set, version, options) => {
+        for (let i = 0; i < set.length; i++) {
+          if (!set[i].test(version)) {
             return false;
           }
         }
 
-        for (let i = 0; i < this.set.length; i++) {
-          if (testSet(this.set[i], version, this.options)) {
-            return true;
-          }
-        }
+        if (version.prerelease.length && !options.includePrerelease) {
+          // Find the set of versions that are allowed to have prereleases
+          // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
+          // That should allow `1.2.3-pr.2` to pass.
+          // However, `1.2.4-alpha.notready` should NOT be allowed,
+          // even though it's within the range set by the comparators.
+          for (let i = 0; i < set.length; i++) {
+            debug(set[i].semver);
 
-        return false;
-      }
-
-    }
-
-    var range = Range$1;
-    const LRU = lruCache;
-    const cache = new LRU({
-      max: 1000
-    });
-    const parseOptions = parseOptions_1;
-    const Comparator = comparator;
-    const debug = debug_1;
-    const SemVer = semver;
-    const {
-      re,
-      t,
-      comparatorTrimReplace,
-      tildeTrimReplace,
-      caretTrimReplace
-    } = re$3.exports;
-
-    const isNullSet = c => c.value === '<0.0.0-0';
-
-    const isAny = c => c.value === ''; // take a set of comparators and determine whether there
-    // exists a version which can satisfy it
-
-
-    const isSatisfiable = (comparators, options) => {
-      let result = true;
-      const remainingComparators = comparators.slice();
-      let testComparator = remainingComparators.pop();
-
-      while (result && remainingComparators.length) {
-        result = remainingComparators.every(otherComparator => {
-          return testComparator.intersects(otherComparator, options);
-        });
-        testComparator = remainingComparators.pop();
-      }
-
-      return result;
-    }; // comprised of xranges, tildes, stars, and gtlt's at this point.
-    // already replaced the hyphen ranges
-    // turn into a set of JUST comparators.
-
-
-    const parseComparator = (comp, options) => {
-      debug('comp', comp, options);
-      comp = replaceCarets(comp, options);
-      debug('caret', comp);
-      comp = replaceTildes(comp, options);
-      debug('tildes', comp);
-      comp = replaceXRanges(comp, options);
-      debug('xrange', comp);
-      comp = replaceStars(comp, options);
-      debug('stars', comp);
-      return comp;
-    };
-
-    const isX = id => !id || id.toLowerCase() === 'x' || id === '*'; // ~, ~> --> * (any, kinda silly)
-    // ~2, ~2.x, ~2.x.x, ~>2, ~>2.x ~>2.x.x --> >=2.0.0 <3.0.0-0
-    // ~2.0, ~2.0.x, ~>2.0, ~>2.0.x --> >=2.0.0 <2.1.0-0
-    // ~1.2, ~1.2.x, ~>1.2, ~>1.2.x --> >=1.2.0 <1.3.0-0
-    // ~1.2.3, ~>1.2.3 --> >=1.2.3 <1.3.0-0
-    // ~1.2.0, ~>1.2.0 --> >=1.2.0 <1.3.0-0
-
-
-    const replaceTildes = (comp, options) => comp.trim().split(/\s+/).map(comp => {
-      return replaceTilde(comp, options);
-    }).join(' ');
-
-    const replaceTilde = (comp, options) => {
-      const r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
-      return comp.replace(r, (_, M, m, p, pr) => {
-        debug('tilde', comp, _, M, m, p, pr);
-        let ret;
-
-        if (isX(M)) {
-          ret = '';
-        } else if (isX(m)) {
-          ret = ">=".concat(M, ".0.0 <").concat(+M + 1, ".0.0-0");
-        } else if (isX(p)) {
-          // ~1.2 == >=1.2.0 <1.3.0-0
-          ret = ">=".concat(M, ".").concat(m, ".0 <").concat(M, ".").concat(+m + 1, ".0-0");
-        } else if (pr) {
-          debug('replaceTilde pr', pr);
-          ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
-        } else {
-          // ~1.2.3 == >=1.2.3 <1.3.0-0
-          ret = ">=".concat(M, ".").concat(m, ".").concat(p, " <").concat(M, ".").concat(+m + 1, ".0-0");
-        }
-
-        debug('tilde return', ret);
-        return ret;
-      });
-    }; // ^ --> * (any, kinda silly)
-    // ^2, ^2.x, ^2.x.x --> >=2.0.0 <3.0.0-0
-    // ^2.0, ^2.0.x --> >=2.0.0 <3.0.0-0
-    // ^1.2, ^1.2.x --> >=1.2.0 <2.0.0-0
-    // ^1.2.3 --> >=1.2.3 <2.0.0-0
-    // ^1.2.0 --> >=1.2.0 <2.0.0-0
-
-
-    const replaceCarets = (comp, options) => comp.trim().split(/\s+/).map(comp => {
-      return replaceCaret(comp, options);
-    }).join(' ');
-
-    const replaceCaret = (comp, options) => {
-      debug('caret', comp, options);
-      const r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
-      const z = options.includePrerelease ? '-0' : '';
-      return comp.replace(r, (_, M, m, p, pr) => {
-        debug('caret', comp, _, M, m, p, pr);
-        let ret;
-
-        if (isX(M)) {
-          ret = '';
-        } else if (isX(m)) {
-          ret = ">=".concat(M, ".0.0").concat(z, " <").concat(+M + 1, ".0.0-0");
-        } else if (isX(p)) {
-          if (M === '0') {
-            ret = ">=".concat(M, ".").concat(m, ".0").concat(z, " <").concat(M, ".").concat(+m + 1, ".0-0");
-          } else {
-            ret = ">=".concat(M, ".").concat(m, ".0").concat(z, " <").concat(+M + 1, ".0.0-0");
-          }
-        } else if (pr) {
-          debug('replaceCaret pr', pr);
-
-          if (M === '0') {
-            if (m === '0') {
-              ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(m, ".").concat(+p + 1, "-0");
-            } else {
-              ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
+            if (set[i].semver === Comparator.ANY) {
+              continue;
             }
-          } else {
-            ret = ">=".concat(M, ".").concat(m, ".").concat(p, "-").concat(pr, " <").concat(+M + 1, ".0.0-0");
-          }
-        } else {
-          debug('no pr');
 
-          if (M === '0') {
-            if (m === '0') {
-              ret = ">=".concat(M, ".").concat(m, ".").concat(p).concat(z, " <").concat(M, ".").concat(m, ".").concat(+p + 1, "-0");
-            } else {
-              ret = ">=".concat(M, ".").concat(m, ".").concat(p).concat(z, " <").concat(M, ".").concat(+m + 1, ".0-0");
+            if (set[i].semver.prerelease.length > 0) {
+              const allowed = set[i].semver;
+
+              if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
+                return true;
+              }
             }
-          } else {
-            ret = ">=".concat(M, ".").concat(m, ".").concat(p, " <").concat(+M + 1, ".0.0-0");
-          }
-        }
-
-        debug('caret return', ret);
-        return ret;
-      });
-    };
-
-    const replaceXRanges = (comp, options) => {
-      debug('replaceXRanges', comp, options);
-      return comp.split(/\s+/).map(comp => {
-        return replaceXRange(comp, options);
-      }).join(' ');
-    };
-
-    const replaceXRange = (comp, options) => {
-      comp = comp.trim();
-      const r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
-      return comp.replace(r, (ret, gtlt, M, m, p, pr) => {
-        debug('xRange', comp, ret, gtlt, M, m, p, pr);
-        const xM = isX(M);
-        const xm = xM || isX(m);
-        const xp = xm || isX(p);
-        const anyX = xp;
-
-        if (gtlt === '=' && anyX) {
-          gtlt = '';
-        } // if we're including prereleases in the match, then we need
-        // to fix this to -0, the lowest possible prerelease value
+          } // Version has a -pre, but it's not one of the ones we like.
 
 
-        pr = options.includePrerelease ? '-0' : '';
-
-        if (xM) {
-          if (gtlt === '>' || gtlt === '<') {
-            // nothing is allowed
-            ret = '<0.0.0-0';
-          } else {
-            // nothing is forbidden
-            ret = '*';
-          }
-        } else if (gtlt && anyX) {
-          // we know patch is an x, because we have any x at all.
-          // replace X with 0
-          if (xm) {
-            m = 0;
-          }
-
-          p = 0;
-
-          if (gtlt === '>') {
-            // >1 => >=2.0.0
-            // >1.2 => >=1.3.0
-            gtlt = '>=';
-
-            if (xm) {
-              M = +M + 1;
-              m = 0;
-              p = 0;
-            } else {
-              m = +m + 1;
-              p = 0;
-            }
-          } else if (gtlt === '<=') {
-            // <=0.7.x is actually <0.8.0, since any 0.7.x should
-            // pass.  Similarly, <=7.x is actually <8.0.0, etc.
-            gtlt = '<';
-
-            if (xm) {
-              M = +M + 1;
-            } else {
-              m = +m + 1;
-            }
-          }
-
-          if (gtlt === '<') pr = '-0';
-          ret = "".concat(gtlt + M, ".").concat(m, ".").concat(p).concat(pr);
-        } else if (xm) {
-          ret = ">=".concat(M, ".0.0").concat(pr, " <").concat(+M + 1, ".0.0-0");
-        } else if (xp) {
-          ret = ">=".concat(M, ".").concat(m, ".0").concat(pr, " <").concat(M, ".").concat(+m + 1, ".0-0");
-        }
-
-        debug('xRange return', ret);
-        return ret;
-      });
-    }; // Because * is AND-ed with everything else in the comparator,
-    // and '' means "any version", just remove the *s entirely.
-
-
-    const replaceStars = (comp, options) => {
-      debug('replaceStars', comp, options); // Looseness is ignored here.  star is always as loose as it gets!
-
-      return comp.trim().replace(re[t.STAR], '');
-    };
-
-    const replaceGTE0 = (comp, options) => {
-      debug('replaceGTE0', comp, options);
-      return comp.trim().replace(re[options.includePrerelease ? t.GTE0PRE : t.GTE0], '');
-    }; // This function is passed to string.replace(re[t.HYPHENRANGE])
-    // M, m, patch, prerelease, build
-    // 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
-    // 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
-    // 1.2 - 3.4 => >=1.2.0 <3.5.0-0
-
-
-    const hyphenReplace = incPr => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr, tb) => {
-      if (isX(fM)) {
-        from = '';
-      } else if (isX(fm)) {
-        from = ">=".concat(fM, ".0.0").concat(incPr ? '-0' : '');
-      } else if (isX(fp)) {
-        from = ">=".concat(fM, ".").concat(fm, ".0").concat(incPr ? '-0' : '');
-      } else if (fpr) {
-        from = ">=".concat(from);
-      } else {
-        from = ">=".concat(from).concat(incPr ? '-0' : '');
-      }
-
-      if (isX(tM)) {
-        to = '';
-      } else if (isX(tm)) {
-        to = "<".concat(+tM + 1, ".0.0-0");
-      } else if (isX(tp)) {
-        to = "<".concat(tM, ".").concat(+tm + 1, ".0-0");
-      } else if (tpr) {
-        to = "<=".concat(tM, ".").concat(tm, ".").concat(tp, "-").concat(tpr);
-      } else if (incPr) {
-        to = "<".concat(tM, ".").concat(tm, ".").concat(+tp + 1, "-0");
-      } else {
-        to = "<=".concat(to);
-      }
-
-      return "".concat(from, " ").concat(to).trim();
-    };
-
-    const testSet = (set, version, options) => {
-      for (let i = 0; i < set.length; i++) {
-        if (!set[i].test(version)) {
           return false;
         }
-      }
 
-      if (version.prerelease.length && !options.includePrerelease) {
-        // Find the set of versions that are allowed to have prereleases
-        // For example, ^1.2.3-pr.1 desugars to >=1.2.3-pr.1 <2.0.0
-        // That should allow `1.2.3-pr.2` to pass.
-        // However, `1.2.4-alpha.notready` should NOT be allowed,
-        // even though it's within the range set by the comparators.
-        for (let i = 0; i < set.length; i++) {
-          debug(set[i].semver);
+        return true;
+      };
 
-          if (set[i].semver === Comparator.ANY) {
-            continue;
-          }
+      return range;
+    }
 
-          if (set[i].semver.prerelease.length > 0) {
-            const allowed = set[i].semver;
-
-            if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
-              return true;
-            }
-          }
-        } // Version has a -pre, but it's not one of the ones we like.
-
-
-        return false;
-      }
-
-      return true;
-    };
-
-    const Range = range;
+    const Range = requireRange();
 
     const satisfies = (version, range, options) => {
       try {
@@ -4340,7 +4394,7 @@
     } // generated with build-style.sh
 
 
-    var defaultStyle = "#vg-tooltip-element {\n  visibility: hidden;\n  padding: 8px;\n  position: fixed;\n  z-index: 1000;\n  font-family: sans-serif;\n  font-size: 11px;\n  border-radius: 3px;\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  /* The default theme is the light theme. */\n  background-color: rgba(255, 255, 255, 0.95);\n  border: 1px solid #d9d9d9;\n  color: black; }\n  #vg-tooltip-element.visible {\n    visibility: visible; }\n  #vg-tooltip-element h2 {\n    margin-top: 0;\n    margin-bottom: 10px;\n    font-size: 13px; }\n  #vg-tooltip-element img {\n    max-width: 200px;\n    max-height: 200px; }\n  #vg-tooltip-element table {\n    border-spacing: 0; }\n    #vg-tooltip-element table tr {\n      border: none; }\n      #vg-tooltip-element table tr td {\n        overflow: hidden;\n        text-overflow: ellipsis;\n        padding-top: 2px;\n        padding-bottom: 2px; }\n        #vg-tooltip-element table tr td.key {\n          color: #808080;\n          max-width: 150px;\n          text-align: right;\n          padding-right: 4px; }\n        #vg-tooltip-element table tr td.value {\n          display: block;\n          max-width: 300px;\n          max-height: 7em;\n          text-align: left; }\n  #vg-tooltip-element.dark-theme {\n    background-color: rgba(32, 32, 32, 0.9);\n    border: 1px solid #f5f5f5;\n    color: white; }\n    #vg-tooltip-element.dark-theme td.key {\n      color: #bfbfbf; }\n";
+    var defaultStyle = "#vg-tooltip-element {\n  visibility: hidden;\n  padding: 8px;\n  position: fixed;\n  z-index: 1000;\n  font-family: sans-serif;\n  font-size: 11px;\n  border-radius: 3px;\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  /* The default theme is the light theme. */\n  background-color: rgba(255, 255, 255, 0.95);\n  border: 1px solid #d9d9d9;\n  color: black;\n}\n#vg-tooltip-element.visible {\n  visibility: visible;\n}\n#vg-tooltip-element h2 {\n  margin-top: 0;\n  margin-bottom: 10px;\n  font-size: 13px;\n}\n#vg-tooltip-element img {\n  max-width: 200px;\n  max-height: 200px;\n}\n#vg-tooltip-element table {\n  border-spacing: 0;\n}\n#vg-tooltip-element table tr {\n  border: none;\n}\n#vg-tooltip-element table tr td {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  padding-top: 2px;\n  padding-bottom: 2px;\n}\n#vg-tooltip-element table tr td.key {\n  color: #808080;\n  max-width: 150px;\n  text-align: right;\n  padding-right: 4px;\n}\n#vg-tooltip-element table tr td.value {\n  display: block;\n  max-width: 300px;\n  max-height: 7em;\n  text-align: left;\n}\n#vg-tooltip-element.dark-theme {\n  background-color: rgba(32, 32, 32, 0.9);\n  border: 1px solid #f5f5f5;\n  color: white;\n}\n#vg-tooltip-element.dark-theme td.key {\n  color: #bfbfbf;\n}\n";
     const EL_ID = 'vg-tooltip-element';
     const DEFAULT_OPTIONS = {
       /**
@@ -4488,11 +4542,10 @@
           this.el = document.createElement('div');
           this.el.setAttribute('id', this.options.id);
           this.el.classList.add('vg-tooltip');
-          document.body.appendChild(this.el);
-        }
+          const tooltipContainer = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : document.body;
+          tooltipContainer.appendChild(this.el);
+        } // hide tooltip for null, undefined, or empty string values
 
-        const tooltipContainer = (_a = document.fullscreenElement) !== null && _a !== void 0 ? _a : document.body;
-        tooltipContainer.appendChild(this.el); // hide tooltip for null, undefined, or empty string values
 
         if (value == null || value === '') {
           this.el.classList.remove('visible', "".concat(this.options.theme, "-theme"));
@@ -4550,7 +4603,7 @@
     }
 
     // generated with build-style.sh
-    var embedStyle = ".vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box;\n}\n.vega-embed.has-actions {\n  padding-right: 38px;\n}\n.vega-embed details:not([open]) > :not(summary) {\n  display: none !important;\n}\n.vega-embed summary {\n  list-style: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  padding: 6px;\n  z-index: 1000;\n  background: white;\n  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n  color: #1b1e23;\n  border: 1px solid #aaa;\n  border-radius: 999px;\n  opacity: 0.2;\n  transition: opacity 0.4s ease-in;\n  outline: none;\n  cursor: pointer;\n  line-height: 0px;\n}\n.vega-embed summary::-webkit-details-marker {\n  display: none;\n}\n.vega-embed summary:active {\n  box-shadow: #aaa 0px 0px 0px 1px inset;\n}\n.vega-embed summary svg {\n  width: 14px;\n  height: 14px;\n}\n.vega-embed details[open] summary {\n  opacity: 0.7;\n}\n.vega-embed:hover summary, .vega-embed:focus summary {\n  opacity: 1 !important;\n  transition: opacity 0.2s ease;\n}\n.vega-embed .vega-actions {\n  position: absolute;\n  z-index: 1001;\n  top: 35px;\n  right: -9px;\n  display: flex;\n  flex-direction: column;\n  padding-bottom: 8px;\n  padding-top: 8px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n  border: 1px solid #d9d9d9;\n  background: white;\n  animation-duration: 0.15s;\n  animation-name: scale-in;\n  animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n  text-align: left;\n}\n.vega-embed .vega-actions a {\n  padding: 8px 16px;\n  font-family: sans-serif;\n  font-size: 14px;\n  font-weight: 600;\n  white-space: nowrap;\n  color: #434a56;\n  text-decoration: none;\n}\n.vega-embed .vega-actions a:hover {\n  background-color: #f7f7f9;\n  color: black;\n}\n.vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n}\n.vega-embed .vega-actions::before {\n  left: auto;\n  right: 14px;\n  top: -16px;\n  border: 8px solid #0000;\n  border-bottom-color: #d9d9d9;\n}\n.vega-embed .vega-actions::after {\n  left: auto;\n  right: 15px;\n  top: -14px;\n  border: 7px solid #0000;\n  border-bottom-color: #fff;\n}\n.vega-embed .chart-wrapper.fit-x {\n  width: 100%;\n}\n.vega-embed .chart-wrapper.fit-y {\n  height: 100%;\n}\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: auto;\n  padding-right: 14px;\n}\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n";
+    var embedStyle = ".vega-embed {\n  position: relative;\n  display: inline-block;\n  box-sizing: border-box;\n}\n.vega-embed.has-actions {\n  padding-right: 38px;\n}\n.vega-embed details:not([open]) > :not(summary) {\n  display: none !important;\n}\n.vega-embed summary {\n  list-style: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  padding: 6px;\n  z-index: 1000;\n  background: white;\n  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);\n  color: #1b1e23;\n  border: 1px solid #aaa;\n  border-radius: 999px;\n  opacity: 0.2;\n  transition: opacity 0.4s ease-in;\n  cursor: pointer;\n  line-height: 0px;\n}\n.vega-embed summary::-webkit-details-marker {\n  display: none;\n}\n.vega-embed summary:active {\n  box-shadow: #aaa 0px 0px 0px 1px inset;\n}\n.vega-embed summary svg {\n  width: 14px;\n  height: 14px;\n}\n.vega-embed details[open] summary {\n  opacity: 0.7;\n}\n.vega-embed:hover summary, .vega-embed:focus-within summary {\n  opacity: 1 !important;\n  transition: opacity 0.2s ease;\n}\n.vega-embed .vega-actions {\n  position: absolute;\n  z-index: 1001;\n  top: 35px;\n  right: -9px;\n  display: flex;\n  flex-direction: column;\n  padding-bottom: 8px;\n  padding-top: 8px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);\n  border: 1px solid #d9d9d9;\n  background: white;\n  animation-duration: 0.15s;\n  animation-name: scale-in;\n  animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);\n  text-align: left;\n}\n.vega-embed .vega-actions a {\n  padding: 8px 16px;\n  font-family: sans-serif;\n  font-size: 14px;\n  font-weight: 600;\n  white-space: nowrap;\n  color: #434a56;\n  text-decoration: none;\n}\n.vega-embed .vega-actions a:hover, .vega-embed .vega-actions a:focus {\n  background-color: #f7f7f9;\n  color: black;\n}\n.vega-embed .vega-actions::before, .vega-embed .vega-actions::after {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n}\n.vega-embed .vega-actions::before {\n  left: auto;\n  right: 14px;\n  top: -16px;\n  border: 8px solid rgba(0, 0, 0, 0);\n  border-bottom-color: #d9d9d9;\n}\n.vega-embed .vega-actions::after {\n  left: auto;\n  right: 15px;\n  top: -14px;\n  border: 7px solid rgba(0, 0, 0, 0);\n  border-bottom-color: #fff;\n}\n.vega-embed .chart-wrapper.fit-x {\n  width: 100%;\n}\n.vega-embed .chart-wrapper.fit-y {\n  height: 100%;\n}\n\n.vega-embed-wrapper {\n  max-width: 100%;\n  overflow: auto;\n  padding-right: 14px;\n}\n\n@keyframes scale-in {\n  from {\n    opacity: 0;\n    transform: scale(0.6);\n  }\n  to {\n    opacity: 1;\n    transform: scale(1);\n  }\n}\n";
 
     if (!String.prototype.startsWith) {
       // eslint-disable-next-line no-extend-native,func-names
@@ -4581,7 +4634,7 @@
     }
 
     var name = "vega-embed";
-    var version$1 = "6.20.5";
+    var version$1 = "6.21.0";
     var description = "Publish Vega visualizations as embedded web components.";
     var keywords = ["vega", "data", "visualization", "component", "embed"];
     var repository = {
@@ -4608,28 +4661,28 @@
     var types = "build/vega-embed.module.d.ts";
     var files = ["src", "build", "build-es5", "patches"];
     var devDependencies = {
-      "@auto-it/conventional-commits": "^10.32.3",
-      "@auto-it/first-time-contributor": "^10.32.3",
-      "@babel/plugin-transform-runtime": "^7.16.4",
-      "@rollup/plugin-commonjs": "21.0.1",
+      "@auto-it/conventional-commits": "^10.37.1",
+      "@auto-it/first-time-contributor": "^10.37.1",
+      "@babel/plugin-transform-runtime": "^7.18.2",
+      "@rollup/plugin-commonjs": "22.0.0",
       "@rollup/plugin-json": "^4.1.0",
-      "@rollup/plugin-node-resolve": "^13.0.6",
+      "@rollup/plugin-node-resolve": "^13.3.0",
       "@types/semver": "^7.3.9",
-      auto: "^10.32.3",
-      "browser-sync": "^2.27.7",
-      concurrently: "^6.4.0",
+      auto: "^10.37.1",
+      "browser-sync": "^2.27.10",
+      concurrently: "^7.2.1",
       "del-cli": "^4.0.1",
-      "jest-canvas-mock": "^2.3.1",
+      "jest-canvas-mock": "^2.4.0",
       "patch-package": "^6.4.7",
       "postinstall-postinstall": "^2.1.0",
-      rollup: "2.60.1",
+      rollup: "2.75.6",
       "rollup-plugin-bundle-size": "^1.0.3",
       "rollup-plugin-terser": "^7.0.2",
-      "rollup-plugin-ts": "^2.0.4",
-      sass: "^1.43.5",
-      typescript: "^4.5.2",
-      vega: "^5.21.0",
-      "vega-lite": "^5.0.0",
+      "rollup-plugin-ts": "^3.0.0",
+      sass: "^1.52.1",
+      typescript: "^4.7.2",
+      vega: "^5.22.1",
+      "vega-lite": "^5.2.0",
       "vega-lite-dev-config": "^0.20.0"
     };
     var peerDependencies = {
@@ -4637,14 +4690,14 @@
       "vega-lite": "*"
     };
     var dependencies = {
-      "fast-json-patch": "^3.1.0",
+      "fast-json-patch": "^3.1.1",
       "json-stringify-pretty-compact": "^3.0.0",
-      semver: "^7.3.5",
-      tslib: "^2.3.1",
+      semver: "^7.3.7",
+      tslib: "^2.4.0",
       "vega-interpreter": "^1.0.4",
       "vega-schema-url-parser": "^2.2.0",
       "vega-themes": "^2.10.0",
-      "vega-tooltip": "^0.27.0"
+      "vega-tooltip": "^0.28.0"
     };
     var bundledDependencies = ["yallist"];
     var scripts = {
@@ -4795,9 +4848,16 @@
     }
 
     function embedOptionsFromUsermeta(parsedSpec) {
-      var _ref;
+      var _embedOptions, _parsedSpec$usermeta;
 
-      return (_ref = parsedSpec.usermeta && parsedSpec.usermeta.embedOptions) !== null && _ref !== void 0 ? _ref : {};
+      const opts = (_embedOptions = (_parsedSpec$usermeta = parsedSpec.usermeta) === null || _parsedSpec$usermeta === void 0 ? void 0 : _parsedSpec$usermeta.embedOptions) !== null && _embedOptions !== void 0 ? _embedOptions : {};
+
+      if (vegaImport.isString(opts.defaultStyle)) {
+        // we don't allow styles set via usermeta since it would allow injection of logic (we set the style via innerHTML)
+        opts.defaultStyle = false;
+      }
+
+      return opts;
     }
     /**
      * Embed a Vega visualization component in a web page. This function returns a promise.
@@ -4823,7 +4883,8 @@
         parsedSpec = spec;
       }
 
-      const usermetaLoader = embedOptionsFromUsermeta(parsedSpec).loader; // either create the loader for the first time or create a new loader if the spec has new loader options
+      const loadedEmbedOptions = embedOptionsFromUsermeta(parsedSpec);
+      const usermetaLoader = loadedEmbedOptions.loader; // either create the loader for the first time or create a new loader if the spec has new loader options
 
       if (!loader || usermetaLoader) {
         var _opts$loader;
@@ -4831,7 +4892,7 @@
         loader = createLoader((_opts$loader = opts.loader) !== null && _opts$loader !== void 0 ? _opts$loader : usermetaLoader);
       }
 
-      const usermetaOpts = await loadOpts(embedOptionsFromUsermeta(parsedSpec), loader);
+      const usermetaOpts = await loadOpts(loadedEmbedOptions, loader);
       const parsedOpts = await loadOpts(opts, loader);
       const mergedOpts = { ...mergeDeep(parsedOpts, usermetaOpts),
         config: vegaImport.mergeConfig((_parsedOpts$config = parsedOpts.config) !== null && _parsedOpts$config !== void 0 ? _parsedOpts$config : {}, (_usermetaOpts$config = usermetaOpts.config) !== null && _usermetaOpts$config !== void 0 ? _usermetaOpts$config : {})
@@ -4868,7 +4929,7 @@
     }
 
     async function _embed(el, spec) {
-      var _opts$config, _opts$actions, _opts$renderer, _opts$logLevel, _opts$downloadFileNam, _ref2, _vega$expressionInter;
+      var _opts$config, _opts$actions, _opts$renderer, _opts$logLevel, _opts$downloadFileNam, _ref, _expressionInterprete;
 
       let opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       let loader = arguments.length > 3 ? arguments[3] : undefined;
@@ -4887,7 +4948,6 @@
       }
 
       if (opts.defaultStyle !== false) {
-        // Add a default stylesheet to the head of the document.
         const ID = 'vega-embed-style';
         const {
           root,
@@ -4897,7 +4957,7 @@
         if (!root.getElementById(ID)) {
           const style = document.createElement('style');
           style.id = ID;
-          style.innerText = opts.defaultStyle === undefined || opts.defaultStyle === true ? (embedStyle ).toString() : opts.defaultStyle;
+          style.innerHTML = opts.defaultStyle === undefined || opts.defaultStyle === true ? (embedStyle ).toString() : opts.defaultStyle;
           rootContainer.appendChild(style);
         }
       }
@@ -4945,6 +5005,19 @@
 
       if (opts.timeFormatLocale) {
         vega.timeFormatLocale(opts.timeFormatLocale);
+      } // Set custom expression functions
+
+
+      if (opts.expressionFunctions) {
+        for (const name in opts.expressionFunctions) {
+          const expressionFunction = opts.expressionFunctions[name];
+
+          if ('fn' in expressionFunction) {
+            vega.expressionFunction(name, expressionFunction.fn, expressionFunction['visitor']);
+          } else if (expressionFunction instanceof Function) {
+            vega.expressionFunction(name, expressionFunction);
+          }
+        }
       }
 
       const {
@@ -4960,7 +5033,7 @@
         logLevel,
         renderer,
         ...(ast ? {
-          expr: (_ref2 = (_vega$expressionInter = vega.expressionInterpreter) !== null && _vega$expressionInter !== void 0 ? _vega$expressionInter : opts.expr) !== null && _ref2 !== void 0 ? _ref2 : expression
+          expr: (_ref = (_expressionInterprete = vega.expressionInterpreter) !== null && _expressionInterprete !== void 0 ? _expressionInterprete : opts.expr) !== null && _ref !== void 0 ? _ref : expression
         } : {})
       });
       view.addSignalListener('autosize', (_, autosize) => {
@@ -5126,7 +5199,8 @@
         view,
         spec,
         vgSpec,
-        finalize
+        finalize,
+        embedOptions: opts
       };
     }
 

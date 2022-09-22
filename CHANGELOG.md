@@ -1,3 +1,7 @@
+## 0.2.7 (unreleased)
+
+- Updated Vega to 5.22.1, Vega-Lite to 5.5.0, and Vega-Embed to 6.21.0
+
 ## 0.2.6 (2022-02-02)
 
 - Added `vega_chart` helper

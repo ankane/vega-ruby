@@ -12,8 +12,8 @@ end
 def download_package(name, version)
   puts "Downloading #{name} #{version}"
   Dir.chdir(Dir.mktmpdir) do
-    system "npm", "pack", "#{name}@#{version}", "-q"
-    system "tar", "xzf", "#{name}-#{version}.tgz"
+    system "npm", "pack", "#{name}@#{version}", "-q", exception: true
+    system "tar", "xzf", "#{name}-#{version}.tgz", exception: true
 
     contents = File.read("package/build/#{name}.js")
     # remove source map to prevent console warnings
@@ -26,8 +26,8 @@ end
 
 task :update do
   # update in lib/vega/spec.rb and README.md as well
-  download_package("vega", "5.21.0")
-  download_package("vega-lite", "5.2.0")
-  download_package("vega-embed", "6.20.5")
+  download_package("vega", "5.22.1")
+  download_package("vega-lite", "5.5.0")
+  download_package("vega-embed", "6.21.0")
   download_package("vega-interpreter", "1.0.4")
 end
