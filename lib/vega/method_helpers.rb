@@ -26,7 +26,7 @@ module Vega
       methods.each do |method|
         define_method("#{method}!") do |value|
           value = [value] unless value.is_a?(Array)
-          (@spec[method] ||= []).push(*value)
+          (@spec[method] ||= []).concat(value)
           self
         end
         immutable_method(method)
