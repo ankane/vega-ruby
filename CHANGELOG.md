@@ -1,5 +1,6 @@
 ## 0.2.8 (unreleased)
 
+- Updated Vega-Lite to 5.6.0
 - Added `params` method
 
 ## 0.2.7 (2022-09-21)

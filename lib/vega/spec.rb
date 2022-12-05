@@ -36,7 +36,7 @@ module Vega
             paths: {
               'vega': 'https://cdn.jsdelivr.net/npm/vega@5.22.1/build/vega.min',
               'vega-util': 'https://cdn.jsdelivr.net/npm/vega-util@1.17.0/build/vega-util.min',
-              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@5.5.0/build/vega-lite.min',
+              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@5.6.0/build/vega-lite.min',
               'vega-embed': 'https://cdn.jsdelivr.net/npm/vega-embed@6.21.0/build/vega-embed.min'
             }
           });
