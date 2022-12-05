@@ -1,7 +1,8 @@
-## 0.2.8 (unreleased)
+## 0.3.0 (unreleased)
 
 - Updated Vega-Lite to 5.6.0
 - Added `params` method
+- Dropped support for Ruby < 2.7 and Rails < 6
 
 ## 0.2.7 (2022-09-21)
 
