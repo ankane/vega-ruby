@@ -1,4 +1,4 @@
-## 0.3.0 (unreleased)
+## 0.3.0 (2022-12-05)
 
 - Updated Vega-Lite to 5.6.0
 - Added `params` method
