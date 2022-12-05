@@ -273,6 +273,14 @@ resolve(scale: {color: "independent"})
 selection(x: {type: "single"})
 ```
 
+### Parameters
+
+[Docs](https://vega.github.io/vega-lite/docs/parameter.html)
+
+```ruby
+params(name: "cornerRadius", value: 5)
+```
+
 ### Config
 
 [Docs](https://vega.github.io/vega-lite/docs/config.html)
