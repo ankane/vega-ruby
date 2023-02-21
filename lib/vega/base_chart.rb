@@ -45,6 +45,7 @@ module Vega
     end
 
     def data_value(value)
+      value = value.rows(named: true) if defined?(Polars::DataFrame) && value.is_a?(Polars::DataFrame)
       value = value.to_a if defined?(Rover::DataFrame) && value.is_a?(Rover::DataFrame)
       value = value.to_a[0] if defined?(Daru::DataFrame) && value.is_a?(Daru::DataFrame)
       case value

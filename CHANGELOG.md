@@ -1,3 +1,7 @@
+## 0.3.1 (unreleased)
+
+- Added support for Polars data frames
+
 ## 0.3.0 (2022-12-05)
 
 - Updated Vega-Lite to 5.6.0
