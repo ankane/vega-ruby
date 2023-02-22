@@ -1,5 +1,6 @@
 ## 0.3.1 (unreleased)
 
+- Updated Vega-Lite to 5.6.1 and Vega-Embed to 6.21.3
 - Added support for Polars data frames
 
 ## 0.3.0 (2022-12-05)
