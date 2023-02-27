@@ -18,14 +18,14 @@ gem "vega"
 
 Then follow the instructions for how you plan to use it:
 
-- [Rails 7 / Importmap](#rails-7--importmap)
-- [Rails 7 / esbuild or Webpack](#rails-7--esbuild-or-webpack)
-- [Rails 6 / Webpacker](#rails-6--webpacker)
-- [Rails 5 / Sprockets](#rails-5--sprockets)
+- [Importmap](#importmap) (Rails 7 default)
+- [esbuild or Webpack](#esbuild-or-webpack)
+- [Webpacker](#webpacker) (Rails 6 default)
+- [Sprockets](#sprockets)
 - [iRuby](#iruby)
 - [Other](#other)
 
-### Rails 7 / Importmap
+### Importmap
 
 Add to `config/importmap.rb`:
 
@@ -45,7 +45,7 @@ import "vega-embed"
 window.dispatchEvent(new Event("vega:load"))
 ```
 
-### Rails 7 / esbuild or Webpack
+### esbuild or Webpack
 
 Run:
 
@@ -62,7 +62,7 @@ window.vegaEmbed = embed
 window.dispatchEvent(new Event("vega:load"))
 ```
 
-### Rails 6 / Webpacker
+### Webpacker
 
 Run:
 
@@ -76,7 +76,7 @@ And add to `app/javascript/packs/application.js`:
 window.vegaEmbed = require("vega-embed").default
 ```
 
-### Rails 5 / Sprockets
+### Sprockets
 
 Add to `app/assets/javascripts/application.js`:
 
@@ -418,7 +418,7 @@ Automatically add a nonce when configured in Rails with:
 
 By default, the Vega parser uses the Function constructor, which [can cause issues with CSP](https://vega.github.io/vega/usage/interpreter/).
 
-For Rails 7 / Importmap, add to `config/importmap.rb`:
+For Importmap, add to `config/importmap.rb`:
 
 ```ruby
 pin "vega-interpreter", to: "vega-interpreter.js"
@@ -430,13 +430,13 @@ And add to `app/javascript/application.js`:
 import "vega-interpreter"
 ```
 
-For Rails 6 / Webpacker, run:
+For Webpacker, run:
 
 ```sh
 yarn add vega-interpreter
 ```
 
-For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
+For Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```js
 //= require vega-interpreter
