@@ -4,16 +4,16 @@ require "json"
 require "securerandom"
 
 # modules
-require "vega/method_helpers"
-require "vega/base_chart"
-require "vega/chart"
-require "vega/lite_chart"
-require "vega/spec"
-require "vega/helper"
-require "vega/version"
+require_relative "vega/method_helpers"
+require_relative "vega/base_chart"
+require_relative "vega/chart"
+require_relative "vega/lite_chart"
+require_relative "vega/spec"
+require_relative "vega/helper"
+require_relative "vega/version"
 
 # integrations
-require "vega/engine" if defined?(Rails)
+require_relative "vega/engine" if defined?(Rails)
 
 module Vega
   class << self
