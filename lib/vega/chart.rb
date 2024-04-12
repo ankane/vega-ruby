@@ -3,7 +3,7 @@ module Vega
     # https://vega.github.io/vega/docs/specification/
     scalar_methods \
       :description, :background, :width, :height,
-      :padding, :autosize, :title, :encode
+      :padding, :autosize, :title, :encode, :columns
 
     hash_methods \
       :config, :usermeta
