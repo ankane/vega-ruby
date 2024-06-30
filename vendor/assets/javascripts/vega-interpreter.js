@@ -2,11 +2,10 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.vega = global.vega || {}));
-}(this, (function (exports) { 'use strict';
+})(this, (function (exports) { 'use strict';
 
   function adjustSpatial (item, encode, swap) {
     let t;
-
     if (encode.x2) {
       if (encode.x) {
         if (swap && item.x > item.x2) {
@@ -14,17 +13,14 @@
           item.x = item.x2;
           item.x2 = t;
         }
-
         item.width = item.x2 - item.x;
       } else {
         item.x = item.x2 - (item.width || 0);
       }
     }
-
     if (encode.xc) {
       item.x = item.xc - (item.width || 0) / 2;
     }
-
     if (encode.y2) {
       if (encode.y) {
         if (swap && item.y > item.y2) {
@@ -32,13 +28,11 @@
           item.y = item.y2;
           item.y2 = t;
         }
-
         item.height = item.y2 - item.y;
       } else {
         item.y = item.y2 - (item.height || 0);
       }
     }
-
     if (encode.yc) {
       item.y = item.yc - (item.height || 0) / 2;
     }
@@ -88,14 +82,11 @@
   };
 
   const slice = Array.prototype.slice;
-
   const apply = (m, args, cast) => {
     const obj = cast ? cast(args[0]) : args[0];
     return obj[m].apply(obj, slice.call(args, 1));
   };
-
   const datetime = (y, m, d, H, M, S, ms) => new Date(y, m || 0, d != null ? d : 1, H || 0, M || 0, S || 0, ms || 0);
-
   var Functions = {
     // math functions
     isNaN: Number.isNaN,
@@ -177,6 +168,8 @@
   };
 
   const EventFunctions = ['view', 'item', 'group', 'xy', 'x', 'y'];
+  const DisallowedMethods = new Set([Function, eval, setTimeout, setInterval]);
+  if (typeof setImmediate === 'function') DisallowedMethods.add(setImmediate);
   const Visitors = {
     Literal: ($, n) => n.value,
     Identifier: ($, n) => {
@@ -185,22 +178,28 @@
     },
     MemberExpression: ($, n) => {
       const d = !n.computed,
-            o = $(n.object);
+        o = $(n.object);
       if (d) $.memberDepth += 1;
       const p = $(n.property);
       if (d) $.memberDepth -= 1;
+      if (DisallowedMethods.has(o[p])) {
+        // eslint-disable-next-line no-console
+        console.error(`Prevented interpretation of member "${p}" which could lead to insecure code execution`);
+        return;
+      }
       return o[p];
     },
     CallExpression: ($, n) => {
       const args = n.arguments;
-      let name = n.callee.name; // handle special internal functions used by encoders
-      // re-route to corresponding standard function
+      let name = n.callee.name;
 
+      // handle special internal functions used by encoders
+      // re-route to corresponding standard function
       if (name.startsWith('_')) {
         name = name.slice(1);
-      } // special case "if" due to conditional evaluation of branches
+      }
 
-
+      // special case "if" due to conditional evaluation of branches
       return name === 'if' ? $(args[0]) ? $(args[1]) : $(args[2]) : ($.fn[name] || Functions[name]).apply($.fn, args.map($));
     },
     ArrayExpression: ($, n) => n.elements.map($),
@@ -212,20 +211,25 @@
       $.memberDepth += 1;
       const k = $(p.key);
       $.memberDepth -= 1;
-      o[k] = $(p.value);
+      if (DisallowedMethods.has($(p.value))) {
+        // eslint-disable-next-line no-console
+        console.error(`Prevented interpretation of property "${k}" which could lead to insecure code execution`);
+      } else {
+        o[k] = $(p.value);
+      }
       return o;
     }, {})
   };
   function interpret (ast, fn, params, datum, event, item) {
     const $ = n => Visitors[n.type]($, n);
-
     $.memberDepth = 0;
     $.fn = Object.create(fn);
     $.params = params;
     $.datum = datum;
     $.event = event;
-    $.item = item; // route event functions to annotated vega event context
+    $.item = item;
 
+    // route event functions to annotated vega event context
     EventFunctions.forEach(f => $.fn[f] = (...args) => event.vega[f](...args));
     return $(ast);
   }
@@ -236,76 +240,65 @@
      */
     operator(ctx, expr) {
       const ast = expr.ast,
-            fn = ctx.functions;
+        fn = ctx.functions;
       return _ => interpret(ast, fn, _);
     },
-
     /**
      * Parse an expression provided as an operator parameter value.
      */
     parameter(ctx, expr) {
       const ast = expr.ast,
-            fn = ctx.functions;
+        fn = ctx.functions;
       return (datum, _) => interpret(ast, fn, _, datum);
     },
-
     /**
      * Parse an expression applied to an event stream.
      */
     event(ctx, expr) {
       const ast = expr.ast,
-            fn = ctx.functions;
+        fn = ctx.functions;
       return event => interpret(ast, fn, undefined, undefined, event);
     },
-
     /**
      * Parse an expression used to handle an event-driven operator update.
      */
     handler(ctx, expr) {
       const ast = expr.ast,
-            fn = ctx.functions;
+        fn = ctx.functions;
       return (_, event) => {
         const datum = event.item && event.item.datum;
         return interpret(ast, fn, _, datum, event);
       };
     },
-
     /**
      * Parse an expression that performs visual encoding.
      */
     encode(ctx, encode) {
       const {
-        marktype,
-        channels
-      } = encode,
-            fn = ctx.functions,
-            swap = marktype === 'group' || marktype === 'image' || marktype === 'rect';
+          marktype,
+          channels
+        } = encode,
+        fn = ctx.functions,
+        swap = marktype === 'group' || marktype === 'image' || marktype === 'rect';
       return (item, _) => {
         const datum = item.datum;
         let m = 0,
-            v;
-
+          v;
         for (const name in channels) {
           v = interpret(channels[name].ast, fn, _, datum, undefined, item);
-
           if (item[name] !== v) {
             item[name] = v;
             m = 1;
           }
         }
-
         if (marktype !== 'rule') {
           adjustSpatial(item, channels, swap);
         }
-
         return m;
       };
     }
-
   };
 
   exports.expressionInterpreter = expression;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+}));
