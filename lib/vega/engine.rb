@@ -4,7 +4,7 @@ module Vega
 
     # for importmap
     initializer "vega.importmap" do |app|
-      if defined?(Importmap)
+      if app.config.respond_to?(:assets) && defined?(Importmap) && defined?(Sprockets)
         app.config.assets.precompile << "vega-embed.js"
         app.config.assets.precompile << "vega-interpreter.js"
         app.config.assets.precompile << "vega-lite.js"
