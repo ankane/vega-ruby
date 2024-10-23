@@ -1,4 +1,4 @@
-## 0.4.0 (unreleased)
+## 0.4.0 (2024-10-22)
 
 - Updated Vega-Lite to 5.21.0 and Vega-Embed to 6.26.0
 - Dropped support for Ruby < 3.1 and Rails < 7
