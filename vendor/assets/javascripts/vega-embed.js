@@ -948,657 +948,39 @@
     };
     var stringify$1 = /*@__PURE__*/getDefaultExportFromCjs(jsonStringifyPrettyCompact);
 
-    var iterator;
-    var hasRequiredIterator;
-    function requireIterator() {
-      if (hasRequiredIterator) return iterator;
-      hasRequiredIterator = 1;
-      iterator = function (Yallist) {
-        Yallist.prototype[Symbol.iterator] = function* () {
-          for (let walker = this.head; walker; walker = walker.next) {
-            yield walker.value;
-          }
-        };
-      };
-      return iterator;
-    }
-
-    var yallist = Yallist$1;
-    Yallist$1.Node = Node;
-    Yallist$1.create = Yallist$1;
-    function Yallist$1(list) {
-      var self = this;
-      if (!(self instanceof Yallist$1)) {
-        self = new Yallist$1();
-      }
-      self.tail = null;
-      self.head = null;
-      self.length = 0;
-      if (list && typeof list.forEach === 'function') {
-        list.forEach(function (item) {
-          self.push(item);
-        });
-      } else if (arguments.length > 0) {
-        for (var i = 0, l = arguments.length; i < l; i++) {
-          self.push(arguments[i]);
-        }
-      }
-      return self;
-    }
-    Yallist$1.prototype.removeNode = function (node) {
-      if (node.list !== this) {
-        throw new Error('removing node which does not belong to this list');
-      }
-      var next = node.next;
-      var prev = node.prev;
-      if (next) {
-        next.prev = prev;
-      }
-      if (prev) {
-        prev.next = next;
-      }
-      if (node === this.head) {
-        this.head = next;
-      }
-      if (node === this.tail) {
-        this.tail = prev;
-      }
-      node.list.length--;
-      node.next = null;
-      node.prev = null;
-      node.list = null;
-      return next;
-    };
-    Yallist$1.prototype.unshiftNode = function (node) {
-      if (node === this.head) {
-        return;
-      }
-      if (node.list) {
-        node.list.removeNode(node);
-      }
-      var head = this.head;
-      node.list = this;
-      node.next = head;
-      if (head) {
-        head.prev = node;
-      }
-      this.head = node;
-      if (!this.tail) {
-        this.tail = node;
-      }
-      this.length++;
-    };
-    Yallist$1.prototype.pushNode = function (node) {
-      if (node === this.tail) {
-        return;
-      }
-      if (node.list) {
-        node.list.removeNode(node);
-      }
-      var tail = this.tail;
-      node.list = this;
-      node.prev = tail;
-      if (tail) {
-        tail.next = node;
-      }
-      this.tail = node;
-      if (!this.head) {
-        this.head = node;
-      }
-      this.length++;
-    };
-    Yallist$1.prototype.push = function () {
-      for (var i = 0, l = arguments.length; i < l; i++) {
-        push(this, arguments[i]);
-      }
-      return this.length;
-    };
-    Yallist$1.prototype.unshift = function () {
-      for (var i = 0, l = arguments.length; i < l; i++) {
-        unshift(this, arguments[i]);
-      }
-      return this.length;
-    };
-    Yallist$1.prototype.pop = function () {
-      if (!this.tail) {
-        return undefined;
-      }
-      var res = this.tail.value;
-      this.tail = this.tail.prev;
-      if (this.tail) {
-        this.tail.next = null;
-      } else {
-        this.head = null;
-      }
-      this.length--;
-      return res;
-    };
-    Yallist$1.prototype.shift = function () {
-      if (!this.head) {
-        return undefined;
-      }
-      var res = this.head.value;
-      this.head = this.head.next;
-      if (this.head) {
-        this.head.prev = null;
-      } else {
-        this.tail = null;
-      }
-      this.length--;
-      return res;
-    };
-    Yallist$1.prototype.forEach = function (fn, thisp) {
-      thisp = thisp || this;
-      for (var walker = this.head, i = 0; walker !== null; i++) {
-        fn.call(thisp, walker.value, i, this);
-        walker = walker.next;
-      }
-    };
-    Yallist$1.prototype.forEachReverse = function (fn, thisp) {
-      thisp = thisp || this;
-      for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
-        fn.call(thisp, walker.value, i, this);
-        walker = walker.prev;
-      }
-    };
-    Yallist$1.prototype.get = function (n) {
-      for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
-        // abort out of the list early if we hit a cycle
-        walker = walker.next;
-      }
-      if (i === n && walker !== null) {
-        return walker.value;
-      }
-    };
-    Yallist$1.prototype.getReverse = function (n) {
-      for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
-        // abort out of the list early if we hit a cycle
-        walker = walker.prev;
-      }
-      if (i === n && walker !== null) {
-        return walker.value;
-      }
-    };
-    Yallist$1.prototype.map = function (fn, thisp) {
-      thisp = thisp || this;
-      var res = new Yallist$1();
-      for (var walker = this.head; walker !== null;) {
-        res.push(fn.call(thisp, walker.value, this));
-        walker = walker.next;
-      }
-      return res;
-    };
-    Yallist$1.prototype.mapReverse = function (fn, thisp) {
-      thisp = thisp || this;
-      var res = new Yallist$1();
-      for (var walker = this.tail; walker !== null;) {
-        res.push(fn.call(thisp, walker.value, this));
-        walker = walker.prev;
-      }
-      return res;
-    };
-    Yallist$1.prototype.reduce = function (fn, initial) {
-      var acc;
-      var walker = this.head;
-      if (arguments.length > 1) {
-        acc = initial;
-      } else if (this.head) {
-        walker = this.head.next;
-        acc = this.head.value;
-      } else {
-        throw new TypeError('Reduce of empty list with no initial value');
-      }
-      for (var i = 0; walker !== null; i++) {
-        acc = fn(acc, walker.value, i);
-        walker = walker.next;
-      }
-      return acc;
-    };
-    Yallist$1.prototype.reduceReverse = function (fn, initial) {
-      var acc;
-      var walker = this.tail;
-      if (arguments.length > 1) {
-        acc = initial;
-      } else if (this.tail) {
-        walker = this.tail.prev;
-        acc = this.tail.value;
-      } else {
-        throw new TypeError('Reduce of empty list with no initial value');
-      }
-      for (var i = this.length - 1; walker !== null; i--) {
-        acc = fn(acc, walker.value, i);
-        walker = walker.prev;
-      }
-      return acc;
-    };
-    Yallist$1.prototype.toArray = function () {
-      var arr = new Array(this.length);
-      for (var i = 0, walker = this.head; walker !== null; i++) {
-        arr[i] = walker.value;
-        walker = walker.next;
-      }
-      return arr;
-    };
-    Yallist$1.prototype.toArrayReverse = function () {
-      var arr = new Array(this.length);
-      for (var i = 0, walker = this.tail; walker !== null; i++) {
-        arr[i] = walker.value;
-        walker = walker.prev;
-      }
-      return arr;
-    };
-    Yallist$1.prototype.slice = function (from, to) {
-      to = to || this.length;
-      if (to < 0) {
-        to += this.length;
-      }
-      from = from || 0;
-      if (from < 0) {
-        from += this.length;
-      }
-      var ret = new Yallist$1();
-      if (to < from || to < 0) {
-        return ret;
-      }
-      if (from < 0) {
-        from = 0;
-      }
-      if (to > this.length) {
-        to = this.length;
-      }
-      for (var i = 0, walker = this.head; walker !== null && i < from; i++) {
-        walker = walker.next;
-      }
-      for (; walker !== null && i < to; i++, walker = walker.next) {
-        ret.push(walker.value);
-      }
-      return ret;
-    };
-    Yallist$1.prototype.sliceReverse = function (from, to) {
-      to = to || this.length;
-      if (to < 0) {
-        to += this.length;
-      }
-      from = from || 0;
-      if (from < 0) {
-        from += this.length;
-      }
-      var ret = new Yallist$1();
-      if (to < from || to < 0) {
-        return ret;
-      }
-      if (from < 0) {
-        from = 0;
-      }
-      if (to > this.length) {
-        to = this.length;
-      }
-      for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
-        walker = walker.prev;
-      }
-      for (; walker !== null && i > from; i--, walker = walker.prev) {
-        ret.push(walker.value);
-      }
-      return ret;
-    };
-    Yallist$1.prototype.splice = function (start, deleteCount, ...nodes) {
-      if (start > this.length) {
-        start = this.length - 1;
-      }
-      if (start < 0) {
-        start = this.length + start;
-      }
-      for (var i = 0, walker = this.head; walker !== null && i < start; i++) {
-        walker = walker.next;
-      }
-      var ret = [];
-      for (var i = 0; walker && i < deleteCount; i++) {
-        ret.push(walker.value);
-        walker = this.removeNode(walker);
-      }
-      if (walker === null) {
-        walker = this.tail;
-      }
-      if (walker !== this.head && walker !== this.tail) {
-        walker = walker.prev;
-      }
-      for (var i = 0; i < nodes.length; i++) {
-        walker = insert(this, walker, nodes[i]);
-      }
-      return ret;
-    };
-    Yallist$1.prototype.reverse = function () {
-      var head = this.head;
-      var tail = this.tail;
-      for (var walker = head; walker !== null; walker = walker.prev) {
-        var p = walker.prev;
-        walker.prev = walker.next;
-        walker.next = p;
-      }
-      this.head = tail;
-      this.tail = head;
-      return this;
-    };
-    function insert(self, node, value) {
-      var inserted = node === self.head ? new Node(value, null, node, self) : new Node(value, node, node.next, self);
-      if (inserted.next === null) {
-        self.tail = inserted;
-      }
-      if (inserted.prev === null) {
-        self.head = inserted;
-      }
-      self.length++;
-      return inserted;
-    }
-    function push(self, item) {
-      self.tail = new Node(item, self.tail, null, self);
-      if (!self.head) {
-        self.head = self.tail;
-      }
-      self.length++;
-    }
-    function unshift(self, item) {
-      self.head = new Node(item, null, self.head, self);
-      if (!self.tail) {
-        self.tail = self.head;
-      }
-      self.length++;
-    }
-    function Node(value, prev, next, list) {
-      if (!(this instanceof Node)) {
-        return new Node(value, prev, next, list);
-      }
-      this.list = list;
-      this.value = value;
-      if (prev) {
-        prev.next = this;
-        this.prev = prev;
-      } else {
-        this.prev = null;
-      }
-      if (next) {
-        next.prev = this;
-        this.next = next;
-      } else {
-        this.next = null;
-      }
-    }
-    try {
-      // add if support for Symbol.iterator is present
-      requireIterator()(Yallist$1);
-    } catch (er) {}
-
-    // A linked list to keep track of recently-used-ness
-    const Yallist = yallist;
-    const MAX = Symbol('max');
-    const LENGTH = Symbol('length');
-    const LENGTH_CALCULATOR = Symbol('lengthCalculator');
-    const ALLOW_STALE = Symbol('allowStale');
-    const MAX_AGE = Symbol('maxAge');
-    const DISPOSE = Symbol('dispose');
-    const NO_DISPOSE_ON_SET = Symbol('noDisposeOnSet');
-    const LRU_LIST = Symbol('lruList');
-    const CACHE = Symbol('cache');
-    const UPDATE_AGE_ON_GET = Symbol('updateAgeOnGet');
-    const naiveLength = () => 1;
-
-    // lruList is a yallist where the head is the youngest
-    // item, and the tail is the oldest.  the list contains the Hit
-    // objects as the entries.
-    // Each Hit object has a reference to its Yallist.Node.  This
-    // never changes.
-    //
-    // cache is a Map (or PseudoMap) that matches the keys to
-    // the Yallist.Node object.
     class LRUCache {
-      constructor(options) {
-        if (typeof options === 'number') options = {
-          max: options
-        };
-        if (!options) options = {};
-        if (options.max && (typeof options.max !== 'number' || options.max < 0)) throw new TypeError('max must be a non-negative number');
-        // Kind of weird to have a default max of Infinity, but oh well.
-        this[MAX] = options.max || Infinity;
-        const lc = options.length || naiveLength;
-        this[LENGTH_CALCULATOR] = typeof lc !== 'function' ? naiveLength : lc;
-        this[ALLOW_STALE] = options.stale || false;
-        if (options.maxAge && typeof options.maxAge !== 'number') throw new TypeError('maxAge must be a number');
-        this[MAX_AGE] = options.maxAge || 0;
-        this[DISPOSE] = options.dispose;
-        this[NO_DISPOSE_ON_SET] = options.noDisposeOnSet || false;
-        this[UPDATE_AGE_ON_GET] = options.updateAgeOnGet || false;
-        this.reset();
-      }
-
-      // resize the cache when the max changes.
-      set max(mL) {
-        if (typeof mL !== 'number' || mL < 0) throw new TypeError('max must be a non-negative number');
-        this[MAX] = mL || Infinity;
-        trim(this);
-      }
-      get max() {
-        return this[MAX];
-      }
-      set allowStale(allowStale) {
-        this[ALLOW_STALE] = !!allowStale;
-      }
-      get allowStale() {
-        return this[ALLOW_STALE];
-      }
-      set maxAge(mA) {
-        if (typeof mA !== 'number') throw new TypeError('maxAge must be a non-negative number');
-        this[MAX_AGE] = mA;
-        trim(this);
-      }
-      get maxAge() {
-        return this[MAX_AGE];
-      }
-
-      // resize the cache when the lengthCalculator changes.
-      set lengthCalculator(lC) {
-        if (typeof lC !== 'function') lC = naiveLength;
-        if (lC !== this[LENGTH_CALCULATOR]) {
-          this[LENGTH_CALCULATOR] = lC;
-          this[LENGTH] = 0;
-          this[LRU_LIST].forEach(hit => {
-            hit.length = this[LENGTH_CALCULATOR](hit.value, hit.key);
-            this[LENGTH] += hit.length;
-          });
-        }
-        trim(this);
-      }
-      get lengthCalculator() {
-        return this[LENGTH_CALCULATOR];
-      }
-      get length() {
-        return this[LENGTH];
-      }
-      get itemCount() {
-        return this[LRU_LIST].length;
-      }
-      rforEach(fn, thisp) {
-        thisp = thisp || this;
-        for (let walker = this[LRU_LIST].tail; walker !== null;) {
-          const prev = walker.prev;
-          forEachStep(this, fn, walker, thisp);
-          walker = prev;
-        }
-      }
-      forEach(fn, thisp) {
-        thisp = thisp || this;
-        for (let walker = this[LRU_LIST].head; walker !== null;) {
-          const next = walker.next;
-          forEachStep(this, fn, walker, thisp);
-          walker = next;
-        }
-      }
-      keys() {
-        return this[LRU_LIST].toArray().map(k => k.key);
-      }
-      values() {
-        return this[LRU_LIST].toArray().map(k => k.value);
-      }
-      reset() {
-        if (this[DISPOSE] && this[LRU_LIST] && this[LRU_LIST].length) {
-          this[LRU_LIST].forEach(hit => this[DISPOSE](hit.key, hit.value));
-        }
-        this[CACHE] = new Map(); // hash of items by key
-        this[LRU_LIST] = new Yallist(); // list of items in order of use recency
-        this[LENGTH] = 0; // length of items in the list
-      }
-      dump() {
-        return this[LRU_LIST].map(hit => isStale(this, hit) ? false : {
-          k: hit.key,
-          v: hit.value,
-          e: hit.now + (hit.maxAge || 0)
-        }).toArray().filter(h => h);
-      }
-      dumpLru() {
-        return this[LRU_LIST];
-      }
-      set(key, value, maxAge) {
-        maxAge = maxAge || this[MAX_AGE];
-        if (maxAge && typeof maxAge !== 'number') throw new TypeError('maxAge must be a number');
-        const now = maxAge ? Date.now() : 0;
-        const len = this[LENGTH_CALCULATOR](value, key);
-        if (this[CACHE].has(key)) {
-          if (len > this[MAX]) {
-            del(this, this[CACHE].get(key));
-            return false;
-          }
-          const node = this[CACHE].get(key);
-          const item = node.value;
-
-          // dispose of the old one before overwriting
-          // split out into 2 ifs for better coverage tracking
-          if (this[DISPOSE]) {
-            if (!this[NO_DISPOSE_ON_SET]) this[DISPOSE](key, item.value);
-          }
-          item.now = now;
-          item.maxAge = maxAge;
-          item.value = value;
-          this[LENGTH] += len - item.length;
-          item.length = len;
-          this.get(key);
-          trim(this);
-          return true;
-        }
-        const hit = new Entry(key, value, len, now, maxAge);
-
-        // oversized objects fall out of cache automatically.
-        if (hit.length > this[MAX]) {
-          if (this[DISPOSE]) this[DISPOSE](key, value);
-          return false;
-        }
-        this[LENGTH] += hit.length;
-        this[LRU_LIST].unshift(hit);
-        this[CACHE].set(key, this[LRU_LIST].head);
-        trim(this);
-        return true;
-      }
-      has(key) {
-        if (!this[CACHE].has(key)) return false;
-        const hit = this[CACHE].get(key).value;
-        return !isStale(this, hit);
+      constructor() {
+        this.max = 1000;
+        this.map = new Map();
       }
       get(key) {
-        return get(this, key, true);
-      }
-      peek(key) {
-        return get(this, key, false);
-      }
-      pop() {
-        const node = this[LRU_LIST].tail;
-        if (!node) return null;
-        del(this, node);
-        return node.value;
-      }
-      del(key) {
-        del(this, this[CACHE].get(key));
-      }
-      load(arr) {
-        // reset the cache
-        this.reset();
-        const now = Date.now();
-        // A previous serialized cache has the most recent items first
-        for (let l = arr.length - 1; l >= 0; l--) {
-          const hit = arr[l];
-          const expiresAt = hit.e || 0;
-          if (expiresAt === 0)
-            // the item was created without expiration in a non aged cache
-            this.set(hit.k, hit.v);else {
-            const maxAge = expiresAt - now;
-            // dont add already expired items
-            if (maxAge > 0) {
-              this.set(hit.k, hit.v, maxAge);
-            }
-          }
-        }
-      }
-      prune() {
-        this[CACHE].forEach((value, key) => get(this, key, false));
-      }
-    }
-    const get = (self, key, doUse) => {
-      const node = self[CACHE].get(key);
-      if (node) {
-        const hit = node.value;
-        if (isStale(self, hit)) {
-          del(self, node);
-          if (!self[ALLOW_STALE]) return undefined;
+        const value = this.map.get(key);
+        if (value === undefined) {
+          return undefined;
         } else {
-          if (doUse) {
-            if (self[UPDATE_AGE_ON_GET]) node.value.now = Date.now();
-            self[LRU_LIST].unshiftNode(node);
+          // Remove the key from the map and add it to the end
+          this.map.delete(key);
+          this.map.set(key, value);
+          return value;
+        }
+      }
+      delete(key) {
+        return this.map.delete(key);
+      }
+      set(key, value) {
+        const deleted = this.delete(key);
+        if (!deleted && value !== undefined) {
+          // If cache is full, delete the least recently used item
+          if (this.map.size >= this.max) {
+            const firstKey = this.map.keys().next().value;
+            this.delete(firstKey);
           }
+          this.map.set(key, value);
         }
-        return hit.value;
-      }
-    };
-    const isStale = (self, hit) => {
-      if (!hit || !hit.maxAge && !self[MAX_AGE]) return false;
-      const diff = Date.now() - hit.now;
-      return hit.maxAge ? diff > hit.maxAge : self[MAX_AGE] && diff > self[MAX_AGE];
-    };
-    const trim = self => {
-      if (self[LENGTH] > self[MAX]) {
-        for (let walker = self[LRU_LIST].tail; self[LENGTH] > self[MAX] && walker !== null;) {
-          // We know that we're about to delete this one, and also
-          // what the next least recently used key will be, so just
-          // go ahead and set it now.
-          const prev = walker.prev;
-          del(self, walker);
-          walker = prev;
-        }
-      }
-    };
-    const del = (self, node) => {
-      if (node) {
-        const hit = node.value;
-        if (self[DISPOSE]) self[DISPOSE](hit.key, hit.value);
-        self[LENGTH] -= hit.length;
-        self[CACHE].delete(hit.key);
-        self[LRU_LIST].removeNode(node);
-      }
-    };
-    class Entry {
-      constructor(key, value, length, now, maxAge) {
-        this.key = key;
-        this.value = value;
-        this.length = length;
-        this.now = now;
-        this.maxAge = maxAge || 0;
+        return this;
       }
     }
-    const forEachStep = (self, fn, node, thisp) => {
-      let hit = node.value;
-      if (isStale(self, hit)) {
-        del(self, node);
-        if (!self[ALLOW_STALE]) hit = undefined;
-      }
-      if (hit) fn.call(thisp, hit.value, hit.key, self);
-    };
-    var lruCache = LRUCache;
+    var lrucache = LRUCache;
 
     // parse out just the options we care about
     const looseOption = Object.freeze({
@@ -1962,7 +1344,7 @@
         do {
           const a = this.build[i];
           const b = other.build[i];
-          debug('prerelease compare', i, a, b);
+          debug('build compare', i, a, b);
           if (a === undefined && b === undefined) {
             return 0;
           } else if (b === undefined) {
@@ -2464,10 +1846,8 @@
         }
       }
       range = Range;
-      const LRU = lruCache;
-      const cache = new LRU({
-        max: 1000
-      });
+      const LRU = lrucache;
+      const cache = new LRU();
       const parseOptions = parseOptions_1;
       const Comparator = requireComparator();
       const debug = debug_1;
@@ -2695,7 +2075,8 @@
       // 1.2 - 3.4.5 => >=1.2.0 <=3.4.5
       // 1.2.3 - 3.4 => >=1.2.0 <3.5.0-0 Any 3.4.x will do
       // 1.2 - 3.4 => >=1.2.0 <3.5.0-0
-      const hyphenReplace = incPr => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr, tb) => {
+      // TODO build?
+      const hyphenReplace = incPr => ($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr) => {
         if (isX(fM)) {
           from = '';
         } else if (isX(fm)) {
@@ -3067,7 +2448,7 @@
     }
 
     var name$1 = "vega-themes";
-    var version$1$1 = "2.14.0";
+    var version$1$1 = "2.15.0";
     var description$1 = "Themes for stylized Vega and Vega-Lite visualizations.";
     var keywords$1 = ["vega", "vega-lite", "themes", "style"];
     var license$1 = "BSD-3-Clause";
@@ -3113,32 +2494,28 @@
       release: "release-it"
     };
     var devDependencies$1 = {
-      "@babel/core": "^7.22.9",
-      "@babel/plugin-proposal-async-generator-functions": "^7.20.7",
-      "@babel/plugin-proposal-json-strings": "^7.18.6",
-      "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
-      "@babel/plugin-proposal-optional-catch-binding": "^7.18.6",
-      "@babel/plugin-transform-runtime": "^7.22.9",
-      "@babel/preset-env": "^7.22.9",
-      "@babel/preset-typescript": "^7.22.5",
-      "@release-it/conventional-changelog": "^7.0.0",
-      "@rollup/plugin-json": "^6.0.0",
-      "@rollup/plugin-node-resolve": "^15.1.0",
-      "@rollup/plugin-terser": "^0.4.3",
-      "@typescript-eslint/eslint-plugin": "^6.0.0",
-      "@typescript-eslint/parser": "^6.0.0",
-      "browser-sync": "^2.29.3",
-      concurrently: "^8.2.0",
+      "@babel/core": "^7.24.6",
+      "@babel/plugin-transform-runtime": "^7.24.6",
+      "@babel/preset-env": "^7.24.6",
+      "@babel/preset-typescript": "^7.24.6",
+      "@release-it/conventional-changelog": "^8.0.1",
+      "@rollup/plugin-json": "^6.1.0",
+      "@rollup/plugin-node-resolve": "^15.2.3",
+      "@rollup/plugin-terser": "^0.4.4",
+      "@typescript-eslint/eslint-plugin": "^7.11.0",
+      "@typescript-eslint/parser": "^7.11.0",
+      "browser-sync": "^3.0.2",
+      concurrently: "^8.2.2",
       eslint: "^8.45.0",
-      "eslint-config-prettier": "^8.8.0",
-      "eslint-plugin-prettier": "^5.0.0",
-      "gh-pages": "^5.0.0",
-      prettier: "^3.0.0",
-      "release-it": "^16.1.0",
-      rollup: "^3.26.2",
+      "eslint-config-prettier": "^9.1.0",
+      "eslint-plugin-prettier": "^5.1.3",
+      "gh-pages": "^6.1.1",
+      prettier: "^3.2.5",
+      "release-it": "^17.3.0",
+      rollup: "^4.18.0",
       "rollup-plugin-bundle-size": "^1.0.3",
-      "rollup-plugin-ts": "^3.2.0",
-      typescript: "^5.1.6",
+      "rollup-plugin-ts": "^3.4.5",
+      typescript: "^5.4.5",
       vega: "^5.25.0",
       "vega-lite": "^5.9.3"
     };
@@ -3904,15 +3281,46 @@
       }
     };
     const defaultFont = 'IBM Plex Sans,system-ui,-apple-system,BlinkMacSystemFont,".sfnstext-regular",sans-serif';
+    const condensedFont = 'IBM Plex Sans Condensed, system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", sans-serif';
     const fontWeight = 400;
+    const TOKENS = {
+      textPrimary: {
+        g90: '#f4f4f4',
+        g100: '#f4f4f4',
+        white: '#161616',
+        g10: '#161616'
+      },
+      textSecondary: {
+        g90: '#c6c6c6',
+        g100: '#c6c6c6',
+        white: '#525252',
+        g10: '#525252'
+      },
+      // layer
+      layerAccent01: {
+        white: '#e0e0e0',
+        g10: '#e0e0e0',
+        g90: '#525252',
+        g100: '#393939'
+      },
+      // grid
+      gridBg: {
+        white: '#ffffff',
+        g10: '#ffffff',
+        g90: '#161616',
+        g100: '#161616'
+      }
+    };
     const darkCategories = ['#8a3ffc', '#33b1ff', '#007d79', '#ff7eb6', '#fa4d56', '#fff1f1', '#6fdc8c', '#4589ff', '#d12771', '#d2a106', '#08bdba', '#bae6ff', '#ba4e00', '#d4bbff'];
     const lightCategories = ['#6929c4', '#1192e8', '#005d5d', '#9f1853', '#fa4d56', '#570408', '#198038', '#002d9c', '#ee538b', '#b28600', '#009d9a', '#012749', '#8a3800', '#a56eff'];
     function genCarbonConfig({
-      type,
+      theme,
       background
     }) {
-      const viewbg = type === 'dark' ? '#161616' : '#ffffff';
-      const textColor = type === 'dark' ? '#f4f4f4' : '#161616';
+      const type = ['white', 'g10'].includes(theme) ? 'light' : 'dark';
+      const viewbg = TOKENS.gridBg[theme];
+      const titleColor = TOKENS.textPrimary[theme];
+      const textColor = TOKENS.textSecondary[theme];
       const category = type === 'dark' ? darkCategories : lightCategories;
       const markColor = type === 'dark' ? '#d4bbff' : '#6929c4';
       return {
@@ -3946,7 +3354,7 @@
           fill: viewbg
         },
         title: {
-          color: textColor,
+          color: titleColor,
           anchor: 'start',
           dy: -15,
           fontSize: 16,
@@ -3954,12 +3362,25 @@
           fontWeight: 600
         },
         axis: {
+          // Axis labels
           labelColor: textColor,
           labelFontSize: 12,
+          labelFont: condensedFont,
+          labelFontWeight: fontWeight,
+          // Axis titles
+          titleColor: titleColor,
+          titleFontWeight: 600,
+          titleFontSize: 12,
+          // MISC
           grid: true,
-          gridColor: '#525252',
-          titleColor: textColor,
+          gridColor: TOKENS.layerAccent01[theme],
           labelAngle: 0
+        },
+        axisX: {
+          titlePadding: 10
+        },
+        axisY: {
+          titlePadding: 2.5
         },
         style: {
           'guide-label': {
@@ -3981,19 +3402,19 @@
       };
     }
     const carbonwhite = genCarbonConfig({
-      type: 'light',
+      theme: 'white',
       background: '#ffffff'
     });
     const carbong10 = genCarbonConfig({
-      type: 'light',
+      theme: 'g10',
       background: '#f4f4f4'
     });
     const carbong90 = genCarbonConfig({
-      type: 'dark',
+      theme: 'g90',
       background: '#262626'
     });
     const carbong100 = genCarbonConfig({
-      type: 'dark',
+      theme: 'g100',
       background: '#161616'
     });
     const version$2 = pkg$1.version;
@@ -4099,7 +3520,7 @@
     function field(field, name, opt) {
       const path = splitAccessPath(field);
       field = path.length === 1 ? path[0] : field;
-      return accessor((opt && opt.get || getter)(path), [field], name || field);
+      return accessor((getter)(path), [field], field);
     }
     field('id');
     accessor(_ => _, [], 'identity');
@@ -4584,7 +4005,7 @@
     }
 
     var name = "vega-embed";
-    var version$1 = "6.25.0";
+    var version$1 = "6.26.0";
     var description = "Publish Vega visualizations as embedded web components.";
     var keywords = ["vega", "data", "visualization", "component", "embed"];
     var repository = {
@@ -4610,40 +4031,52 @@
     var jsdelivr = "build/vega-embed.min.js";
     var types = "build/vega-embed.module.d.ts";
     var files = ["src", "build"];
+    var exports$1 = {
+      ".": {
+        "import": {
+          types: "./build/vega-embed.module.d.ts",
+          "default": "./build/vega-embed.module.js"
+        },
+        require: {
+          "default": "./build/vega-embed.js"
+        }
+      }
+    };
     var devDependencies = {
-      "@babel/core": "^7.24.4",
-      "@babel/plugin-transform-runtime": "^7.24.3",
-      "@babel/preset-env": "^7.24.4",
-      "@babel/preset-typescript": "^7.24.1",
+      "@babel/core": "^7.24.7",
+      "@babel/eslint-parser": "^7.24.7",
+      "@babel/plugin-transform-runtime": "^7.24.7",
+      "@babel/preset-env": "^7.24.7",
+      "@babel/preset-typescript": "^7.24.7",
       "@release-it/conventional-changelog": "^8.0.1",
-      "@rollup/plugin-commonjs": "25.0.7",
+      "@rollup/plugin-commonjs": "26.0.1",
       "@rollup/plugin-json": "^6.1.0",
       "@rollup/plugin-node-resolve": "^15.2.3",
       "@rollup/plugin-terser": "^0.4.4",
-      "@types/jest": "^29.5.12",
       "@types/semver": "^7.5.8",
-      "@typescript-eslint/eslint-plugin": "^7.6.0",
-      "@typescript-eslint/parser": "^7.6.0",
+      "@typescript-eslint/parser": "^7.15.0",
+      "@vitest/coverage-v8": "^1.6.0",
       "browser-sync": "^3.0.2",
       concurrently: "^8.2.2",
       "del-cli": "^5.1.0",
-      eslint: "^8.56.0",
+      eslint: "^9.6.0",
       "eslint-config-prettier": "^9.1.0",
-      "eslint-plugin-jest": "^28.2.0",
       "eslint-plugin-prettier": "^5.1.3",
-      jest: "^29.7.0",
-      "jest-canvas-mock": "^2.5.2",
-      "jest-environment-jsdom": "^29.7.0",
+      "eslint-plugin-vitest": "^0.5.4",
+      jsdom: "^24.1.0",
       "postinstall-postinstall": "^2.1.0",
-      prettier: "^3.2.5",
-      "release-it": "^17.1.1",
-      rollup: "4.14.1",
+      prettier: "^3.3.2",
+      "release-it": "^17.4.1",
+      rollup: "4.18.0",
       "rollup-plugin-bundle-size": "^1.0.3",
       "rollup-plugin-ts": "^3.4.5",
-      sass: "^1.74.1",
-      typescript: "^5.4.5",
-      vega: "^5.22.1",
-      "vega-lite": "^5.2.0"
+      sass: "^1.77.6",
+      typescript: "^5.5.3",
+      "typescript-eslint": "^7.15.0",
+      vega: "^5.30.0",
+      "vega-lite": "^5.19.0",
+      vitest: "^1.6.0",
+      "vitest-canvas-mock": "^0.3.3"
     };
     var peerDependencies = {
       vega: "^5.21.0",
@@ -4652,11 +4085,11 @@
     var dependencies = {
       "fast-json-patch": "^3.1.1",
       "json-stringify-pretty-compact": "^3.0.0",
-      semver: "^7.6.0",
-      tslib: "^2.6.2",
+      semver: "^7.6.2",
+      tslib: "^2.6.3",
       "vega-interpreter": "^1.0.5",
       "vega-schema-url-parser": "^2.2.0",
-      "vega-themes": "^2.14.0",
+      "vega-themes": "^2.15.0",
       "vega-tooltip": "^0.34.0"
     };
     var scripts = {
@@ -4669,8 +4102,7 @@
       serve: "browser-sync start --directory -s -f build *.html",
       start: "yarn build && concurrently --kill-others -n Server,Rollup 'yarn serve' 'rollup -c -w'",
       pretest: "yarn build:style",
-      test: "jest",
-      "test:inspect": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+      test: "vitest run",
       prettierbase: "prettier '*.{css,scss,html}'",
       format: "eslint . --fix && yarn prettierbase --write",
       lint: "eslint . && yarn prettierbase --check",
@@ -4693,6 +4125,7 @@
       jsdelivr: jsdelivr,
       types: types,
       files: files,
+      exports: exports$1,
       devDependencies: devDependencies,
       peerDependencies: peerDependencies,
       dependencies: dependencies,
@@ -5079,9 +4512,9 @@
           editorLink.addEventListener('click', function (e) {
             post(window, editorUrl, {
               config: config,
-              mode,
+              mode: patch ? 'vega' : mode,
               renderer,
-              spec: stringify$1(spec)
+              spec: stringify$1(patch ? vgSpec : spec)
             });
             e.preventDefault();
           });
