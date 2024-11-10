@@ -20,7 +20,6 @@ Then follow the instructions for how you plan to use it:
 
 - [Importmap](#importmap) (Rails 7+ default)
 - [esbuild or Webpack](#esbuild-or-webpack)
-- [Webpacker](#webpacker) (Rails 6 default)
 - [Sprockets](#sprockets)
 - [iRuby](#iruby)
 - [Other](#other)
@@ -60,20 +59,6 @@ import embed from "vega-embed"
 
 window.vegaEmbed = embed
 window.dispatchEvent(new Event("vega:load"))
-```
-
-### Webpacker
-
-Run:
-
-```sh
-yarn add vega vega-lite vega-embed
-```
-
-And add to `app/javascript/packs/application.js`:
-
-```js
-window.vegaEmbed = require("vega-embed").default
 ```
 
 ### Sprockets
@@ -430,7 +415,7 @@ And add to `app/javascript/application.js`:
 import "vega-interpreter"
 ```
 
-For Webpacker, run:
+For esbuild or Webpack, run:
 
 ```sh
 yarn add vega-interpreter
