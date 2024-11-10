@@ -19,7 +19,7 @@ gem "vega"
 Then follow the instructions for how you plan to use it:
 
 - [Importmap](#importmap) (Rails 7+ default)
-- [esbuild or Webpack](#esbuild-or-webpack)
+- [Bun, esbuild, or Webpack](#bun-esbuild-or-webpack)
 - [Sprockets](#sprockets)
 - [iRuby](#iruby)
 - [Other](#other)
@@ -44,11 +44,13 @@ import "vega-embed"
 window.dispatchEvent(new Event("vega:load"))
 ```
 
-### esbuild or Webpack
+### Bun, esbuild, or Webpack
 
 Run:
 
 ```sh
+bun add vega vega-lite vega-embed
+# or
 yarn add vega vega-lite vega-embed
 ```
 
@@ -413,6 +415,12 @@ And add to `app/javascript/application.js`:
 
 ```js
 import "vega-interpreter"
+```
+
+For Bun, run:
+
+```sh
+bun add vega-interpreter
 ```
 
 For esbuild or Webpack, run:
