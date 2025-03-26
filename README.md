@@ -7,6 +7,7 @@ Interactive charts for Ruby, powered by [Vega](https://vega.github.io/vega/) and
 Works with Rails, iRuby, and other frameworks
 
 [![Build Status](https://github.com/ankane/vega-ruby/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/vega-ruby/actions)
+[![libs.tech recommends](https://libs.tech/project/298898992/badge.svg)](https://libs.tech/project/298898992/vega-ruby)
 
 ## Installation
 
