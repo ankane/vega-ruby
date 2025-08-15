@@ -1,6 +1,7 @@
 ## 0.5.0 (unreleased)
 
 - Added support for JupyterLab and Jupyter Notebook 7+
+- Dropped support for Ruby < 3.2 and Rails < 7.1
 
 ## 0.4.0 (2024-10-22)
 
