@@ -113,7 +113,7 @@ class ChartTest < Minitest::Test
 
   def test_to_json
     result = JSON.parse(Vega.lite.to_json)
-    assert_equal "https://vega.github.io/schema/vega-lite/v5.json", result["$schema"]
+    assert_equal "https://vega.github.io/schema/vega-lite/v6.json", result["$schema"]
   end
 
   def test_to_iruby

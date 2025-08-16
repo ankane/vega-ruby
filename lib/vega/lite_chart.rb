@@ -11,7 +11,7 @@ module Vega
       :transform, :layer, :hconcat, :vconcat, :concat, :params
 
     def initialize
-      @schema = "https://vega.github.io/schema/vega-lite/v5.json"
+      @schema = "https://vega.github.io/schema/vega-lite/v6.json"
       super()
     end
 

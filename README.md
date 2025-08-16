@@ -328,7 +328,7 @@ You can also create a specification by hand
 
 ```ruby
 spec = {
-  "$schema" => "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema" => "https://vega.github.io/schema/vega-lite/v6.json",
   "data" => {"url" => "https://www.example.com"},
   # ...
 }

@@ -1,5 +1,6 @@
 ## 0.5.0 (unreleased)
 
+- Updated Vega to 6.1.2, Vega-Lite to 6.2.0, and Vega-Embed to 7.0.2
 - Added support for JupyterLab and Jupyter Notebook 7+
 - Dropped support for Ruby < 3.2 and Rails < 7.1
 

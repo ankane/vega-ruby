@@ -434,9 +434,8 @@
     }
     return [u, v];
   }
-  const hop = Object.prototype.hasOwnProperty;
   function has$1(object, property) {
-    return hop.call(object, property);
+    return Object.hasOwn(object, property);
   }
   const NULL = {};
   function fastmap(input) {
@@ -1984,7 +1983,7 @@
           if (step < 0) while (++step <= 0) {
             while (offseti(date, -1), !test(date)) {} // eslint-disable-line no-empty
           } else while (--step >= 0) {
-            while (offseti(date, +1), !test(date)) {} // eslint-disable-line no-empty
+            while (offseti(date, 1), !test(date)) {} // eslint-disable-line no-empty
           }
         }
       });
@@ -3375,8 +3374,8 @@
       options: options || {},
       sanitize: sanitize,
       load: load$1,
-      fileAccess: !!fs,
-      file: fileLoader(fs),
+      fileAccess: false,
+      file: fileLoader(),
       http: httpLoader(fetch)
     });
   }
@@ -3482,11 +3481,7 @@
    *   return {Promise} A promise that resolves to the file contents.
    */
   function fileLoader(fs) {
-    return fs ? filename => new Promise((accept, reject) => {
-      fs.readFile(filename, (error, data) => {
-        if (error) reject(error);else accept(data);
-      });
-    }) : fileReject;
+    return fileReject;
   }
 
   /**
@@ -3677,10 +3672,7 @@
       }
     }
   }
-  const loader = loaderFactory(typeof fetch !== 'undefined' && fetch,
-  // use built-in fetch API
-  null // no file system access
-  );
+  const loader = loaderFactory(typeof fetch !== 'undefined' && fetch);
 
   function UniqueList(idFunc) {
     const $ = idFunc || identity$6,
@@ -5128,8 +5120,6 @@
     }
   });
 
-  /* eslint-disable require-atomic-updates */
-
   /**
    * Evaluates the dataflow and returns a Promise that resolves when pulse
    * propagation completes. This method will increment the current timestamp
@@ -6062,67 +6052,67 @@
       p;
     if (w < 6.25) {
       w -= 3.125;
-      p = -3.6444120640178196996e-21;
-      p = -1.685059138182016589e-19 + p * w;
+      p = -364441206401782e-35;
+      p = -16850591381820166e-35 + p * w;
       p = 1.2858480715256400167e-18 + p * w;
       p = 1.115787767802518096e-17 + p * w;
-      p = -1.333171662854620906e-16 + p * w;
+      p = -1333171662854621e-31 + p * w;
       p = 2.0972767875968561637e-17 + p * w;
       p = 6.6376381343583238325e-15 + p * w;
-      p = -4.0545662729752068639e-14 + p * w;
-      p = -8.1519341976054721522e-14 + p * w;
+      p = -4054566272975207e-29 + p * w;
+      p = -8151934197605472e-29 + p * w;
       p = 2.6335093153082322977e-12 + p * w;
-      p = -1.2975133253453532498e-11 + p * w;
-      p = -5.4154120542946279317e-11 + p * w;
+      p = -12975133253453532e-27 + p * w;
+      p = -5415412054294628e-26 + p * w;
       p = 1.051212273321532285e-09 + p * w;
-      p = -4.1126339803469836976e-09 + p * w;
-      p = -2.9070369957882005086e-08 + p * w;
+      p = -4.112633980346984e-9 + p * w;
+      p = -2.9070369957882005e-8 + p * w;
       p = 4.2347877827932403518e-07 + p * w;
-      p = -1.3654692000834678645e-06 + p * w;
-      p = -1.3882523362786468719e-05 + p * w;
+      p = -13654692000834679e-22 + p * w;
+      p = -13882523362786469e-21 + p * w;
       p = 0.0001867342080340571352 + p * w;
-      p = -0.00074070253416626697512 + p * w;
-      p = -0.0060336708714301490533 + p * w;
+      p = -740702534166267e-18 + p * w;
+      p = -0.006033670871430149 + p * w;
       p = 0.24015818242558961693 + p * w;
       p = 1.6536545626831027356 + p * w;
     } else if (w < 16.0) {
       w = Math.sqrt(w) - 3.25;
       p = 2.2137376921775787049e-09;
       p = 9.0756561938885390979e-08 + p * w;
-      p = -2.7517406297064545428e-07 + p * w;
+      p = -2.7517406297064545e-7 + p * w;
       p = 1.8239629214389227755e-08 + p * w;
       p = 1.5027403968909827627e-06 + p * w;
-      p = -4.013867526981545969e-06 + p * w;
+      p = -4013867526981546e-21 + p * w;
       p = 2.9234449089955446044e-06 + p * w;
       p = 1.2475304481671778723e-05 + p * w;
-      p = -4.7318229009055733981e-05 + p * w;
+      p = -47318229009055734e-21 + p * w;
       p = 6.8284851459573175448e-05 + p * w;
       p = 2.4031110387097893999e-05 + p * w;
-      p = -0.0003550375203628474796 + p * w;
+      p = -3550375203628475e-19 + p * w;
       p = 0.00095328937973738049703 + p * w;
-      p = -0.0016882755560235047313 + p * w;
+      p = -0.0016882755560235047 + p * w;
       p = 0.0024914420961078508066 + p * w;
-      p = -0.0037512085075692412107 + p * w;
+      p = -0.003751208507569241 + p * w;
       p = 0.005370914553590063617 + p * w;
       p = 1.0052589676941592334 + p * w;
       p = 3.0838856104922207635 + p * w;
     } else if (Number.isFinite(w)) {
       w = Math.sqrt(w) - 5.0;
-      p = -2.7109920616438573243e-11;
-      p = -2.5556418169965252055e-10 + p * w;
+      p = -27109920616438573e-27;
+      p = -2555641816996525e-25 + p * w;
       p = 1.5076572693500548083e-09 + p * w;
-      p = -3.7894654401267369937e-09 + p * w;
+      p = -3.789465440126737e-9 + p * w;
       p = 7.6157012080783393804e-09 + p * w;
-      p = -1.4960026627149240478e-08 + p * w;
+      p = -1.496002662714924e-8 + p * w;
       p = 2.9147953450901080826e-08 + p * w;
-      p = -6.7711997758452339498e-08 + p * w;
+      p = -6.771199775845234e-8 + p * w;
       p = 2.2900482228026654717e-07 + p * w;
-      p = -9.9298272942317002539e-07 + p * w;
+      p = -9.9298272942317e-7 + p * w;
       p = 4.5260625972231537039e-06 + p * w;
-      p = -1.9681778105531670567e-05 + p * w;
+      p = -1968177810553167e-20 + p * w;
       p = 7.5995277030017761139e-05 + p * w;
-      p = -0.00021503011930044477347 + p * w;
-      p = -0.00013871931833623122026 + p * w;
+      p = -21503011930044477e-20 + p * w;
+      p = -13871931833623122e-20 + p * w;
       p = 1.0103004648645343977 + p * w;
       p = 4.8499064014085844221 + p * w;
     } else {
@@ -6509,7 +6499,6 @@
     };
   }
   function exp$1(data, x, y) {
-    // eslint-disable-next-line no-unused-vars
     const [xv, yv, ux, uy] = points(data, x, y);
     let YL = 0,
       XY = 0,
@@ -12689,10 +12678,10 @@
   }));
 
   var A = -0.14861,
-    B$1 = +1.78277,
+    B$1 = 1.78277,
     C$1 = -0.29227,
     D$1 = -0.90649,
-    E = +1.97294,
+    E = 1.97294,
     ED = E * D$1,
     EB = E * B$1,
     BC_DA = B$1 * C$1 - D$1 * A;
@@ -12767,7 +12756,7 @@
     };
   }
 
-  var constant$2 = (x => () => x);
+  var constant$2 = x => () => x;
 
   function linear$1(a, d) {
     return function (t) {
@@ -17533,12 +17522,12 @@
     /**
      * Add an event handler. Subclasses should override this method.
      */
-    on( /*type, handler*/) {}
+    on(/*type, handler*/) {}
 
     /**
      * Remove an event handler. Subclasses should override this method.
      */
-    off( /*type, handler*/) {}
+    off(/*type, handler*/) {}
 
     /**
      * Utility method for finding the array index of an event handler.
@@ -17744,7 +17733,7 @@
      * incremental should implement this method.
      * @param {Item} item - The dirty item whose bounds should be redrawn.
      */
-    dirty( /*item*/) {}
+    dirty(/*item*/) {}
 
     /**
      * Render an input scenegraph, potentially with a set of dirty items.
@@ -17783,7 +17772,7 @@
      * @param {Array} markTypes - Array of the mark types to render.
      *                            If undefined, render all mark types
      */
-    _render( /*scene, markTypes*/
+    _render(/*scene, markTypes*/
     ) {
       // subclasses to override
     }
@@ -22166,7 +22155,7 @@
       boundsStream$1.point = boundsPoint$1;
       boundsStream$1.lineStart = boundsLineStart;
       boundsStream$1.lineEnd = boundsLineEnd;
-      if (areaRingSum$1 < 0) lambda0 = -(lambda1 = 180), phi0 = -(phi1 = 90);else if (deltaSum > epsilon$3) phi1 = 90;else if (deltaSum < -epsilon$3) phi0 = -90;
+      if (areaRingSum$1 < 0) lambda0 = -(lambda1 = 180), phi0 = -(phi1 = 90);else if (deltaSum > epsilon$3) phi1 = 90;else if (deltaSum < -1e-6) phi0 = -90;
       range$2[0] = lambda0, range$2[1] = lambda1;
     },
     sphere: function () {
@@ -22700,7 +22689,7 @@
     // from the point to the South pole.  If it is zero, then the point is the
     // same side as the South pole.
 
-    return (angle < -epsilon$3 || angle < epsilon$3 && sum < -epsilon2) ^ winding & 1;
+    return (angle < -1e-6 || angle < epsilon$3 && sum < -1e-12) ^ winding & 1;
   }
 
   function clip$1 (pointVisible, clipLine, interpolate, start) {
@@ -22901,7 +22890,7 @@
 
   function clipCircle (radius) {
     var cr = cos$1(radius),
-      delta = 6 * radians,
+      delta = 2 * radians,
       smallRadius = cr > 0,
       notHemisphere = abs$1(cr) > epsilon$3; // TODO optimise for this common case
 
@@ -23117,7 +23106,7 @@
   }
 
   var clipMax = 1e9,
-    clipMin = -clipMax;
+    clipMin = -1e9;
 
   // TODO Use d3-polygon’s polygonContains here for the ring check?
   // TODO Eliminate duplicate buffering in clipBuffer and polygon.push?
@@ -23371,7 +23360,7 @@
     return graticule.extentMajor([[-180, -90 + epsilon$3], [180, 90 - epsilon$3]]).extentMinor([[-180, -80 - epsilon$3], [180, 80 + epsilon$3]]);
   }
 
-  var identity = (x => x);
+  var identity = x => x;
 
   var areaSum = new Adder(),
     areaRingSum = new Adder(),
@@ -23645,7 +23634,7 @@
               const r = this._radius;
               const s = this._;
               this._ = ""; // stash the old string so we can cache the circle path fragment
-              this._append`m0,${r}a${r},${r} 0 1,1 0,${-2 * r}a${r},${r} 0 1,1 0,${2 * r}z`;
+              this._append`m0,${r}a${r},${r} 0 1,1 0,${ -2 * r}a${r},${r} 0 1,1 0,${2 * r}z`;
               cacheRadius = r;
               cacheAppend = this._append;
               cacheCircle = this._;
@@ -30626,7 +30615,6 @@
     const detleft = (ay - cy) * (bx - cx);
     const detright = (ax - cx) * (by - cy);
     const det = detleft - detright;
-    if (detleft === 0 || detright === 0 || detleft > 0 !== detright > 0) return det;
     const detsum = Math.abs(detleft + detright);
     if (Math.abs(det) >= ccwerrboundA * detsum) return det;
     return -orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
@@ -30662,7 +30650,7 @@
       this._hullPrev = new Uint32Array(n); // edge to prev edge
       this._hullNext = new Uint32Array(n); // edge to next edge
       this._hullTri = new Uint32Array(n); // edge to adjacent triangle
-      this._hullHash = new Int32Array(this._hashSize).fill(-1); // angular edge hash
+      this._hullHash = new Int32Array(this._hashSize); // angular edge hash
 
       // temporary arrays for sorting points
       this._ids = new Uint32Array(n);
@@ -30695,11 +30683,10 @@
       }
       const cx = (minX + maxX) / 2;
       const cy = (minY + maxY) / 2;
-      let minDist = Infinity;
       let i0, i1, i2;
 
       // pick a seed point close to the center
-      for (let i = 0; i < n; i++) {
+      for (let i = 0, minDist = Infinity; i < n; i++) {
         const d = dist(cx, cy, coords[2 * i], coords[2 * i + 1]);
         if (d < minDist) {
           i0 = i;
@@ -30708,10 +30695,9 @@
       }
       const i0x = coords[2 * i0];
       const i0y = coords[2 * i0 + 1];
-      minDist = Infinity;
 
       // find the point closest to the seed
-      for (let i = 0; i < n; i++) {
+      for (let i = 0, minDist = Infinity; i < n; i++) {
         if (i === i0) continue;
         const d = dist(i0x, i0y, coords[2 * i], coords[2 * i + 1]);
         if (d < minDist && d > 0) {
@@ -30745,9 +30731,10 @@
         let j = 0;
         for (let i = 0, d0 = -Infinity; i < n; i++) {
           const id = this._ids[i];
-          if (this._dists[id] > d0) {
+          const d = this._dists[id];
+          if (d > d0) {
             hull[j++] = id;
-            d0 = this._dists[id];
+            d0 = d;
           }
         }
         this.hull = hull.subarray(0, j);
@@ -32522,7 +32509,7 @@
         addv[i] = key(data[i]);
         addi[i] = i;
       }
-      addv = sort(addv, addi);
+      addv = sort$1(addv, addi);
       if (n0) {
         oldv = value;
         oldi = index;
@@ -32584,7 +32571,7 @@
       size: () => size
     };
   }
-  function sort(values, index) {
+  function sort$1(values, index) {
     values.sort.call(index, (a, b) => {
       const x = values[a],
         y = values[b];
@@ -33065,7 +33052,7 @@
     resolvefilter: ResolveFilter
   });
 
-  var version = "5.30.0";
+  var version$1 = "6.1.2";
 
   const RawCode = 'RawCode';
   const Literal = 'Literal';
@@ -34543,6 +34530,9 @@
       substring: fn('substring', STRING),
       split: fn('split', STRING),
       trim: fn('trim', STRING, 0),
+      // base64 encode/decode
+      btoa: 'btoa',
+      atob: 'atob',
       // REGEXP functions
       regexp: REGEXP,
       test: fn('test', REGEXP),
@@ -34666,6 +34656,12 @@
     TYPE_RANGE_EXC = 'R-E',
     TYPE_RANGE_LE = 'R-LE',
     TYPE_RANGE_RE = 'R-RE',
+    TYPE_PRED_LT = 'E-LT',
+    TYPE_PRED_LTE = 'E-LTE',
+    TYPE_PRED_GT = 'E-GT',
+    TYPE_PRED_GTE = 'E-GTE',
+    TYPE_PRED_VALID = 'E-VALID',
+    TYPE_PRED_ONE_OF = 'E-ONE',
     UNIT_INDEX = 'index:unit';
 
   // TODO: revisit date coercion?
@@ -34699,6 +34695,18 @@
           if (!inrange(dval, values[i], false, false)) return false;
         } else if (f.type === TYPE_RANGE_LE) {
           if (!inrange(dval, values[i], false, true)) return false;
+        } else if (f.type === TYPE_PRED_LT) {
+          if (dval >= values[i]) return false;
+        } else if (f.type === TYPE_PRED_LTE) {
+          if (dval > values[i]) return false;
+        } else if (f.type === TYPE_PRED_GT) {
+          if (dval <= values[i]) return false;
+        } else if (f.type === TYPE_PRED_GTE) {
+          if (dval < values[i]) return false;
+        } else if (f.type === TYPE_PRED_VALID) {
+          if (dval === null || isNaN(dval)) return false;
+        } else if (f.type === TYPE_PRED_ONE_OF) {
+          if (values[i].indexOf(dval) === -1) return false;
         }
       }
     }
@@ -34945,13 +34953,9 @@
       field = 'unit',
       indexName = IndexPrefix$1 + field,
       dataName = DataPrefix$1 + data;
-
-    // eslint-disable-next-line no-prototype-builtins
     if (op === Intersect && !has$1(params, indexName)) {
       params[indexName] = scope.getData(data).indataRef(scope, field);
     }
-
-    // eslint-disable-next-line no-prototype-builtins
     if (!has$1(params, dataName)) {
       params[dataName] = scope.getData(data).tuplesRef();
     }
@@ -35059,13 +35063,17 @@
       }
     }
   }
+
+  /**
+   * nameOrFunction must be a string or function that was registered.
+   * Return undefined if scale is not recognized.
+   */
   function getScale(nameOrFunction, ctx) {
-    if (isFunction(nameOrFunction)) {
-      return nameOrFunction;
-    }
     if (isString(nameOrFunction)) {
       const maybeScale = ctx.scales[nameOrFunction];
       return maybeScale && isRegisteredScale(maybeScale.value) ? maybeScale.value : undefined;
+    } else if (isFunction(nameOrFunction)) {
+      return isRegisteredScale(nameOrFunction) ? nameOrFunction : undefined;
     }
     return undefined;
   }
@@ -35276,10 +35284,14 @@
   }
   function replace(str, pattern, repl) {
     if (isFunction(repl)) error('Function argument passed to replace.');
+    if (!isString(pattern) && !isRegExp(pattern)) error('Please pass a string or RegExp argument to replace.');
     return String(str).replace(pattern, repl);
   }
   function reverse(seq) {
     return array(seq).slice().reverse();
+  }
+  function sort(seq) {
+    return array(seq).slice().sort(ascending$2);
   }
   function bandspace(count, paddingInner, paddingOuter) {
     return bandSpace(count || 0, paddingInner || 0, paddingOuter || 0);
@@ -35521,6 +35533,7 @@
     lastindexof,
     replace,
     reverse,
+    sort,
     slice,
     flush,
     lerp,
@@ -38598,6 +38611,8 @@
   const GuideTitleStyle = 'guide-title';
   const GroupTitleStyle = 'group-title';
   const GroupSubtitleStyle = 'group-subtitle';
+
+  /** All values of LegendType */
   const Symbols = 'symbol';
   const Gradient = 'gradient';
   const Discrete = 'discrete';
@@ -41480,6 +41495,7 @@
   // -- Transforms -----
 
   extend$1(transforms, tx, vtx, encode$1, geo, force, label, tree, reg, voronoi, wordcloud, xf);
+  const version = version$1;
 
   exports.Bounds = Bounds;
   exports.CanvasHandler = CanvasHandler;
@@ -41654,7 +41670,6 @@
   exports.renderModule = renderModule;
   exports.repeat = repeat;
   exports.resetDefaultLocale = resetDefaultLocale;
-  exports.resetSVGClipId = resetSVGClipId;
   exports.resetSVGDefIds = resetSVGDefIds;
   exports.responseType = responseType;
   exports.runtimeContext = context;

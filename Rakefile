@@ -15,9 +15,11 @@ def download_package(name, version)
     system "npm", "pack", "#{name}@#{version}", "-q", exception: true
     system "tar", "xzf", "#{name}-#{version}.tgz", exception: true
 
-    contents = File.read("package/build/#{name}.js")
+    # vega-lite and vega-embed no longer provide non-minified UMD builds
+    suffix = ["vega-lite", "vega-embed"].include?(name) ? ".min" : ""
+    contents = File.read("package/build/#{name}#{suffix}.js")
     # remove source map to prevent console warnings
-    contents.sub!("//# sourceMappingURL=#{name}.js.map\n", "")
+    contents.sub!("//# sourceMappingURL=#{name}#{suffix}.js.map\n", "")
     File.write(File.expand_path("vendor/assets/javascripts/#{name}.js", __dir__), contents)
 
     FileUtils.cp("package/LICENSE", File.expand_path("licenses/LICENSE-#{name}.txt", __dir__))
@@ -26,8 +28,8 @@ end
 
 # update in lib/vega/spec.rb as well
 task :update do
-  download_package("vega", "5.30.0")
-  download_package("vega-lite", "5.21.0")
-  download_package("vega-embed", "6.26.0")
-  download_package("vega-interpreter", "1.0.5")
+  download_package("vega", "6.1.2")
+  download_package("vega-lite", "6.2.0")
+  download_package("vega-embed", "7.0.2")
+  download_package("vega-interpreter", "2.0.0")
 end
