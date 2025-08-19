@@ -1,4 +1,4 @@
-## 0.5.0 (unreleased)
+## 0.5.0 (2025-08-18)
 
 - Updated Vega to 6.1.2, Vega-Lite to 6.2.0, and Vega-Embed to 7.0.2
 - Added support for JupyterLab and Jupyter Notebook 7+
