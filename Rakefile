@@ -1,15 +1,16 @@
 require "bundler/gem_tasks"
 require "rake/testtask"
-require "fileutils"
-require "tmpdir"
 
-task default: :test
 Rake::TestTask.new do |t|
-  t.libs << "test"
   t.pattern = "test/**/*_test.rb"
 end
 
+task default: :test
+
 def download_package(name, version)
+  require "fileutils"
+  require "tmpdir"
+
   puts "Downloading #{name} #{version}"
   Dir.chdir(Dir.mktmpdir) do
     system "npm", "pack", "#{name}@#{version}", "-q", exception: true
