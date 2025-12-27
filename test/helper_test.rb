@@ -43,13 +43,11 @@ class HelperTest < Minitest::Test
   end
 
   def with_nonce
-    stub(:content_security_policy_nonce, "test123") do
-      yield
-    end
+    self.content_security_policy_nonce = "test123"
+    yield
+  ensure
+    self.content_security_policy_nonce = nil
   end
 
-  # for stubbing
-  def content_security_policy_nonce
-    nil
-  end
+  attr_accessor :content_security_policy_nonce
 end
