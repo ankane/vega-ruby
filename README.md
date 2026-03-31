@@ -18,7 +18,7 @@ gem "vega"
 
 Then follow the instructions for how you plan to use it:
 
-- [Importmap](#importmap) (Rails 7+ default)
+- [Importmap](#importmap) (Rails default)
 - [Bun, esbuild, or Webpack](#bun-esbuild-or-webpack)
 - [Sprockets](#sprockets)
 - [iRuby](#iruby)
