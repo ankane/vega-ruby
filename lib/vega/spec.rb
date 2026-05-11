@@ -34,10 +34,10 @@ module Vega
         <script>
           (function() {
             var paths = {
-              'vega': 'https://cdn.jsdelivr.net/npm/vega@6.1.2/build/vega.min',
-              'vega-util': 'https://cdn.jsdelivr.net/npm/vega-util@2.0.0/build/vega-util.min',
-              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@6.2.0/build/vega-lite.min',
-              'vega-embed': 'https://cdn.jsdelivr.net/npm/vega-embed@7.0.2/build/vega-embed.min'
+              'vega': 'https://cdn.jsdelivr.net/npm/vega@6.2.0/build/vega.min',
+              'vega-util': 'https://cdn.jsdelivr.net/npm/vega-util@2.1.1/build/vega-util.min',
+              'vega-lite': 'https://cdn.jsdelivr.net/npm/vega-lite@6.4.3/build/vega-lite.min',
+              'vega-embed': 'https://cdn.jsdelivr.net/npm/vega-embed@7.1.0/build/vega-embed.min'
             };
             if (typeof(require) === 'undefined') {
               (async function() {

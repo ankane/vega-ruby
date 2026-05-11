@@ -1,3 +1,7 @@
+## 0.6.0 (unreleased)
+
+- Updated Vega to 6.2.0, Vega-Lite to 6.4.3, and Vega-Embed to 7.1.0
+
 ## 0.5.0 (2025-08-18)
 
 - Updated Vega to 6.1.2, Vega-Lite to 6.2.0, and Vega-Embed to 7.0.2

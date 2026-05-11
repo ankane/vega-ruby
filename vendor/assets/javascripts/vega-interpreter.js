@@ -1,4 +1,4 @@
-import { ascending, isString } from 'vega-util';
+import { ascending, isString, DisallowedObjectProperties } from 'vega-util';
 
 function adjustSpatial (item, encode, swap) {
   let t;
@@ -82,15 +82,7 @@ const apply = (m, args, cast) => {
   const obj = cast ? cast(args[0]) : args[0];
   return obj[m].apply(obj, slice.call(args, 1));
 };
-const datetime = function (yearOrTimestring) {
-  let m = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  let d = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-  let H = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-  let M = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
-  let S = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-  let ms = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
-  return isString(yearOrTimestring) ? new Date(yearOrTimestring) : new Date(yearOrTimestring, m, d, H, M, S, ms);
-};
+const datetime = (yearOrTimestring, m = 0, d = 1, H = 0, M = 0, S = 0, ms = 0) => isString(yearOrTimestring) ? new Date(yearOrTimestring) : new Date(yearOrTimestring, m, d, H, M, S, ms);
 var Functions = {
   // math functions
   isNaN: Number.isNaN,
@@ -221,7 +213,7 @@ const Visitors = {
     $.memberDepth += 1;
     const k = $(p.key);
     $.memberDepth -= 1;
-    if (DisallowedMethods.has($(p.value))) {
+    if (DisallowedObjectProperties.has($(p.value))) {
       // eslint-disable-next-line no-console
       console.error(`Prevented interpretation of property "${k}" which could lead to insecure code execution`);
     } else {
@@ -240,9 +232,7 @@ function interpret (ast, fn, params, datum, event, item) {
   $.item = item;
 
   // route event functions to annotated vega event context
-  EventFunctions.forEach(f => $.fn[f] = function () {
-    return event.vega[f](...arguments);
-  });
+  EventFunctions.forEach(f => $.fn[f] = (...args) => event.vega[f](...args));
   return $(ast);
 }
 
